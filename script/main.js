@@ -27,36 +27,7 @@ function sequenceProgress(progress, start, end) {
 }
 
 function updateHeroScroll() {
-    if (!heroStage || !heroMediaGrid || !heroContent) return;
-
-    const stageRect = heroStage.getBoundingClientRect();
-    const scrollDistance = heroStage.offsetHeight - window.innerHeight;
-    const progress = clamp(-stageRect.top / scrollDistance, 0, 1);
-    const textProgress = clamp(progress / 0.72, 0, 1);
-    const textMoveY = textProgress * -118;
-    const textOpacity = 1 - clamp((progress - 0.42) / 0.28, 0, 1);
-    const mask01 = sequenceProgress(progress, 0, 0.25);
-    const mask02 = sequenceProgress(progress, 0.25, 0.5);
-    const mask03 = sequenceProgress(progress, 0.5, 0.75);
-    const mask04 = sequenceProgress(progress, 0.75, 1);
-
-    heroMediaGrid.style.setProperty("--mask-01", `${mix(0, 108, mask01)}vh`);
-    heroMediaGrid.style.setProperty("--mask-02", `${mix(0, 108, mask02)}vh`);
-    heroMediaGrid.style.setProperty("--mask-03", `${mix(0, 108, mask03)}vh`);
-    heroMediaGrid.style.setProperty("--mask-04", `${mix(0, 108, mask04)}vh`);
-
-    heroPlaceholders.forEach((placeholder, index) => {
-        const panelProgress = [mask01, mask02, mask03, mask04][index] || 0;
-        const offset = panelProgress * -14;
-        placeholder.style.transform = `translate3d(0, ${offset}vh, 0)`;
-    });
-
-    heroContent.style.transform = `translate3d(0, ${textMoveY}vh, 0)`;
-    heroContent.style.opacity = textOpacity;
-
-    if (fixedUi) {
-        fixedUi.classList.toggle("is-visible", progress > 0.82);
-    }
+    // 4패널 인터랙션 제거 — 히어로는 정적으로 표시
 }
 
 function updateFixedNav() {
