@@ -39,14 +39,9 @@ a {
 .fixed-ui {
     position: fixed;
     inset: 0;
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-}
-
-.fixed-ui.is-visible {
+    z-index: 1000;
     opacity: 1;
+    pointer-events: none;
 }
 
 .fixed-ui.is-dark {
@@ -117,7 +112,8 @@ a {
     top: 0;
     bottom: 0;
     width: 1px;
-    background: rgba(0, 0, 0, 0.16);
+    background: #c2c2c2;
+    opacity: 0.65;
 }
 
 .fixed-grid-line--01 {
@@ -139,7 +135,7 @@ a {
     width: 7.7vw;
     height: 14.6vh;
     border: 1px solid rgba(0, 0, 0, 0.28);
-    border-radius: 50% 50% 4px 4px;
+    border-radius: 50% 50% 0.21vw 0.21vw;
     background:
         repeating-radial-gradient(circle at 50% 88%,
             transparent 0 0.95vw,
@@ -148,13 +144,13 @@ a {
 }
 
 .hero-stage {
-    height: 260vh;
+    height: 100vh;
 }
 
 .hero {
     position: sticky;
     top: 0;
-    background: #fff;
+    background: #121212;
 }
 
 .hero__media-grid {
@@ -172,7 +168,7 @@ a {
     position: relative;
     height: 100vh;
     overflow: hidden;
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .hero__media-panel:last-child {
@@ -182,32 +178,42 @@ a {
 .hero__media-placeholder {
     position: absolute;
     inset: 0;
-    background: #d9d9d2;
+    background: #121212;
+    overflow: hidden;
     will-change: transform;
 }
 
-.hero__media-panel--01 .hero__media-mask {
-    height: var(--mask-01, 0vh);
+/* JCM800 이미지: 피그마 컨테이너 width=3903, height=1159, left=-1450, top=151 (1920px 기준) */
+/* 이미지 내부 크롭: h=189.44%, top=-15.49% → object-fit+object-position으로 재현 */
+.hero__panel-img {
+    position: absolute;
+    width: 203.28vw;              /* 3903/1920 */
+    height: 60.36vw;              /* 1159/1920 — 피그마 컨테이너 높이 */
+    top: calc(42.5vh - 16.04vw); /* 텍스트 기준: title top(42.5vh) - 308px(=16.04vw) */
+    object-fit: cover;
+    object-position: 0% 17.3%;   /* 피그마 top=-15.49% 크롭 위치 */
+    pointer-events: none;
 }
 
-.hero__media-panel--02 .hero__media-mask {
-    height: var(--mask-02, 0vh);
-}
-
-.hero__media-panel--03 .hero__media-mask {
-    height: var(--mask-03, 0vh);
-}
-
-.hero__media-panel--04 .hero__media-mask {
-    height: var(--mask-04, 0vh);
-}
+.hero__media-panel--01 .hero__panel-img { left: -75.52vw; }
+.hero__media-panel--02 .hero__panel-img { left: -100.52vw; }
+.hero__media-panel--03 .hero__panel-img { left: -125.52vw; }
+.hero__media-panel--04 .hero__panel-img { left: -150.52vw; }
 
 .hero__media-mask {
+    display: none;
+}
+
+/* Rectangle 20: x=-3,y=787,w=1926,h=291 (1920×1078 기준) */
+.hero__gradient-overlay {
     position: absolute;
-    right: 0;
-    bottom: 0;
     left: 0;
-    background: #fff;
+    top: 73.0vh;      /* 787/1078 */
+    width: 100vw;
+    height: 27.0vh;   /* 291/1078 */
+    background: linear-gradient(to bottom, rgba(4,4,4,0) 0%, rgba(0,0,0,0.65) 74.69%);
+    z-index: 2;
+    pointer-events: none;
 }
 
 .hero__content {
@@ -225,8 +231,12 @@ a {
     margin: 0;
     font-family: Arial, sans-serif;
     font-size: 6.67vw;
+    font-weight: 400;
+    font-style: normal;
     line-height: 1;
+    letter-spacing: 0;
     white-space: nowrap;
+    color: #ffeac6;
 }
 
 .hero__volume {
@@ -234,9 +244,13 @@ a {
     top: 31.3vh;
     left: 50vw;
     margin: 0;
+    font-family: 'SUIT', 'Pretendard Variable', Pretendard, sans-serif;
     font-size: 0.833vw;
+    font-weight: 400;
+    font-style: normal;
     line-height: 1.2;
     letter-spacing: -0.03em;
+    color: #e6d4b6;
     transform: translateX(0);
 }
 
@@ -245,11 +259,14 @@ a {
     top: 42.5vh;
     left: 1.7vw;
     margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: 'Amplify Personal Use Only', cursive;
     font-size: 18.23vw;
     font-weight: 400;
-    line-height: 0.92;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0;
     white-space: nowrap;
+    color: #ffeac6;
 }
 
 .hero__year {
@@ -259,11 +276,13 @@ a {
     margin: 0;
     font-family: Arial, sans-serif;
     font-size: 18.49vw;
+    font-weight: 400;
     font-style: italic;
-    line-height: 0.9;
+    line-height: normal;
     letter-spacing: -0.05em;
     text-align: right;
     white-space: nowrap;
+    color: #ffeac6;
 }
 
 .hero__about {
@@ -274,18 +293,64 @@ a {
 
 .hero__about-label {
     margin: 0 0 2.2vh;
+    font-family: 'SUIT', 'Pretendard Variable', Pretendard, sans-serif;
     font-size: 0.833vw;
+    font-weight: 400;
+    font-style: normal;
     line-height: 1.2;
     letter-spacing: -0.03em;
+    color: #ffeac6;
 }
 
 .hero__description {
     margin: 0;
     font-family: Arial, sans-serif;
     font-size: 2.5vw;
-    line-height: 1.15;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
     letter-spacing: -0.03em;
+    color: #ffeac6;
 }
+
+/* ── 스피커 패널 섹션 ─────────────────────────────────── */
+/* 피그마: 4패널 y=1078, 각 w=480(25vw), h: 455/552/737/1080px */
+.speakers-stage {
+    width: 100vw;
+    background: #eaeaea;
+}
+
+.speakers-grid {
+    display: flex;
+    align-items: flex-start;
+    width: 100vw;
+}
+
+.speakers-panel {
+    position: relative;
+    width: 25vw;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.speakers-panel--01 { height: 23.70vw; } /* 455/1920 */
+.speakers-panel--02 { height: 28.75vw; } /* 552/1920 */
+.speakers-panel--03 { height: 38.38vw; } /* 737/1920 */
+.speakers-panel--04 { height: 56.25vw; } /* 1080/1920 */
+
+/* 각 이미지: 400% 너비로 전체 씬 렌더, offset으로 각 구역 표시 */
+.speakers-img {
+    position: absolute;
+    width: 400%;
+    max-width: none;
+    top: 0;
+    pointer-events: none;
+}
+
+.speakers-panel--01 .speakers-img { left: 0;      height: 237.36%; }
+.speakers-panel--02 .speakers-img { left: -100%;  height: 195.65%; }
+.speakers-panel--03 .speakers-img { left: -200%;  height: 146.54%; }
+.speakers-panel--04 .speakers-img { left: -300%;  height: 100%;    }
 
 .beginning-stage {
     height: calc(100vh + 66.72vw + 100vh);
@@ -294,7 +359,7 @@ a {
 .beginning {
     height: calc(100vh + 66.72vw + 100vh);
     overflow: visible;
-    background: #fff;
+    background: #eaeaea;
 }
 
 .beginning__header {
@@ -407,6 +472,7 @@ a {
     justify-content: space-between;
     width: 100%;
     margin-bottom: 2.41vw;
+    font-family: 'SUIT', sans-serif;
     font-size: 0.833vw;
     line-height: 1.2;
     letter-spacing: -0.03em;
@@ -419,21 +485,24 @@ a {
 }
 
 .beginning-feature__marker {
-    width: 0;
-    height: 0;
-    border-top: 0.13vw solid transparent;
-    border-bottom: 0.13vw solid transparent;
-    border-left: 0.42vw solid #ffeac6;
-    transform: rotate(90deg);
+    display: inline-block;
+    width: 0.59vw;
+    height: 0.2vw;
+    background-image: url('../assets/svg/marker_polygon.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
 }
 
 .beginning-feature__slashes {
-    letter-spacing: 0.21vw;
+    font-family: 'SUIT', sans-serif;
+    letter-spacing: 0.25em;
 }
 
 .beginning-feature__headline {
     text-align: center;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: 'Olivera Demo', Georgia, serif;
     font-size: 11.82vw;
     font-weight: 400;
     line-height: 0.92;
@@ -451,6 +520,7 @@ a {
     left: 1.77vw;
     width: 46.67vw;
     color: #ffeac6;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: 1.67vw;
     line-height: 1.3;
     letter-spacing: -0.022em;
@@ -482,7 +552,7 @@ a {
     position: relative;
     width: 100vw;
     height: 76.11vh;
-    min-height: 720px;
+    min-height: 66.67vh;
     overflow: hidden;
     background: #fff;
 }
