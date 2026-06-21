@@ -7,6 +7,22 @@ const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
 const beginningDesign = document.querySelector("[data-beginning-design]");
 const beginningCopyOne = document.querySelector("[data-beginning-copy-one]");
 const beginningCopyTwo = document.querySelector("[data-beginning-copy-scroll]");
+const soundStage = document.querySelector("[data-sound-stage]");
+const soundSticky = document.querySelector(".sound-sticky");
+const soundTrack = document.querySelector("[data-sound-track]");
+const signatureSound = document.querySelector("[data-signature-sound]");
+const headphoneSequence = document.querySelector(".headphone-sequence");
+const headphoneSequenceSticky = document.querySelector(".headphone-sequence__sticky");
+const headphoneStage = document.querySelector("[data-headphone-stage]");
+const headphoneDetail = document.querySelector("[data-headphone-detail]");
+const soundBlank = document.querySelector("[data-sound-blank]");
+const legacyStage = document.querySelector("[data-legacy-stage]");
+const legacySequence = document.querySelector("[data-legacy-sequence]");
+const legacySequenceArt = document.querySelector(".legacy-sequence__art");
+const legacyHero = document.querySelector("[data-legacy-hero]");
+const legacyStatement = document.querySelector("[data-legacy-statement]");
+const legacyClosing = document.querySelector("[data-legacy-closing]");
+const finale = document.querySelector("[data-finale]");
 const fixedNavSections = Array.from(fixedNavLinks)
     .map((link) => {
         const target = document.querySelector(link.getAttribute("href"));
@@ -64,6 +80,8 @@ function updateFixedNav() {
 
     const activePoint = window.innerHeight * 0.52;
     let activeSection = fixedNavSections[0];
+    let isSignatureActive = false;
+    let isLegacyHeroActive = false;
 
     fixedNavSections.forEach((section) => {
         const rect = section.target.getBoundingClientRect();
@@ -72,6 +90,49 @@ function updateFixedNav() {
             activeSection = section;
         }
     });
+
+    if (signatureSound) {
+        const signatureRect = signatureSound.getBoundingClientRect();
+        isSignatureActive = signatureRect.top <= activePoint && signatureRect.bottom > activePoint;
+
+        if (isSignatureActive) {
+            activeSection = fixedNavSections.find(({ link }) => link.getAttribute("href") === "#sound") || activeSection;
+        }
+    }
+
+    if (legacyHero) {
+        const legacyHeroRect = legacyHero.getBoundingClientRect();
+        isLegacyHeroActive = legacyHeroRect.top <= activePoint && legacyHeroRect.bottom > activePoint;
+
+        if (isLegacyHeroActive) {
+            activeSection =
+                fixedNavSections.find(({ link }) => link.getAttribute("href") === "#legacy") || activeSection;
+        }
+    }
+
+    if (legacyStatement) {
+        const legacyStatementRect = legacyStatement.getBoundingClientRect();
+        const isLegacyStatementActive =
+            legacyStatementRect.top <= activePoint && legacyStatementRect.bottom > activePoint;
+        isLegacyHeroActive = isLegacyHeroActive || isLegacyStatementActive;
+
+        if (isLegacyStatementActive) {
+            activeSection =
+                fixedNavSections.find(({ link }) => link.getAttribute("href") === "#legacy") || activeSection;
+        }
+    }
+
+    if (legacyClosing) {
+        const legacyClosingRect = legacyClosing.getBoundingClientRect();
+        const isLegacyClosingActive =
+            legacyClosingRect.top <= activePoint && legacyClosingRect.bottom > activePoint;
+        isLegacyHeroActive = isLegacyHeroActive || isLegacyClosingActive;
+
+        if (isLegacyClosingActive) {
+            activeSection =
+                fixedNavSections.find(({ link }) => link.getAttribute("href") === "#legacy") || activeSection;
+        }
+    }
 
     fixedNavLinks.forEach((link) => {
         const isActive = link === activeSection.link;
@@ -83,6 +144,34 @@ function updateFixedNav() {
             link.removeAttribute("aria-current");
         }
     });
+
+    if (fixedUi && soundStage) {
+        const soundRect = soundStage.getBoundingClientRect();
+        const isSoundActive =
+            (soundRect.top <= activePoint && soundRect.bottom > activePoint) ||
+            isSignatureActive;
+        fixedUi.classList.toggle("is-dark", isSoundActive || isLegacyHeroActive);
+        fixedUi.classList.toggle("is-signature-sound", isSignatureActive);
+
+        const headphoneRect = headphoneStage?.getBoundingClientRect();
+        const headphoneDetailRect = headphoneDetail?.getBoundingClientRect();
+        const soundBlankRect = soundBlank?.getBoundingClientRect();
+        const legacyRect = legacyStage?.getBoundingClientRect();
+        const finaleRect = finale?.getBoundingClientRect();
+        const isHeadphoneActive = Boolean(
+            (headphoneRect && headphoneRect.top <= activePoint && headphoneRect.bottom > activePoint) ||
+            (headphoneDetailRect &&
+                headphoneDetailRect.top <= activePoint &&
+                headphoneDetailRect.bottom > activePoint) ||
+            (soundBlankRect && soundBlankRect.top <= activePoint && soundBlankRect.bottom > activePoint) ||
+            (legacyRect && legacyRect.top <= activePoint && legacyRect.bottom > activePoint)
+        );
+        fixedUi.classList.toggle("is-headphone-stage", isHeadphoneActive);
+        fixedUi.classList.toggle(
+            "is-final-stage",
+            Boolean(finaleRect && finaleRect.top <= activePoint && finaleRect.bottom > activePoint)
+        );
+    }
 }
 
 function updateBeginningCopyScroll() {
@@ -103,10 +192,56 @@ function updateBeginningCopyScroll() {
     beginningCopyTwo.style.transform = `translate3d(0, ${trackMove}px, 0)`;
 }
 
+function updateSoundHorizontalScroll() {
+    if (!soundStage || !soundSticky || !soundTrack) return;
+
+    const stageRect = soundStage.getBoundingClientRect();
+    const scrollDistance = Math.max(soundStage.offsetHeight - window.innerHeight, 1);
+    const progress = clamp(-stageRect.top / scrollDistance, 0, 1);
+    const isPinned = stageRect.top <= 0 && stageRect.bottom > window.innerHeight;
+    const isEnded = stageRect.bottom <= window.innerHeight;
+    const isSoundVisible = stageRect.top < window.innerHeight && stageRect.bottom > 0;
+    const horizontalDistance = Math.max(soundTrack.scrollWidth - window.innerWidth, 0);
+
+    soundSticky.classList.toggle("is-pinned", isPinned);
+    soundSticky.classList.toggle("is-ended", isEnded);
+    soundTrack.style.transform = `translate3d(${-progress * horizontalDistance}px, 0, 0)`;
+
+    if (fixedUi) {
+        fixedUi.classList.toggle("is-sound-content", isSoundVisible && progress > 0.08);
+        fixedUi.classList.toggle("is-sound-horizontal", isSoundVisible);
+    }
+}
+
+function updateHeadphoneSequence() {
+    if (!headphoneSequence || !headphoneSequenceSticky) return;
+
+    const sequenceRect = headphoneSequence.getBoundingClientRect();
+    const isPinned = sequenceRect.top <= 0 && sequenceRect.bottom > window.innerHeight;
+    const isEnded = sequenceRect.bottom <= window.innerHeight;
+
+    headphoneSequenceSticky.classList.toggle("is-pinned", isPinned);
+    headphoneSequenceSticky.classList.toggle("is-ended", isEnded);
+}
+
+function updateLegacySequence() {
+    if (!legacySequence || !legacySequenceArt) return;
+
+    const sequenceRect = legacySequence.getBoundingClientRect();
+    const isPinned = sequenceRect.top <= 0 && sequenceRect.bottom > window.innerHeight;
+    const isEnded = sequenceRect.bottom <= window.innerHeight;
+
+    legacySequenceArt.classList.toggle("is-pinned", isPinned);
+    legacySequenceArt.classList.toggle("is-ended", isEnded);
+}
+
 function updateScrollEffects() {
     updateHeroScroll();
     updateFixedNav();
     updateBeginningCopyScroll();
+    updateSoundHorizontalScroll();
+    updateHeadphoneSequence();
+    updateLegacySequence();
 }
 
 window.addEventListener("scroll", updateScrollEffects, { passive: true });
