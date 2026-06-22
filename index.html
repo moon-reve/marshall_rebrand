@@ -35,6 +35,17 @@
         <div class="fixed-gauge" aria-hidden="true"></div>
     </div>
 
+    <svg width="0" height="0" style="position:absolute;overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="outside-text-stroke" x="-3%" y="-15%" width="106%" height="130%">
+                <feMorphology operator="dilate" radius="1.5" in="SourceAlpha" result="expanded"/>
+                <feComposite in="expanded" in2="SourceAlpha" operator="out" result="ring"/>
+                <feFlood flood-color="#ffeac6" result="color"/>
+                <feComposite in="color" in2="ring" operator="in"/>
+            </filter>
+        </defs>
+    </svg>
+
     <main class="site-main">
         <section class="hero-stage" data-hero-stage>
             <div class="section hero" id="hero" aria-labelledby="hero-title">
@@ -110,7 +121,7 @@
                 </header>
 
                 <p class="beginning__text">
-                    <span class="beginning__text-primary">1962년, 더 크고 거친 사운드를 원했던 뮤지션들의 요구에서 시작되었다. 짐 마샬은 런던의 작은 악기점에서 당대 기타리스트들의 목소리를 들었다. 그들은 기존 앰프로는 만족할 수 없었다. </span><span>더 크고, 더 강렬하고, 무대를 가득 채울 사운드가 필요했다. 그 순간부터 Marshall은 단순한 앰프가 아닌 록 음악의 상징이 되기 시작했다.</span>
+                    <span class="beginning__text-primary">1962년, 더 크고 거친 사운드를 원했던 뮤지션들의 요구에서 시작되었다. 짐 마샬은 런던의 작은 악기점에서 당대 기타리스트들의 목소리를 들었다. 그들은 기존 앰프로는 만족할 수 없었다. </span><span>더 크고, 더 강렬하게, 무대를 가득 채울 사운드가 필요했다. 그 순간부터 Marshall은 단순한 앰프가 아닌 록 음악의 상징이 되기 시작했다.</span>
                 </p>
 
                 <img
@@ -472,7 +483,7 @@
 
         <section class="legacy-detail" data-legacy-stage aria-label="Marshall legacy">
             <div class="legacy-detail__art" role="img" aria-label="Marshall 앰프 라인 일러스트와 브랜드의 역사 및 장인정신을 설명하는 문구">
-                <img src="./assets/images/marshall-legacy-art.png" alt="" />
+                <img src="./assets/svg/legacy-art.svg" alt="" />
             </div>
 
             <div class="legacy-detail__copy">
