@@ -7,14 +7,14 @@
 html {
     width: 100%;
     min-height: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 body {
     width: 100%;
     min-height: 100%;
     margin: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     color: #000;
     background: #fff;
@@ -61,6 +61,10 @@ a {
 }
 
 .fixed-ui.is-signature-sound .fixed-grid-lines {
+    opacity: 0;
+}
+
+.fixed-ui.is-evolution-stage .fixed-grid-lines {
     opacity: 0;
 }
 
@@ -637,7 +641,8 @@ a {
 }
 
 .milestone__sticky {
-    position: relative;
+    position: sticky;
+    top: 0;
     height: auto;
     min-height: 100vh;
     overflow: hidden;
@@ -684,6 +689,9 @@ a {
 }
 
 .milestone__spec {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: calc(100vh - 23.89vh);
     padding: 3.15vh 1.77vw;
     overflow: hidden;
@@ -691,7 +699,7 @@ a {
 }
 
 .milestone__lead {
-    margin: 0 0 34.26vh;
+    margin: 0;
     font-family: Arial, sans-serif;
     font-size: 2.5vw;
     line-height: 1.1;
@@ -710,10 +718,10 @@ a {
 
 .milestone__table div {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5vw;
-    min-height: 6.52vh;
-    padding-top: 2.31vh;
+    grid-template-columns: 45% 55%;
+    gap: 0;
+    min-height: auto;
+    padding: 1.5vh 0;
     border-top: 1px solid rgba(27, 20, 16, 0.25);
 }
 
@@ -1710,7 +1718,6 @@ a {
     }
 
     .milestone__lead {
-        margin-bottom: 18vh;
         font-size: 8vw;
     }
 

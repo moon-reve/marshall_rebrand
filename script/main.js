@@ -7,6 +7,7 @@ const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
 const beginningDesign = document.querySelector("[data-beginning-design]");
 const beginningCopyOne = document.querySelector("[data-beginning-copy-one]");
 const beginningCopyTwo = document.querySelector("[data-beginning-copy-scroll]");
+const evolutionStage = document.querySelector("[data-evolution-stage]");
 const soundStage = document.querySelector("[data-sound-stage]");
 const soundSticky = document.querySelector(".sound-sticky");
 const soundTrack = document.querySelector("[data-sound-track]");
@@ -117,10 +118,15 @@ function updateFixedNav() {
     });
 
     if (fixedUi && soundStage) {
+        const evolutionRect = evolutionStage?.getBoundingClientRect();
         const soundRect = soundStage.getBoundingClientRect();
         const isSoundActive =
             (soundRect.top <= activePoint && soundRect.bottom > activePoint) ||
             isSignatureActive;
+        fixedUi.classList.toggle(
+            "is-evolution-stage",
+            Boolean(evolutionRect && evolutionRect.top <= activePoint && evolutionRect.bottom > activePoint)
+        );
         fixedUi.classList.toggle("is-dark", isSoundActive || isLegacyHeroActive);
         fixedUi.classList.toggle("is-signature-sound", isSignatureActive);
 
