@@ -3,6 +3,7 @@ const heroMediaGrid = document.querySelector(".hero__media-grid");
 const heroContent = document.querySelector(".hero__content");
 const heroPlaceholders = document.querySelectorAll(".hero__media-placeholder");
 const speakersStage = document.querySelector("[data-speakers-stage]");
+const speakersGrid = speakersStage?.querySelector(".speakers-grid");
 const speakersPanels = document.querySelectorAll(".speakers-panel");
 const fixedUi = document.querySelector("[data-fixed-ui]");
 const fixedNav = document.querySelector(".fixed-nav");
@@ -69,7 +70,24 @@ function sequenceProgress(progress, start, end) {
 }
 
 function updateHeroScroll() {
-    // 4패널 인터랙션 제거 — 히어로는 정적으로 표시
+    if (!heroStage || !speakersStage || !speakersGrid) return;
+
+    const heroRect = heroStage.getBoundingClientRect();
+    const speakersRect = speakersStage.getBoundingClientRect();
+    const heroScrollDistance = Math.max(heroStage.offsetHeight - window.innerHeight, 1);
+    const heroProgress = clamp(-heroRect.top / heroScrollDistance, 0, 1);
+
+    // speakers-stage가 아직 뷰포트 위에 없는 동안 entry 페이즈
+    const isEntryPhase = heroProgress > 0 && speakersRect.top > 0;
+
+    speakersGrid.classList.toggle("is-entry", isEntryPhase);
+
+    if (isEntryPhase) {
+        const easedProgress = heroProgress * heroProgress * (3 - 2 * heroProgress);
+        speakersGrid.style.transform = `translate3d(0, ${(1 - easedProgress) * 100}vh, 0)`;
+    } else {
+        speakersGrid.style.removeProperty("transform");
+    }
 }
 
 function prepareBeginningText() {
