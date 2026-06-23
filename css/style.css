@@ -749,7 +749,7 @@ a {
 .beginning-feature__copy--one p:not(:first-child) {
     font-size: 1.25vw;
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .beginning-feature__copy--two {
@@ -761,7 +761,7 @@ a {
 
 .beginning-feature__copy--two p:not(:first-child) {
     font-size: 1.354vw;
-    line-height: 1.15;
+    line-height: 1.3;
 }
 
 .beginning-feature__copy p {
@@ -785,31 +785,32 @@ a {
 
 .evolution-intro__topline {
     position: absolute;
-    top: 29.45vh;
-    left: 1.82vw;
-    right: 1.67vw;
+    top: 50%;
+    left: 50%;
     display: flex;
+    flex-direction: column-reverse;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: center;
+    transform: translate(-50%, -50%);
 }
 
-.evolution-intro__title,
-.evolution-intro__product {
+.evolution-intro__title {
     margin: 0;
     color: #2b2118;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 11.82vw;
+    font-size: 7.8125vw;
     font-weight: 400;
     line-height: 0.95;
-    letter-spacing: -0.055em;
+    letter-spacing: -0.03em;
     white-space: nowrap;
 }
 
 .evolution-intro__label {
     display: flex;
     align-items: center;
+    align-self: flex-end;
     gap: 0.42vw;
-    margin: 0.37vw 0 0;
+    margin: 0 0 0.37vw;
     color: #1b1410;
     font-size: 0.833vw;
     line-height: 1.2;
@@ -819,26 +820,9 @@ a {
 .evolution-intro__marker {
     width: 0;
     height: 0;
-    border-top: 0.13vw solid transparent;
-    border-bottom: 0.13vw solid transparent;
-    border-left: 0.42vw solid #1b1410;
-    transform: rotate(90deg);
-}
-
-.evolution-intro__product {
-    position: absolute;
-    top: 51.76vh;
-    right: 1.04vw;
-    text-align: right;
-}
-
-.evolution-intro__arrow {
-    position: absolute;
-    top: 57.03vh;
-    left: 1.82vw;
-    width: 5.49vw;
-    height: auto;
-    display: block;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 6px solid #f5a000;
 }
 
 .milestone {
@@ -1896,30 +1880,24 @@ a {
         padding: 12vh 5vw 10vh;
     }
 
-    .evolution-intro__topline,
-    .evolution-intro__product,
-    .evolution-intro__arrow {
+    .evolution-intro__topline {
         position: static;
     }
 
     .evolution-intro__topline {
-        display: block;
+        display: flex;
+        align-items: flex-start;
+        transform: none;
     }
 
-    .evolution-intro__title,
-    .evolution-intro__product {
+    .evolution-intro__title {
         font-size: 18vw;
         white-space: normal;
     }
 
     .evolution-intro__label {
-        margin-top: 2vh;
+        margin-bottom: 2vh;
         font-size: 3.2vw;
-    }
-
-    .evolution-intro__arrow {
-        margin-top: 4vh;
-        width: 18vw;
     }
 
     .milestone {
