@@ -842,6 +842,8 @@ a {
 .milestone__sticky {
     position: sticky;
     top: 0;
+    display: flex;
+    flex-direction: column;
     height: auto;
     min-height: 100vh;
     overflow: hidden;
@@ -870,7 +872,6 @@ a {
 }
 
 .milestone__heading {
-    height: 23.89vh;
     padding: 3.24vh 1.56vw;
     background: #1b1410;
     color: #fff;
@@ -885,13 +886,14 @@ a {
 
 .milestone__heading p+p {
     color: #c8922a;
+    font-size: 2.0833vw;
 }
 
 .milestone__spec {
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 23.89vh);
     padding: 3.15vh 1.77vw;
     overflow: hidden;
     background: #e9e9e9;
