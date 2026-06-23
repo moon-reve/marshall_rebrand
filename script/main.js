@@ -28,10 +28,15 @@ const soundLightRays = document.querySelector("[data-sound-light-rays]");
 const signatureSound = document.querySelector("[data-signature-sound]");
 const headphoneSequence = document.querySelector(".headphone-sequence");
 const headphoneSequenceSticky = document.querySelector(".headphone-sequence__sticky");
+const headphoneStageArt = document.querySelector(".headphone-stage__art");
 const headphoneStage = document.querySelector("[data-headphone-stage]");
 const headphoneDetail = document.querySelector("[data-headphone-detail]");
-const soundBlank = document.querySelector("[data-sound-blank]");
-const legacyStage = document.querySelector("[data-legacy-stage]");
+const headphoneDetailCopy = document.querySelector(".headphone-detail__copy");
+const soundSpeaker = document.querySelector("[data-sound-speaker]");
+const soundSpeakerSticky = document.querySelector(".sound-speaker__sticky");
+const soundSpeakerArt = document.querySelector(".sound-speaker__art");
+const soundSpeakerDetail = document.querySelector(".sound-speaker__detail");
+const soundSpeakerCopy = document.querySelector(".sound-speaker__copy");
 const legacySequence = document.querySelector("[data-legacy-sequence]");
 const legacySequenceArt = document.querySelector(".legacy-sequence__art");
 const legacyHero = document.querySelector("[data-legacy-hero]");
@@ -71,6 +76,10 @@ let beginningArtTargetProgress = 0;
 let beginningArtRenderedProgress = 0;
 let beginningArtAnimationFrame = null;
 let beginningArtPaths = [];
+let headphoneArtPaths = [];
+let headphoneArtTotalLength = 0;
+let soundSpeakerArtPaths = [];
+let soundSpeakerArtTotalLength = 0;
 const fixedNavSections = Array.from(fixedNavLinks)
     .map((link) => {
         const target = document.querySelector(link.getAttribute("href"));
@@ -182,6 +191,8 @@ function updateHeroScroll() {
     const speakersRect = speakersStage.getBoundingClientRect();
     const heroScrollDistance = Math.max(heroStage.offsetHeight - window.innerHeight, 1);
     const heroProgress = clamp(-heroRect.top / heroScrollDistance, 0, 1);
+
+    fixedNav?.classList.toggle("is-hero", heroProgress < 0.01);
 
     // speakers-stage가 아직 뷰포트 위에 없는 동안 entry 페이즈
     const isEntryPhase = heroProgress > 0 && speakersRect.top > 0;
@@ -434,6 +445,106 @@ function updateBeginningArtReveal() {
     }
 
     beginningArtAnimationFrame = requestAnimationFrame(renderBeginningArtReveal);
+}
+
+function prepareHeadphoneArtPaths() {
+    if (!headphoneStageArt || headphoneArtPaths.length) return Boolean(headphoneArtPaths.length);
+
+    const svgDocument = headphoneStageArt.contentDocument;
+    if (!svgDocument) return false;
+
+    let accumulatedLength = 0;
+
+    headphoneArtPaths = Array.from(svgDocument.querySelectorAll("path")).map((path) => {
+        const length = path.getTotalLength();
+        const startLength = accumulatedLength;
+
+        accumulatedLength += length;
+
+        path.style.fill = "none";
+        path.style.strokeDasharray = `${length}`;
+        path.style.strokeDashoffset = `${length}`;
+
+        return { path, length, startLength };
+    });
+    headphoneArtTotalLength = accumulatedLength;
+
+    return Boolean(headphoneArtPaths.length);
+}
+
+function updateHeadphoneArtReveal() {
+    if (!headphoneSequence || !headphoneDetail || !headphoneDetailCopy || !prepareHeadphoneArtPaths()) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        headphoneArtPaths.forEach(({ path }) => path.style.strokeDashoffset = "0");
+        return;
+    }
+
+    const sequenceRect = headphoneSequence.getBoundingClientRect();
+    const copyOffset = headphoneDetail.offsetTop + headphoneDetailCopy.offsetTop;
+    const startSequenceTop = window.innerHeight * 0.25;
+    const endSequenceTop = window.innerHeight * 0.1 - copyOffset;
+    const revealDistance = Math.max(startSequenceTop - endSequenceTop, 1);
+    const progress = clamp((startSequenceTop - sequenceRect.top) / revealDistance, 0, 1);
+    if (!headphoneArtTotalLength) return;
+
+    const drawLength = progress * headphoneArtTotalLength;
+
+    headphoneArtPaths.forEach(({ path, length, startLength }) => {
+        const pathProgress = clamp((drawLength - startLength) / length, 0, 1);
+
+        path.style.strokeDashoffset = `${length * (1 - pathProgress)}`;
+    });
+}
+
+function prepareSoundSpeakerArtPaths() {
+    if (!soundSpeakerArt || soundSpeakerArtPaths.length) return Boolean(soundSpeakerArtPaths.length);
+
+    const svgDocument = soundSpeakerArt.contentDocument;
+    if (!svgDocument) return false;
+
+    let accumulatedLength = 0;
+
+    soundSpeakerArtPaths = Array.from(svgDocument.querySelectorAll("path")).map((path) => {
+        const length = path.getTotalLength();
+        const startLength = accumulatedLength;
+
+        accumulatedLength += length;
+
+        path.style.fill = "none";
+        path.style.strokeDasharray = `${length}`;
+        path.style.strokeDashoffset = `${length}`;
+
+        return { path, length, startLength };
+    });
+    soundSpeakerArtTotalLength = accumulatedLength;
+
+    return Boolean(soundSpeakerArtPaths.length);
+}
+
+function updateSoundSpeakerArtReveal() {
+    if (!soundSpeaker || !soundSpeakerDetail || !soundSpeakerCopy || !prepareSoundSpeakerArtPaths()) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        soundSpeakerArtPaths.forEach(({ path }) => path.style.strokeDashoffset = "0");
+        return;
+    }
+
+    const sequenceRect = soundSpeaker.getBoundingClientRect();
+    const copyOffset = soundSpeakerDetail.offsetTop + soundSpeakerCopy.offsetTop;
+    const startSequenceTop = window.innerHeight * 0.25;
+    const endSequenceTop = window.innerHeight * 0.1 - copyOffset;
+    const revealDistance = Math.max(startSequenceTop - endSequenceTop, 1);
+    const progress = clamp((startSequenceTop - sequenceRect.top) / revealDistance, 0, 1);
+    if (!soundSpeakerArtTotalLength) return;
+
+    const drawLength = progress * soundSpeakerArtTotalLength;
+
+    soundSpeakerArtPaths.forEach(({ path, length, startLength }) => {
+        const pathProgress = clamp((drawLength - startLength) / length, 0, 1);
+
+        path.style.strokeDashoffset = `${length * (1 - pathProgress)}`;
+    });
 }
 
 function updateBeginningSectionTransition() {
@@ -837,16 +948,16 @@ function updateFixedNav() {
 
         const headphoneRect = headphoneStage?.getBoundingClientRect();
         const headphoneDetailRect = headphoneDetail?.getBoundingClientRect();
-        const soundBlankRect = soundBlank?.getBoundingClientRect();
-        const legacyRect = legacyStage?.getBoundingClientRect();
+        const soundSpeakerRect = soundSpeaker?.getBoundingClientRect();
         const finaleRect = finale?.getBoundingClientRect();
         const isHeadphoneActive = Boolean(
             (headphoneRect && headphoneRect.top <= activePoint && headphoneRect.bottom > activePoint) ||
             (headphoneDetailRect &&
                 headphoneDetailRect.top <= activePoint &&
                 headphoneDetailRect.bottom > activePoint) ||
-            (soundBlankRect && soundBlankRect.top <= activePoint && soundBlankRect.bottom > activePoint) ||
-            (legacyRect && legacyRect.top <= activePoint && legacyRect.bottom > activePoint)
+            (soundSpeakerRect &&
+                soundSpeakerRect.top <= activePoint &&
+                soundSpeakerRect.bottom > activePoint)
         );
         fixedUi.classList.toggle("is-headphone-stage", isHeadphoneActive);
         fixedUi.classList.toggle(
@@ -945,6 +1056,17 @@ function updateHeadphoneSequence() {
     headphoneSequenceSticky.classList.toggle("is-ended", isEnded);
 }
 
+function updateSoundSpeakerSequence() {
+    if (!soundSpeaker || !soundSpeakerSticky) return;
+
+    const sequenceRect = soundSpeaker.getBoundingClientRect();
+    const isPinned = sequenceRect.top <= 0 && sequenceRect.bottom > window.innerHeight;
+    const isEnded = sequenceRect.bottom <= window.innerHeight;
+
+    soundSpeakerSticky.classList.toggle("is-pinned", isPinned);
+    soundSpeakerSticky.classList.toggle("is-ended", isEnded);
+}
+
 function updateLegacySequence() {
     if (!legacySequence || !legacySequenceArt) return;
 
@@ -966,6 +1088,9 @@ function updateScrollEffects() {
     updateBeginningCopyScroll();
     updateSoundHorizontalScroll();
     updateHeadphoneSequence();
+    updateHeadphoneArtReveal();
+    updateSoundSpeakerSequence();
+    updateSoundSpeakerArtReveal();
     updateLegacySequence();
 }
 
@@ -977,5 +1102,13 @@ beginningScrollArt?.addEventListener("load", () => {
     updateBeginningArtReveal();
 });
 initializeSoundLightRays();
+headphoneStageArt?.addEventListener("load", () => {
+    prepareHeadphoneArtPaths();
+    updateHeadphoneArtReveal();
+});
+soundSpeakerArt?.addEventListener("load", () => {
+    prepareSoundSpeakerArtPaths();
+    updateSoundSpeakerArtReveal();
+});
 prepareBeginningText();
 updateScrollEffects();
