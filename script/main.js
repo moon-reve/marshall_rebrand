@@ -4,7 +4,7 @@ const heroContent = document.querySelector(".hero__content");
 const heroPlaceholders = document.querySelectorAll(".hero__media-placeholder");
 const speakersStage = document.querySelector("[data-speakers-stage]");
 const speakersGrid = speakersStage?.querySelector(".speakers-grid");
-const speakersPanels = document.querySelectorAll(".speakers-panel");
+const speakersImages = document.querySelectorAll(".speakers-img");
 const fixedUi = document.querySelector("[data-fixed-ui]");
 const fixedNav = document.querySelector(".fixed-nav");
 const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
@@ -37,6 +37,21 @@ const legacyHero = document.querySelector("[data-legacy-hero]");
 const legacyStatement = document.querySelector("[data-legacy-statement]");
 const legacyClosing = document.querySelector("[data-legacy-closing]");
 const finale = document.querySelector("[data-finale]");
+const speakersTransitionBg = document.createElement("div");
+
+speakersTransitionBg.className = "speakers-transition-bg";
+speakersGrid?.prepend(speakersTransitionBg);
+
+if (heroMediaGrid) {
+    heroMediaGrid.classList.add("hero__media-grid-overlay");
+    document.body.appendChild(heroMediaGrid);
+}
+
+if (heroContent) {
+    heroContent.classList.add("hero__content-overlay");
+    document.body.appendChild(heroContent);
+}
+
 let speakersTargetProgress = 0;
 let speakersRenderedProgress = 0;
 let speakersAnimationFrame = null;
@@ -44,6 +59,10 @@ let speakersPreviousTargetProgress = 0;
 let speakersFirstPanelProgress = 0;
 let speakersFirstPanelHoldUntil = 0;
 let speakersFirstPanelIsSequenced = false;
+let speakersEntryIsAutoAnimating = false;
+let speakersEntryAutoAnimationFrame = null;
+let speakersIsAutoAnimating = false;
+let speakersAutoAnimationFrame = null;
 let beginningTextTargetProgress = 0;
 let beginningTextRenderedProgress = 0;
 let beginningTextAnimationFrame = null;
@@ -57,6 +76,12 @@ const fixedNavSections = Array.from(fixedNavLinks)
         return target ? { link, target } : null;
     })
     .filter(Boolean);
+const speakersPanelTimings = [
+    [0, 0.56],
+    [0.08, 0.66],
+    [0.24, 0.82],
+    [0.4, 0.96],
+];
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -70,8 +95,87 @@ function sequenceProgress(progress, start, end) {
     return clamp((progress - start) / (end - start), 0, 1);
 }
 
+function renderSpeakersEntry(progress) {
+    const easedProgress = progress * progress * (3 - 2 * progress);
+
+    speakersImages.forEach((image) => {
+        image.style.setProperty("--speakers-entry-y", `${(1 - easedProgress) * 100}vh`);
+    });
+}
+
+function renderHeroContentExit(progress) {
+    if (!heroContent) return;
+
+    const exitProgress = clamp(progress, 0, 1);
+    const easedProgress = exitProgress * exitProgress * (3 - 2 * exitProgress);
+
+    heroContent.classList.toggle("is-active", exitProgress < 0.995);
+    heroContent.style.setProperty("--hero-content-y", `${-easedProgress * 100}vh`);
+    heroContent.style.setProperty("--hero-content-opacity", `${1 - easedProgress}`);
+}
+
+function renderHeroMediaExit(progress) {
+    if (!heroMediaGrid) return;
+
+    const [firstPanelStart, firstPanelEnd] = speakersPanelTimings[0];
+    const exitProgress = sequenceProgress(progress, firstPanelStart, firstPanelEnd);
+    const easedProgress = exitProgress * exitProgress * (3 - 2 * exitProgress);
+
+    heroMediaGrid.style.setProperty("--hero-media-y", `${-easedProgress * 100}vh`);
+}
+
+function renderSpeakersTransitionBackground(progress) {
+    const [firstPanelStart, firstPanelEnd] = speakersPanelTimings[0];
+    const backgroundProgress = sequenceProgress(progress, firstPanelStart, firstPanelEnd);
+
+    speakersTransitionBg.style.setProperty(
+        "--speakers-transition-bg-opacity",
+        `${backgroundProgress}`
+    );
+}
+
+function renderSpeakersImages(progress, useFirstPanelSequence = true) {
+    let isFirstPanelMoving = false;
+
+    speakersImages.forEach((image, index) => {
+        const [start, end] = speakersPanelTimings[index];
+        let panelProgress = sequenceProgress(progress, start, end);
+
+        if (index === 0 && useFirstPanelSequence) {
+            if (speakersFirstPanelIsSequenced) {
+                const isFirstPanelHeld = performance.now() < speakersFirstPanelHoldUntil;
+                const firstPanelTarget = isFirstPanelHeld ? 1 : panelProgress;
+                const firstPanelDistance = firstPanelTarget - speakersFirstPanelProgress;
+
+                speakersFirstPanelProgress += firstPanelDistance * 0.12;
+
+                if (Math.abs(firstPanelDistance) < 0.0001) {
+                    speakersFirstPanelProgress = firstPanelTarget;
+
+                    if (!isFirstPanelHeld) speakersFirstPanelIsSequenced = false;
+                } else {
+                    isFirstPanelMoving = true;
+                }
+            } else {
+                speakersFirstPanelProgress = panelProgress;
+            }
+
+            panelProgress = speakersFirstPanelProgress;
+        } else if (index === 0) {
+            speakersFirstPanelProgress = panelProgress;
+        }
+
+        const easedProgress = panelProgress * panelProgress * (3 - 2 * panelProgress);
+
+        image.style.setProperty("--speakers-panel-y", `${-easedProgress * 100}%`);
+    });
+
+    return isFirstPanelMoving;
+}
+
 function updateHeroScroll() {
-    if (!heroStage || !speakersStage || !speakersGrid) return;
+    if (!heroStage || !speakersStage || !speakersGrid || !speakersImages.length) return;
+    if (speakersEntryIsAutoAnimating) return;
 
     const heroRect = heroStage.getBoundingClientRect();
     const speakersRect = speakersStage.getBoundingClientRect();
@@ -80,14 +184,23 @@ function updateHeroScroll() {
 
     // speakers-stage가 아직 뷰포트 위에 없는 동안 entry 페이즈
     const isEntryPhase = heroProgress > 0 && speakersRect.top > 0;
+    const isHeroContentVisible = heroRect.bottom > 0 && speakersRect.top > 0;
 
     speakersGrid.classList.toggle("is-entry", isEntryPhase);
+    heroContent?.classList.toggle("is-active", isHeroContentVisible);
 
     if (isEntryPhase) {
-        const easedProgress = heroProgress * heroProgress * (3 - 2 * heroProgress);
-        speakersGrid.style.transform = `translate3d(0, ${(1 - easedProgress) * 100}vh, 0)`;
+        renderHeroContentExit(0);
+        renderHeroMediaExit(0);
+        renderSpeakersTransitionBackground(0);
+        renderSpeakersEntry(heroProgress);
     } else {
-        speakersGrid.style.removeProperty("transform");
+        speakersImages.forEach((image) => {
+            image.style.setProperty("--speakers-entry-y", "0vh");
+        });
+        renderHeroContentExit(speakersRenderedProgress);
+        renderHeroMediaExit(speakersRenderedProgress);
+        renderSpeakersTransitionBackground(speakersRect.bottom > 0 ? speakersRenderedProgress : 0);
     }
 }
 
@@ -124,6 +237,21 @@ function prepareBeginningText() {
     });
 }
 
+function renderBeginningTextProgress(progress) {
+    const characterCount = beginningTextChars.length;
+
+    beginningTextChars.forEach((character, index) => {
+        const characterStart = index / characterCount;
+        const characterProgress = clamp(
+            (progress - characterStart) * characterCount,
+            0,
+            1
+        );
+
+        character.style.opacity = `${0.25 + characterProgress * 0.75}`;
+    });
+}
+
 function updateBeginningTextReveal() {
     if (!beginningSection || !beginningTextChars.length) return;
 
@@ -148,18 +276,7 @@ function updateBeginningTextReveal() {
             beginningTextRenderedProgress = beginningTextTargetProgress;
         }
 
-        const characterCount = beginningTextChars.length;
-
-        beginningTextChars.forEach((character, index) => {
-            const characterStart = index / characterCount;
-            const characterProgress = clamp(
-                (beginningTextRenderedProgress - characterStart) * characterCount,
-                0,
-                1
-            );
-
-            character.style.opacity = `${0.25 + characterProgress * 0.75}`;
-        });
+        renderBeginningTextProgress(beginningTextRenderedProgress);
 
         if (beginningTextRenderedProgress !== beginningTextTargetProgress) {
             beginningTextAnimationFrame = requestAnimationFrame(renderBeginningTextReveal);
@@ -169,6 +286,49 @@ function updateBeginningTextReveal() {
     }
 
     beginningTextAnimationFrame = requestAnimationFrame(renderBeginningTextReveal);
+}
+
+function getPointDistance(firstPoint, secondPoint) {
+    const xDistance = firstPoint.x - secondPoint.x;
+    const yDistance = firstPoint.y - secondPoint.y;
+
+    return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+}
+
+function sortConnectedPathsLeftToRight(paths) {
+    const remainingPaths = [...paths].sort((firstPath, secondPath) => {
+        if (firstPath.start.x !== secondPath.start.x) return firstPath.start.x - secondPath.start.x;
+        if (firstPath.start.y !== secondPath.start.y) return firstPath.start.y - secondPath.start.y;
+        return firstPath.index - secondPath.index;
+    });
+    const sortedPaths = [];
+    const connectionTolerance = 3;
+
+    while (remainingPaths.length) {
+        let currentPath = remainingPaths.shift();
+        sortedPaths.push(currentPath);
+
+        while (remainingPaths.length) {
+            let nextIndex = -1;
+            let nextDistance = Infinity;
+
+            remainingPaths.forEach((candidatePath, index) => {
+                const distance = getPointDistance(currentPath.end, candidatePath.start);
+
+                if (distance <= connectionTolerance && distance < nextDistance) {
+                    nextIndex = index;
+                    nextDistance = distance;
+                }
+            });
+
+            if (nextIndex === -1) break;
+
+            currentPath = remainingPaths.splice(nextIndex, 1)[0];
+            sortedPaths.push(currentPath);
+        }
+    }
+
+    return sortedPaths;
 }
 
 function prepareBeginningArtPaths() {
@@ -186,7 +346,7 @@ function prepareBeginningArtPaths() {
         svgRoot.prepend(defs);
     }
 
-    beginningArtPaths = Array.from(svgDocument.querySelectorAll("path")).map((sourcePath, index) => {
+    beginningArtPaths = sortConnectedPathsLeftToRight(Array.from(svgDocument.querySelectorAll("path")).map((sourcePath, index) => {
         const mask = svgDocument.createElementNS(svgNamespace, "mask");
         const maskId = `beginning-art-mask-${index}`;
         mask.setAttribute("id", maskId);
@@ -208,15 +368,21 @@ function prepareBeginningArtPaths() {
         defs.appendChild(mask);
 
         const length = path.getTotalLength();
+        const firstPoint = path.getPointAtLength(0);
+        const lastPoint = path.getPointAtLength(length);
+        const shouldRevealFromEnd = lastPoint.x < firstPoint.x;
+        const start = shouldRevealFromEnd ? lastPoint : firstPoint;
+        const end = shouldRevealFromEnd ? firstPoint : lastPoint;
+
         path.style.strokeDasharray = `${length}`;
-        path.style.strokeDashoffset = `${length}`;
+        path.style.strokeDashoffset = `${shouldRevealFromEnd ? -length : length}`;
 
         sourcePath.style.fill = "#000";
         sourcePath.style.stroke = "none";
         sourcePath.setAttribute("mask", `url(#${maskId})`);
 
-        return { path, length };
-    });
+        return { path, length, shouldRevealFromEnd, start, end, index };
+    }));
 
     return Boolean(beginningArtPaths.length);
 }
@@ -245,8 +411,18 @@ function updateBeginningArtReveal() {
             beginningArtRenderedProgress = beginningArtTargetProgress;
         }
 
-        beginningArtPaths.forEach(({ path, length }) => {
-            path.style.strokeDashoffset = `${length * (1 - beginningArtRenderedProgress)}`;
+        const pathCount = beginningArtPaths.length;
+
+        beginningArtPaths.forEach(({ path, length, shouldRevealFromEnd }, index) => {
+            const pathStart = index / pathCount;
+            const pathProgress = clamp(
+                (beginningArtRenderedProgress - pathStart) * pathCount,
+                0,
+                1
+            );
+            const hiddenOffset = shouldRevealFromEnd ? -length : length;
+
+            path.style.strokeDashoffset = `${hiddenOffset * (1 - pathProgress)}`;
         });
 
         if (beginningArtRenderedProgress !== beginningArtTargetProgress) {
@@ -303,11 +479,17 @@ function updateBeginningSectionTransition() {
 }
 
 function updateSpeakersTransition() {
-    if (!speakersStage || !speakersPanels.length) return;
+    if (!speakersStage || !speakersImages.length) return;
+    if (speakersIsAutoAnimating) return;
 
     const stageRect = speakersStage.getBoundingClientRect();
-    const scrollDistance = Math.max(speakersStage.offsetHeight - window.innerHeight, 1);
-    speakersTargetProgress = clamp(-stageRect.top / scrollDistance, 0, 1);
+
+    if (stageRect.bottom <= 0 || stageRect.top >= window.innerHeight) {
+        renderSpeakersTransitionBackground(0);
+    }
+
+    const scrollDistance = Math.max(speakersStage.offsetHeight, 1);
+    speakersTargetProgress = clamp((window.innerHeight - stageRect.top) / scrollDistance, 0, 1);
 
     if (fixedNav && heroStage) {
         const heroBottom = heroStage.getBoundingClientRect().bottom;
@@ -332,58 +514,24 @@ function updateSpeakersTransition() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         if (speakersAnimationFrame) cancelAnimationFrame(speakersAnimationFrame);
         speakersAnimationFrame = null;
-        speakersPanels.forEach((panel) => panel.style.removeProperty("transform"));
+        speakersImages.forEach((image) => image.style.removeProperty("--speakers-panel-y"));
         return;
     }
 
     if (speakersAnimationFrame) return;
 
-    const timings = [
-        [0, 0.56],
-        [0.08, 0.66],
-        [0.24, 0.82],
-        [0.4, 0.96],
-    ];
-
     function renderSpeakersTransition() {
         const distance = speakersTargetProgress - speakersRenderedProgress;
         speakersRenderedProgress += distance * 0.085;
-        let isFirstPanelMoving = false;
 
         if (Math.abs(distance) < 0.0001) {
             speakersRenderedProgress = speakersTargetProgress;
         }
 
-        speakersPanels.forEach((panel, index) => {
-            const [start, end] = timings[index];
-            let panelProgress = sequenceProgress(speakersRenderedProgress, start, end);
-
-            if (index === 0) {
-                if (speakersFirstPanelIsSequenced) {
-                    const isFirstPanelHeld = performance.now() < speakersFirstPanelHoldUntil;
-                    const firstPanelTarget = isFirstPanelHeld ? 1 : panelProgress;
-                    const firstPanelDistance = firstPanelTarget - speakersFirstPanelProgress;
-
-                    speakersFirstPanelProgress += firstPanelDistance * 0.12;
-
-                    if (Math.abs(firstPanelDistance) < 0.0001) {
-                        speakersFirstPanelProgress = firstPanelTarget;
-
-                        if (!isFirstPanelHeld) speakersFirstPanelIsSequenced = false;
-                    } else {
-                        isFirstPanelMoving = true;
-                    }
-                } else {
-                    speakersFirstPanelProgress = panelProgress;
-                }
-
-                panelProgress = speakersFirstPanelProgress;
-            }
-
-            const easedProgress = panelProgress * panelProgress * (3 - 2 * panelProgress);
-
-            panel.style.transform = `translate3d(0, ${-easedProgress * 100}%, 0)`;
-        });
+        const isFirstPanelMoving = renderSpeakersImages(speakersRenderedProgress);
+        renderHeroContentExit(speakersRenderedProgress);
+        renderHeroMediaExit(speakersRenderedProgress);
+        renderSpeakersTransitionBackground(speakersRenderedProgress);
 
         if (
             speakersRenderedProgress !== speakersTargetProgress ||
@@ -397,6 +545,178 @@ function updateSpeakersTransition() {
     }
 
     speakersAnimationFrame = requestAnimationFrame(renderSpeakersTransition);
+}
+
+function animateSpeakersToEnd() {
+    if (!speakersStage || speakersIsAutoAnimating || speakersRenderedProgress >= 0.98) return;
+
+    speakersIsAutoAnimating = true;
+    speakersFirstPanelHoldUntil = 0;
+    speakersFirstPanelIsSequenced = false;
+
+    if (speakersAnimationFrame) cancelAnimationFrame(speakersAnimationFrame);
+    if (speakersAutoAnimationFrame) cancelAnimationFrame(speakersAutoAnimationFrame);
+
+    speakersAnimationFrame = null;
+    const startProgress = speakersRenderedProgress;
+    const startBeginningProgress = beginningTextRenderedProgress;
+    const startScrollY = window.scrollY;
+    const startTime = performance.now();
+    const duration = 1400;
+    let targetScrollY = speakersStage.offsetTop + speakersStage.offsetHeight - window.innerHeight;
+    let targetBeginningProgress = 0;
+
+    if (beginningText && beginningTextChars.length) {
+        const textRect = beginningText.getBoundingClientRect();
+        const beginningTextLowerY = window.scrollY + textRect.top - window.innerHeight * 0.68;
+
+        targetScrollY = Math.max(targetScrollY, beginningTextLowerY);
+        targetBeginningProgress = 0.18;
+    }
+
+    function renderSpeakersAutoAnimation(now) {
+        const progress = clamp((now - startTime) / duration, 0, 1);
+        const easedProgress = progress * progress * (3 - 2 * progress);
+
+        speakersRenderedProgress = mix(startProgress, 1, easedProgress);
+        speakersTargetProgress = speakersRenderedProgress;
+        renderSpeakersImages(speakersRenderedProgress, false);
+        renderHeroContentExit(speakersRenderedProgress);
+        renderHeroMediaExit(speakersRenderedProgress);
+        renderSpeakersTransitionBackground(speakersRenderedProgress);
+        window.scrollTo(0, mix(startScrollY, targetScrollY, easedProgress));
+
+        if (beginningTextChars.length) {
+            beginningTextRenderedProgress = mix(startBeginningProgress, targetBeginningProgress, easedProgress);
+            beginningTextTargetProgress = beginningTextRenderedProgress;
+            renderBeginningTextProgress(beginningTextRenderedProgress);
+        }
+
+        if (progress < 1) {
+            speakersAutoAnimationFrame = requestAnimationFrame(renderSpeakersAutoAnimation);
+            return;
+        }
+
+        speakersRenderedProgress = 1;
+        speakersTargetProgress = 1;
+        speakersPreviousTargetProgress = 1;
+        renderSpeakersImages(1, false);
+        renderHeroContentExit(1);
+        renderHeroMediaExit(1);
+        renderSpeakersTransitionBackground(1);
+
+        if (beginningTextChars.length) {
+            beginningTextRenderedProgress = targetBeginningProgress;
+            beginningTextTargetProgress = targetBeginningProgress;
+            renderBeginningTextProgress(targetBeginningProgress);
+        }
+
+        window.scrollTo(0, targetScrollY);
+
+        speakersAutoAnimationFrame = null;
+        requestAnimationFrame(() => {
+            speakersIsAutoAnimating = false;
+            updateScrollEffects();
+        });
+    }
+
+    speakersAutoAnimationFrame = requestAnimationFrame(renderSpeakersAutoAnimation);
+}
+
+function animateSpeakersEntryToEnd() {
+    if (!heroStage || !speakersStage || !speakersGrid || speakersEntryIsAutoAnimating) return;
+
+    const heroRect = heroStage.getBoundingClientRect();
+    const speakersRect = speakersStage.getBoundingClientRect();
+    const heroScrollDistance = Math.max(heroStage.offsetHeight - window.innerHeight, 1);
+    const startProgress = clamp(-heroRect.top / heroScrollDistance, 0, 1);
+
+    if (startProgress >= 0.98 || speakersRect.top <= 0) return;
+
+    speakersEntryIsAutoAnimating = true;
+    speakersGrid.classList.add("is-entry");
+    renderHeroContentExit(0);
+    renderHeroMediaExit(0);
+    renderSpeakersTransitionBackground(0);
+
+    if (speakersEntryAutoAnimationFrame) cancelAnimationFrame(speakersEntryAutoAnimationFrame);
+
+    const startTime = performance.now();
+    const duration = 950;
+    const targetScrollY = heroStage.offsetTop + heroStage.offsetHeight - window.innerHeight + 1;
+
+    function renderSpeakersEntryAutoAnimation(now) {
+        const progress = clamp((now - startTime) / duration, 0, 1);
+        const easedProgress = progress * progress * (3 - 2 * progress);
+        const entryProgress = mix(startProgress, 1, easedProgress);
+
+        renderSpeakersEntry(entryProgress);
+        renderHeroContentExit(0);
+        renderHeroMediaExit(0);
+        renderSpeakersTransitionBackground(0);
+
+        if (progress < 1) {
+            speakersEntryAutoAnimationFrame = requestAnimationFrame(renderSpeakersEntryAutoAnimation);
+            return;
+        }
+
+        renderSpeakersEntry(1);
+        renderHeroContentExit(0);
+        renderHeroMediaExit(0);
+        renderSpeakersTransitionBackground(0);
+        window.scrollTo(0, targetScrollY);
+
+        speakersEntryAutoAnimationFrame = null;
+        requestAnimationFrame(() => {
+            speakersEntryIsAutoAnimating = false;
+            updateScrollEffects();
+        });
+    }
+
+    speakersEntryAutoAnimationFrame = requestAnimationFrame(renderSpeakersEntryAutoAnimation);
+}
+
+function handleSpeakersWheel(event) {
+    if (!speakersStage || !speakersImages.length) return;
+
+    if (speakersEntryIsAutoAnimating) {
+        event.preventDefault();
+        return;
+    }
+
+    if (speakersIsAutoAnimating) {
+        event.preventDefault();
+        return;
+    }
+
+    if (event.deltaY <= 0) return;
+
+    const heroRect = heroStage?.getBoundingClientRect();
+    const speakersRect = speakersStage.getBoundingClientRect();
+    const heroScrollDistance = heroStage ? Math.max(heroStage.offsetHeight - window.innerHeight, 1) : 1;
+    const heroProgress = heroRect ? clamp(-heroRect.top / heroScrollDistance, 0, 1) : 1;
+    const isHeroEntryAvailable =
+        heroRect &&
+        heroProgress < 0.98 &&
+        heroRect.bottom > 0 &&
+        speakersRect.top > 0 &&
+        speakersRect.top <= window.innerHeight * 1.5;
+
+    if (isHeroEntryAvailable) {
+        event.preventDefault();
+        animateSpeakersEntryToEnd();
+        return;
+    }
+
+    if (speakersRenderedProgress >= 0.98) return;
+
+    const stageRect = speakersRect;
+    const isSpeakersStageEntering = stageRect.top < window.innerHeight && stageRect.bottom > 0;
+
+    if (!isSpeakersStageEntering) return;
+
+    event.preventDefault();
+    animateSpeakersToEnd();
 }
 
 function updateFixedNav() {
@@ -540,14 +860,14 @@ function updateBeginningCopyScroll() {
 
     const fixedGap = window.innerHeight * 0.5;
     const copyTwoTop = beginningCopyOne.offsetTop + beginningCopyOne.offsetHeight + fixedGap;
-    const trackExit = copyTwoTop + beginningCopyTwo.offsetHeight + 48;
+    const trackExit = copyTwoTop + beginningCopyTwo.offsetHeight + window.innerHeight * 0.12;
 
     const stageRect = beginningDesign.getBoundingClientRect();
-    const scrollDistance = Math.max(beginningDesign.offsetHeight - window.innerHeight, 1);
-    const progress = clamp(-stageRect.top / scrollDistance, 0, 1);
-    const copyStartDelay = window.innerHeight * 0.35;
-    const textProgress = clamp((-stageRect.top - copyStartDelay) / trackExit, 0, 1);
-    const trackMove = textProgress * -trackExit;
+    const copyStartPoint = window.innerHeight * 0.75;
+    const textProgress = clamp((window.innerHeight - stageRect.top - copyStartPoint) / trackExit, 0, 1);
+    const entryProgress = sequenceProgress(textProgress, 0, 0.3);
+    const easedEntryProgress = entryProgress * entryProgress * (3 - 2 * entryProgress);
+    const trackMove = (1 - easedEntryProgress) * window.innerHeight * 0.7 + textProgress * -trackExit;
 
     beginningCopyTwo.style.top = `${copyTwoTop}px`;
     beginningCopyOne.style.transform = `translate3d(0, ${trackMove}px, 0)`;
@@ -624,6 +944,7 @@ function updateScrollEffects() {
 }
 
 window.addEventListener("scroll", updateScrollEffects, { passive: true });
+window.addEventListener("wheel", handleSpeakersWheel, { passive: false });
 window.addEventListener("resize", updateScrollEffects);
 beginningScrollArt?.addEventListener("load", () => {
     prepareBeginningArtPaths();

@@ -191,7 +191,7 @@ a {
 }
 
 .hero-stage {
-    height: 200vh;
+    height: 150vh;
 }
 
 .hero {
@@ -208,6 +208,13 @@ a {
     grid-template-columns: repeat(4, 25vw);
     width: 100vw;
     height: 100vh;
+    will-change: transform;
+}
+
+.hero__media-grid-overlay {
+    position: fixed;
+    z-index: 1;
+    transform: translate3d(0, var(--hero-media-y, 0vh), 0);
     will-change: transform;
 }
 
@@ -271,6 +278,31 @@ a {
     will-change: transform;
 }
 
+.hero__content-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    opacity: var(--hero-content-opacity, 0);
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(0, var(--hero-content-y, 0vh), 0);
+    will-change: transform, opacity;
+}
+
+.hero__content-overlay.is-active {
+    --hero-content-opacity: 1;
+    visibility: visible;
+}
+
+.speakers-transition-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: #fff;
+    opacity: var(--speakers-transition-bg-opacity, 0);
+    pointer-events: none;
+}
+
 .hero__year-range {
     position: absolute;
     top: 1.3vh;
@@ -319,25 +351,6 @@ a {
     filter: drop-shadow(0 0.12vw 0.1vw rgba(33, 18, 3, 0.2));
 }
 
-.hero__title::before {
-    content: "";
-    position: absolute;
-    z-index: 2;
-    top: 24%;
-    left: 99%;
-    width: 1.5vw;
-    aspect-ratio: 1;
-    pointer-events: none;
-    opacity: 0;
-    background: radial-gradient(circle, #fff 0 8%, #fff4c7 24%, #e5b947 58%, transparent 72%);
-    clip-path: polygon(50% 0, 53% 47%, 100% 50%, 53% 53%, 50% 100%, 47% 53%, 0 50%, 47% 47%);
-    filter:
-        drop-shadow(0 0 0.22vw rgba(255, 250, 222, 0.95))
-        drop-shadow(0 0 0.55vw rgba(255, 210, 89, 0.9));
-    transform: translate(-50%, -50%) scale(0.15) rotate(0deg);
-    animation: hero-gold-sparkle 5.5s ease-in-out infinite;
-}
-
 .hero__title::after {
     content: "";
     position: absolute;
@@ -346,17 +359,19 @@ a {
     pointer-events: none;
     background: linear-gradient(
         115deg,
-        transparent 38%,
-        rgba(255, 235, 166, 0.12) 44%,
-        rgba(255, 250, 222, 0.75) 50%,
-        rgba(255, 218, 121, 0.22) 56%,
-        transparent 62%
+        transparent 43%,
+        rgba(255, 246, 222, 0.16) 47%,
+        rgba(255, 255, 255, 0.95) 49.4%,
+        rgba(255, 255, 255, 1) 50%,
+        rgba(255, 255, 255, 0.82) 50.6%,
+        rgba(255, 224, 142, 0.22) 53%,
+        transparent 57%
     );
-    background-size: 250% 100%;
+    background-size: 320% 100%;
     background-position: 180% 50%;
     mix-blend-mode: screen;
-    -webkit-mask: url("../assets/images/marshall_logo_goldmetal.png") center / 100% 100% no-repeat;
-    mask: url("../assets/images/marshall_logo_goldmetal.png") center / 100% 100% no-repeat;
+    -webkit-mask: url("../assets/images/marshall_logo_3_transparent.png") center / 100% 100% no-repeat;
+    mask: url("../assets/images/marshall_logo_3_transparent.png") center / 100% 100% no-repeat;
     animation: hero-gold-shine 5.5s ease-in-out infinite;
 }
 
@@ -366,13 +381,13 @@ a {
         opacity: 0;
     }
 
-    24% {
-        opacity: 0.9;
+    23% {
+        opacity: 1;
     }
 
-    58% {
+    56% {
         background-position: -80% 50%;
-        opacity: 0.9;
+        opacity: 1;
     }
 
     64%, 100% {
@@ -381,30 +396,7 @@ a {
     }
 }
 
-@keyframes hero-gold-sparkle {
-    0%, 60% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.15) rotate(0deg);
-    }
-
-    67% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.15) rotate(18deg);
-    }
-
-    74% {
-        opacity: 0.65;
-        transform: translate(-50%, -50%) scale(0.72) rotate(38deg);
-    }
-
-    80%, 100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.15) rotate(55deg);
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .hero__title::before,
     .hero__title::after {
         animation: none;
         opacity: 0;
@@ -459,9 +451,8 @@ a {
 /* 피그마: 4패널 y=1078, 각 w=480(25vw), h: 455/552/737/1080px */
 .speakers-stage {
     position: relative;
-    z-index: 4;
     width: 100vw;
-    height: 200vh;
+    height: 150vh;
     background: #fff;
     pointer-events: none;
 }
@@ -479,15 +470,16 @@ a {
 .speakers-grid.is-entry {
     position: fixed;
     top: 0;
+    z-index: 2;
 }
 
 .speakers-panel {
     position: relative;
+    z-index: 1;
     width: 25vw;
     height: 100vh;
     overflow: hidden;
     flex-shrink: 0;
-    will-change: transform;
 }
 
 /* 각 이미지: 400% 너비로 전체 씬 렌더, offset으로 각 구역 표시 */
@@ -499,6 +491,8 @@ a {
     bottom: 0;
     object-fit: cover;
     pointer-events: none;
+    transform: translate3d(0, calc(var(--speakers-entry-y, 0vh) + var(--speakers-panel-y, 0%)), 0);
+    will-change: transform;
 }
 
 .speakers-panel--01 .speakers-img { left: 0; }
@@ -513,16 +507,19 @@ a {
 
     .speakers-panel {
         height: 100vh;
+    }
+
+    .speakers-img {
         transform: none !important;
     }
 }
 
 .beginning-stage {
-    height: 600vh;
+    height: 530vh;
 }
 
 .beginning {
-    height: 600vh;
+    height: 530vh;
     overflow: visible;
     background: #fff;
 }
@@ -585,7 +582,7 @@ a {
 
 .beginning__scroll-art {
     position: absolute;
-    top: 59.5vh;
+    top: 55.5vh;
     left: 24.9vw;
     z-index: 1;
     width: 50.2vw;
@@ -605,15 +602,16 @@ a {
 }
 
 .beginning-feature--sound {
-    top: 100vh;
-    height: 300vh;
+    top: 84vh;
+    height: 316vh;
     background-image: none;
 }
 
 .beginning-feature__sound-sticky {
     --sound-section-opacity: 1;
-    position: absolute;
+    position: sticky;
     top: 0;
+    z-index: 3;
     width: 100vw;
     height: 100vh;
     background-image: url("../assets/images/beginning_1.webp");
@@ -626,20 +624,18 @@ a {
 }
 
 .beginning-feature__sound-sticky.is-pinned {
-    position: fixed;
-    inset: 0;
-    z-index: 3;
+    position: sticky;
+    top: 0;
 }
 
 .beginning-feature__sound-sticky.is-ended {
-    position: absolute;
-    top: auto;
-    bottom: 0;
+    position: sticky;
+    top: 0;
 }
 
 .beginning-feature--design {
     top: 300vh;
-    height: 300vh;
+    height: 230vh;
     background-image: none;
 }
 
@@ -751,8 +747,9 @@ a {
 }
 
 .beginning-feature__copy--one p:not(:first-child) {
-    font-size: 1.354vw;
-    line-height: 1.15;
+    font-size: 1.25vw;
+    font-weight: 300;
+    line-height: 1.2;
 }
 
 .beginning-feature__copy--two {
