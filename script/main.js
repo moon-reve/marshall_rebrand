@@ -43,6 +43,8 @@ const legacyHero = document.querySelector("[data-legacy-hero]");
 const legacyStatement = document.querySelector("[data-legacy-statement]");
 const legacyClosing = document.querySelector("[data-legacy-closing]");
 const finale = document.querySelector("[data-finale]");
+const finaleTitle = document.querySelector(".finale__title");
+const finaleCreditItems = document.querySelectorAll(".finale__credits span");
 const speakersTransitionBg = document.createElement("div");
 
 speakersTransitionBg.className = "speakers-transition-bg";
@@ -1078,6 +1080,89 @@ function updateLegacySequence() {
     legacySequenceArt.classList.toggle("is-ended", isEnded);
 }
 
+function initializeFinaleCreditTypewriter() {
+    finaleCreditItems.forEach((item) => {
+        const fullText = item.dataset.credit || item.textContent.trim();
+        let typeTimer = null;
+
+        item.dataset.credit = fullText;
+        item.style.setProperty("--credit-width", `${item.getBoundingClientRect().width}px`);
+        item.tabIndex = 0;
+
+        const stopTyping = () => {
+            if (typeTimer) {
+                clearInterval(typeTimer);
+                typeTimer = null;
+            }
+        };
+
+        const restoreText = () => {
+            stopTyping();
+            item.textContent = fullText;
+            item.style.setProperty("--typing-progress", "0%");
+            item.classList.remove("is-typing");
+        };
+
+        const typeText = () => {
+            stopTyping();
+
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                item.textContent = fullText;
+                return;
+            }
+
+            let index = 0;
+
+            item.textContent = "";
+            item.style.setProperty("--typing-progress", "0%");
+            item.classList.add("is-typing");
+
+            typeTimer = window.setInterval(() => {
+                index += 1;
+                item.textContent = fullText.slice(0, index);
+                item.style.setProperty("--typing-progress", `${(index / fullText.length) * 100}%`);
+
+                if (index >= fullText.length) {
+                    stopTyping();
+                }
+            }, 46);
+        };
+
+        item.addEventListener("mouseenter", typeText);
+        item.addEventListener("focus", typeText);
+        item.addEventListener("mouseleave", restoreText);
+        item.addEventListener("blur", restoreText);
+    });
+}
+
+function initializeFinaleTitleSlideDown() {
+    if (!finaleTitle) return;
+
+    const text = finaleTitle.textContent;
+
+    finaleTitle.textContent = "";
+    finaleTitle.setAttribute("aria-label", text);
+
+    Array.from(text).forEach((letter, index) => {
+        const char = document.createElement("span");
+
+        char.className = "char";
+        char.style.setProperty("--char-index", index);
+        char.textContent = letter;
+        char.setAttribute("aria-hidden", "true");
+        finaleTitle.appendChild(char);
+    });
+
+    const observer = new IntersectionObserver(
+        ([entry]) => {
+            finaleTitle.classList.toggle("is-visible", entry.isIntersecting);
+        },
+        { threshold: 0.35 }
+    );
+
+    observer.observe(finaleTitle);
+}
+
 function updateScrollEffects() {
     updateHeroScroll();
     updateSpeakersTransition();
@@ -1102,6 +1187,8 @@ beginningScrollArt?.addEventListener("load", () => {
     updateBeginningArtReveal();
 });
 initializeSoundLightRays();
+initializeFinaleCreditTypewriter();
+initializeFinaleTitleSlideDown();
 headphoneStageArt?.addEventListener("load", () => {
     prepareHeadphoneArtPaths();
     updateHeadphoneArtReveal();
