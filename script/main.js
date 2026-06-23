@@ -24,6 +24,7 @@ const soundStage = document.querySelector("[data-sound-stage]");
 const soundSticky = document.querySelector(".sound-sticky");
 const soundTrack = document.querySelector("[data-sound-track]");
 const soundChannels = document.querySelectorAll(".sound-channel");
+const soundLightRays = document.querySelector("[data-sound-light-rays]");
 const signatureSound = document.querySelector("[data-signature-sound]");
 const headphoneSequence = document.querySelector(".headphone-sequence");
 const headphoneSequenceSticky = document.querySelector(".headphone-sequence__sticky");
@@ -908,6 +909,31 @@ function updateSoundKnobs(isTuned) {
     });
 }
 
+function initializeSoundLightRays() {
+    if (!soundLightRays || !window.SoundLightRays) return;
+
+    try {
+        const lightRays = new window.SoundLightRays(soundLightRays, {
+            origin: "left",
+            color: "#ffffff",
+            speed: 1,
+            spread: 0.2,
+            length: 1.8,
+            fadeDistance: 0.9,
+            saturation: 0.1,
+            mouseInfluence: 0.42,
+            noiseAmount: 0.1,
+            distortion: 0.05,
+            sweepAmount: 0.22,
+            sweepSpeed: 0.55,
+        });
+
+        lightRays.init();
+    } catch (error) {
+        console.warn("Sound light rays failed to initialize:", error);
+    }
+}
+
 function updateHeadphoneSequence() {
     if (!headphoneSequence || !headphoneSequenceSticky) return;
 
@@ -950,5 +976,6 @@ beginningScrollArt?.addEventListener("load", () => {
     prepareBeginningArtPaths();
     updateBeginningArtReveal();
 });
+initializeSoundLightRays();
 prepareBeginningText();
 updateScrollEffects();
