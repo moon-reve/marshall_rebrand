@@ -8,6 +8,8 @@ const speakersImages = document.querySelectorAll(".speakers-img");
 const fixedUi = document.querySelector("[data-fixed-ui]");
 const fixedNav = document.querySelector(".fixed-nav");
 const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
+const fixedGauge = document.querySelector(".fixed-gauge");
+const fixedGaugeTicks = document.querySelectorAll(".fixed-gauge__tick");
 const beginningDesign = document.querySelector("[data-beginning-design]");
 const beginningSection = document.querySelector(".beginning");
 const beginningText = document.querySelector(".beginning__text");
@@ -44,6 +46,12 @@ const legacyStatement = document.querySelector("[data-legacy-statement]");
 const legacyClosing = document.querySelector("[data-legacy-closing]");
 const finale = document.querySelector("[data-finale]");
 const speakersTransitionBg = document.createElement("div");
+const fixedGaugeTickAngles = [0, 30, 60, 90, 120, 150, 210, 240, 270, 300, 330];
+const fixedGaugeDotBaseAngle = 33;
+const fixedGaugeStartAngle = (fixedGaugeDotBaseAngle + 180) % 360;
+const fixedGaugeEndAngle = fixedGaugeTickAngles[5];
+const fixedGaugeMaxRotation = getClockwiseAngleDistance(fixedGaugeStartAngle, fixedGaugeEndAngle);
+const fixedGaugeActivationRange = 8;
 
 speakersTransitionBg.className = "speakers-transition-bg";
 speakersGrid?.prepend(speakersTransitionBg);
@@ -124,14 +132,27 @@ function renderHeroContentExit(progress) {
     heroContent.style.setProperty("--hero-content-opacity", `${1 - easedProgress}`);
 }
 
-function renderHeroMediaExit(progress) {
-    if (!heroMediaGrid) return;
+function renderFixedGaugeReveal(progress) {
+    if (!fixedGauge) return;
 
+    const [lastPanelStart, lastPanelEnd] = speakersPanelTimings[3];
+    const revealProgress = sequenceProgress(progress, lastPanelStart, lastPanelEnd);
+    const easedProgress = revealProgress * revealProgress * (3 - 2 * revealProgress);
+
+    fixedGauge.style.setProperty("--fixed-gauge-reveal", `${easedProgress}`);
+    fixedGauge.style.setProperty("--fixed-gauge-opacity", `${easedProgress}`);
+}
+
+function renderHeroMediaExit(progress) {
     const [firstPanelStart, firstPanelEnd] = speakersPanelTimings[0];
     const exitProgress = sequenceProgress(progress, firstPanelStart, firstPanelEnd);
     const easedProgress = exitProgress * exitProgress * (3 - 2 * exitProgress);
 
-    heroMediaGrid.style.setProperty("--hero-media-y", `${-easedProgress * 100}vh`);
+    if (heroMediaGrid) {
+        heroMediaGrid.style.setProperty("--hero-media-y", `${-easedProgress * 100}vh`);
+    }
+
+    renderFixedGaugeReveal(progress);
 }
 
 function renderSpeakersTransitionBackground(progress) {
@@ -933,6 +954,8 @@ function updateFixedNav() {
         fixedNav.classList.toggle("is-beginning-sound", isBeginningSoundActive);
     }
 
+    fixedUi?.classList.toggle("is-beginning-sound", isBeginningSoundActive);
+
     if (fixedUi && soundStage) {
         const evolutionRect = evolutionStage?.getBoundingClientRect();
         const soundRect = soundStage.getBoundingClientRect();
@@ -1078,6 +1101,37 @@ function updateLegacySequence() {
     legacySequenceArt.classList.toggle("is-ended", isEnded);
 }
 
+function getAngleDistance(angle, targetAngle) {
+    const difference = Math.abs(((angle - targetAngle + 540) % 360) - 180);
+
+    return Math.min(difference, 360 - difference);
+}
+
+function getClockwiseAngleDistance(angle, targetAngle) {
+    return (targetAngle - angle + 360) % 360;
+}
+
+function updateFixedGauge() {
+    if (!fixedGauge || !fixedGaugeTicks.length) return;
+
+    const scrollableDistance = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    const scrollProgress = clamp(window.scrollY / scrollableDistance, 0, 1);
+    const rotation = scrollProgress * fixedGaugeMaxRotation;
+    const dotAngle = (fixedGaugeDotBaseAngle + rotation + 180) % 360;
+
+    fixedGauge.style.setProperty("--fixed-gauge-rotation", `${rotation}deg`);
+
+    fixedGaugeTicks.forEach((tick, index) => {
+        const tickAngle = fixedGaugeTickAngles[index];
+        const passedDistance = getClockwiseAngleDistance(fixedGaugeStartAngle, tickAngle);
+        const hasBeenPassed = passedDistance <= rotation + fixedGaugeActivationRange;
+        const isStartingTick = getAngleDistance(fixedGaugeStartAngle, tickAngle) <= fixedGaugeActivationRange;
+        const isCurrentTick = getAngleDistance(dotAngle, tickAngle) <= fixedGaugeActivationRange;
+
+        tick.classList.toggle("is-active", isStartingTick || hasBeenPassed || isCurrentTick);
+    });
+}
+
 function updateScrollEffects() {
     updateHeroScroll();
     updateSpeakersTransition();
@@ -1085,6 +1139,7 @@ function updateScrollEffects() {
     updateBeginningArtReveal();
     updateBeginningSectionTransition();
     updateFixedNav();
+    updateFixedGauge();
     updateBeginningCopyScroll();
     updateSoundHorizontalScroll();
     updateHeadphoneSequence();
