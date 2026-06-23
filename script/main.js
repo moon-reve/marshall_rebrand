@@ -1176,6 +1176,8 @@ function updateFixedGauge() {
 
         tick.classList.toggle("is-active", isStartingTick || hasBeenPassed || isCurrentTick);
     });
+}
+
 function initializeFinaleCreditTypewriter() {
     finaleCreditItems.forEach((item) => {
         const fullText = item.dataset.credit || item.textContent.trim();
