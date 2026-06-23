@@ -23,6 +23,7 @@ const evolutionStage = document.querySelector("[data-evolution-stage]");
 const soundStage = document.querySelector("[data-sound-stage]");
 const soundSticky = document.querySelector(".sound-sticky");
 const soundTrack = document.querySelector("[data-sound-track]");
+const soundChannels = document.querySelectorAll(".sound-channel");
 const signatureSound = document.querySelector("[data-signature-sound]");
 const headphoneSequence = document.querySelector(".headphone-sequence");
 const headphoneSequenceSticky = document.querySelector(".headphone-sequence__sticky");
@@ -567,11 +568,24 @@ function updateSoundHorizontalScroll() {
     soundSticky.classList.toggle("is-pinned", isPinned);
     soundSticky.classList.toggle("is-ended", isEnded);
     soundTrack.style.transform = `translate3d(${-progress * horizontalDistance}px, 0, 0)`;
+    updateSoundKnobs(isPinned || isEnded);
 
     if (fixedUi) {
         fixedUi.classList.toggle("is-sound-content", isSoundVisible && progress > 0.08);
         fixedUi.classList.toggle("is-sound-horizontal", isSoundVisible);
     }
+}
+
+function updateSoundKnobs(isTuned) {
+    soundChannels.forEach((channel) => {
+        const level = isTuned ? channel.dataset.endLevel : channel.dataset.startLevel;
+        const knob = channel.querySelector(".sound-channel__knob");
+
+        if (!level) return;
+
+        channel.style.setProperty("--level", `${level}%`);
+        knob?.setAttribute("aria-valuenow", `${100 - Number(level)}`);
+    });
 }
 
 function updateHeadphoneSequence() {
