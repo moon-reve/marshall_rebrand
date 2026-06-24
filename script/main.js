@@ -1175,7 +1175,7 @@ function updateSoundHorizontalScroll() {
 
 function updateSoundKnobs(isTuned) {
     soundChannels.forEach((channel) => {
-        const level = isTuned ? channel.dataset.endLevel : channel.dataset.startLevel;
+        const level = isTuned ? channel.dataset.endLevel : "100";
         const knob = channel.querySelector(".sound-channel__knob");
 
         if (!level) return;
