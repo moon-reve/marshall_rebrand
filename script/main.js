@@ -1273,6 +1273,8 @@ function updateLegacyClosingPanels() {
     const isActive = rect.top < triggerStart;
     legacyClosingSteps.classList.toggle("is-active", isActive);
 
+    fixedGauge?.classList.toggle("is-legacy-closing", isActive);
+
     if (!isActive) return;
 
     // progress: copy.top=0.1vh → 0, copy.top=0.1vh - vh → 1
@@ -1335,7 +1337,11 @@ function getClockwiseAngleDistance(angle, targetAngle) {
 function updateFixedGauge() {
     if (!fixedGauge || !fixedGaugeTicks.length) return;
 
-    const scrollableDistance = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    const finaleStart = finale
+        ? window.scrollY + finale.getBoundingClientRect().top
+        : document.documentElement.scrollHeight - window.innerHeight;
+    const scrollEnd = Math.max(finaleStart, 1);
+    const scrollableDistance = Math.max(scrollEnd, 1);
     const scrollProgress = clamp(window.scrollY / scrollableDistance, 0, 1);
     const rotation = scrollProgress * fixedGaugeMaxRotation;
     const dotAngle = (fixedGaugeDotBaseAngle + rotation + 180) % 360;
