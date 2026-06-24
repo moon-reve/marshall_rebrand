@@ -49,8 +49,6 @@
             </span>
             <span class="fixed-gauge__knob"></span>
             <span class="fixed-gauge__dot"></span>
-            <span class="fixed-gauge__label fixed-gauge__label--min">0</span>
-            <span class="fixed-gauge__label fixed-gauge__label--max">10</span>
         </div>
     </div>
 
@@ -170,7 +168,7 @@
                     </div>
                 </div>
 
-                <div class="beginning-feature beginning-feature--design" data-beginning-design>
+                <div class="beginning-feature beginning-feature--design" id="design" data-beginning-design>
                     <div class="beginning-feature__design-sticky">
                     <div class="beginning-feature__copy beginning-feature__copy--one" data-beginning-copy-one>
                         <p>Design Shaped By Sound</p>
@@ -320,8 +318,8 @@
             </div>
         </section>
 
-        <section class="sound-stage" id="sound" data-sound-stage aria-label="Sound control timeline">
-            <div class="sound-sticky">
+        <section class="sound-stage" data-sound-stage aria-label="Sound control timeline">
+            <div class="sound-sticky" id="analog">
                 <div class="sound-light-rays" data-sound-light-rays aria-hidden="true"></div>
                 <div class="sound-track" data-sound-track>
                     <div class="sound-panel sound-panel--console">
@@ -446,7 +444,7 @@
             </div>
         </section>
 
-        <section class="signature-sound" data-signature-sound aria-labelledby="signature-sound-title">
+        <section class="signature-sound" id="sound" data-signature-sound aria-labelledby="signature-sound-title">
             <h2 class="signature-sound__title" id="signature-sound-title">Signature Sound</h2>
             <div class="signature-sound__grid" aria-hidden="true">
                 <span></span>
@@ -535,7 +533,7 @@
                 <img src="./assets/images/the-legacy-background.png" alt="" />
             </div>
 
-        <section class="legacy-hero" data-legacy-hero aria-labelledby="legacy-hero-title">
+        <section class="legacy-hero" id="legacy" data-legacy-hero aria-labelledby="legacy-hero-title">
 
             <div class="legacy-hero__meta" aria-hidden="true">
                 <span class="legacy-hero__volume">VOLUME 11</span>

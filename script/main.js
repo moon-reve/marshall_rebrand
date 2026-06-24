@@ -25,6 +25,7 @@ const evolutionStage = document.querySelector("[data-evolution-stage]");
 const soundStage = document.querySelector("[data-sound-stage]");
 const soundSticky = document.querySelector(".sound-sticky");
 const soundTrack = document.querySelector("[data-sound-track]");
+const soundPanels = document.querySelectorAll(".sound-panel");
 const soundChannels = document.querySelectorAll(".sound-channel");
 const soundLightRays = document.querySelector("[data-sound-light-rays]");
 const signatureSound = document.querySelector("[data-signature-sound]");
@@ -49,11 +50,11 @@ const finaleTitle = document.querySelector(".finale__title");
 const finaleCreditItems = document.querySelectorAll(".finale__credits span");
 const speakersTransitionBg = document.createElement("div");
 const fixedGaugeTickAngles = [0, 30, 60, 90, 120, 150, 210, 240, 270, 300, 330];
-const fixedGaugeDotBaseAngle = 33;
+const fixedGaugeDotBaseAngle = 30;
 const fixedGaugeStartAngle = (fixedGaugeDotBaseAngle + 180) % 360;
 const fixedGaugeEndAngle = fixedGaugeTickAngles[5];
 const fixedGaugeMaxRotation = getClockwiseAngleDistance(fixedGaugeStartAngle, fixedGaugeEndAngle);
-const fixedGaugeActivationRange = 8;
+const fixedGaugeActivationRange = 0;
 
 speakersTransitionBg.className = "speakers-transition-bg";
 speakersGrid?.prepend(speakersTransitionBg);
@@ -98,6 +99,17 @@ const fixedNavSections = Array.from(fixedNavLinks)
         return target ? { link, target } : null;
     })
     .filter(Boolean);
+fixedNavLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+        if (!fixedNav.classList.contains("is-speakers-revealed")) return;
+        const href = link.getAttribute("href");
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth" });
+    });
+});
+
 const speakersPanelTimings = [
     [0, 0.56],
     [0.08, 0.66],
@@ -610,9 +622,17 @@ function updateBeginningSectionTransition() {
             0,
             1
         );
-        const designEntryProgress = sequenceProgress(entryProgress, 0.5, 1);
+        const designEntryProgress = sequenceProgress(entryProgress, 0.08, 1);
         const easedEntryProgress =
             designEntryProgress * designEntryProgress * (3 - 2 * designEntryProgress);
+        const soundFadeProgress = sequenceProgress(entryProgress, 0.28, 1);
+        const easedSoundFadeProgress =
+            soundFadeProgress * soundFadeProgress * (3 - 2 * soundFadeProgress);
+        const designDistance = Math.max(beginningDesign.offsetHeight - window.innerHeight, 1);
+        const designProgress = clamp(-designRect.top / designDistance, 0, 1);
+        const designExitProgress = sequenceProgress(designProgress, 0.68, 1);
+        const easedExitProgress =
+            designExitProgress * designExitProgress * (3 - 2 * designExitProgress);
         const isCrossfading = designRect.top > 0 && designRect.top < window.innerHeight;
         const isDesignPinned = designRect.top <= 0 && designRect.bottom > window.innerHeight;
         const isDesignEnded = designRect.bottom <= window.innerHeight;
@@ -624,9 +644,13 @@ function updateBeginningSectionTransition() {
             "--design-entry-opacity",
             `${easedEntryProgress}`
         );
+        beginningDesignSticky.style.setProperty(
+            "--design-exit-opacity",
+            `${1 - easedExitProgress}`
+        );
         beginningSoundSticky?.style.setProperty(
             "--sound-section-opacity",
-            `${1 - easedEntryProgress}`
+            `${1 - easedSoundFadeProgress}`
         );
     }
 }
@@ -905,7 +929,10 @@ function updateFixedNav() {
     let activeSection = fixedNavSections[0];
     let isSignatureActive = false;
     let isLegacyHeroActive = false;
+    let isLegacyNavExiting = false;
     let isBeginningSoundActive = false;
+    let isEvolutionActive = false;
+    let isHeadphoneActive = false;
 
     fixedNavSections.forEach((section) => {
         const rect = section.target.getBoundingClientRect();
@@ -920,7 +947,60 @@ function updateFixedNav() {
         isSignatureActive = signatureRect.top <= activePoint && signatureRect.bottom > activePoint;
 
         if (isSignatureActive) {
+            fixedNav?.classList.add("is-speakers-revealed");
             activeSection = fixedNavSections.find(({ link }) => link.getAttribute("href") === "#sound") || activeSection;
+        }
+    }
+
+    if (soundPanels.length) {
+        const activeSoundPanel = Array.from(soundPanels).find((panel) => {
+            const panelRect = panel.getBoundingClientRect();
+            return panelRect.top <= activePoint && panelRect.bottom > activePoint;
+        });
+
+        if (activeSoundPanel) {
+            const analogLink = Array.from(fixedNavLinks).find(
+                (link) => link.getAttribute("href") === "#analog"
+            );
+
+            if (analogLink) {
+                activeSection = {
+                    link: analogLink,
+                    target: activeSoundPanel,
+                };
+            }
+        }
+    }
+
+    if (headphoneSequence || headphoneStage || headphoneDetail || soundSpeaker) {
+        const headphoneSequenceRect = headphoneSequence?.getBoundingClientRect();
+        const headphoneRect = headphoneStage?.getBoundingClientRect();
+        const headphoneDetailRect = headphoneDetail?.getBoundingClientRect();
+        const soundSpeakerRect = soundSpeaker?.getBoundingClientRect();
+        isHeadphoneActive = Boolean(
+            (headphoneSequenceRect &&
+                headphoneSequenceRect.top <= activePoint &&
+                headphoneSequenceRect.bottom > activePoint) ||
+            (headphoneRect && headphoneRect.top <= activePoint && headphoneRect.bottom > activePoint) ||
+            (headphoneDetailRect &&
+                headphoneDetailRect.top <= activePoint &&
+                headphoneDetailRect.bottom > activePoint) ||
+            (soundSpeakerRect &&
+                soundSpeakerRect.top <= activePoint &&
+                soundSpeakerRect.bottom > activePoint)
+        );
+
+        if (isHeadphoneActive) {
+            activeSection = fixedNavSections.find(({ link }) => link.getAttribute("href") === "#sound") || activeSection;
+        }
+    }
+
+    if (evolutionStage) {
+        const evolutionRect = evolutionStage.getBoundingClientRect();
+        isEvolutionActive = evolutionRect.top <= activePoint && evolutionRect.bottom > activePoint;
+
+        if (isEvolutionActive) {
+            activeSection = fixedNavSections.find(({ link }) => link.getAttribute("href") === "#evolution") || activeSection;
         }
     }
 
@@ -929,8 +1009,14 @@ function updateFixedNav() {
         isLegacyHeroActive = legacyHeroRect.top <= activePoint && legacyHeroRect.bottom > activePoint;
 
         if (isLegacyHeroActive) {
-            activeSection =
-                fixedNavSections.find(({ link }) => link.getAttribute("href") === "#legacy") || activeSection;
+            const legacyLink = Array.from(fixedNavLinks).find((link) => link.getAttribute("href") === "#legacy");
+
+            if (legacyLink) {
+                activeSection = {
+                    link: legacyLink,
+                    target: legacyHero,
+                };
+            }
         }
     }
 
@@ -941,8 +1027,14 @@ function updateFixedNav() {
         isLegacyHeroActive = isLegacyHeroActive || isLegacyStatementActive;
 
         if (isLegacyStatementActive) {
-            activeSection =
-                fixedNavSections.find(({ link }) => link.getAttribute("href") === "#legacy") || activeSection;
+            const legacyLink = Array.from(fixedNavLinks).find((link) => link.getAttribute("href") === "#legacy");
+
+            if (legacyLink) {
+                activeSection = {
+                    link: legacyLink,
+                    target: legacyStatement,
+                };
+            }
         }
     }
 
@@ -951,10 +1043,17 @@ function updateFixedNav() {
         const isLegacyClosingActive =
             legacyClosingRect.top <= activePoint && legacyClosingRect.bottom > activePoint;
         isLegacyHeroActive = isLegacyHeroActive || isLegacyClosingActive;
+        isLegacyNavExiting = isLegacyClosingActive;
 
         if (isLegacyClosingActive) {
-            activeSection =
-                fixedNavSections.find(({ link }) => link.getAttribute("href") === "#legacy") || activeSection;
+            const legacyLink = Array.from(fixedNavLinks).find((link) => link.getAttribute("href") === "#legacy");
+
+            if (legacyLink) {
+                activeSection = {
+                    link: legacyLink,
+                    target: legacyClosing,
+                };
+            }
         }
     }
 
@@ -972,7 +1071,7 @@ function updateFixedNav() {
     if (beginningSound || beginningDesignSticky) {
         const beginningSoundRect = beginningSound?.getBoundingClientRect();
         const beginningDesignStickyRect = beginningDesignSticky?.getBoundingClientRect();
-        isBeginningSoundActive = Boolean(
+        isBeginningSoundActive = !isEvolutionActive && Boolean(
             (beginningSoundRect &&
                 beginningSoundRect.top <= activePoint &&
                 beginningSoundRect.bottom > activePoint) ||
@@ -998,6 +1097,7 @@ function updateFixedNav() {
     if (fixedNav && activeSection.link) {
         fixedNav.style.setProperty("--fixed-nav-indicator-top", `${activeSection.link.offsetTop}px`);
         fixedNav.classList.toggle("is-beginning-sound", isBeginningSoundActive);
+        fixedNav.classList.toggle("is-legacy-exiting", isLegacyNavExiting);
     }
 
     fixedUi?.classList.toggle("is-beginning-sound", isBeginningSoundActive);
@@ -1015,19 +1115,7 @@ function updateFixedNav() {
         fixedUi.classList.toggle("is-dark", isSoundActive || isLegacyHeroActive);
         fixedUi.classList.toggle("is-signature-sound", isSignatureActive);
 
-        const headphoneRect = headphoneStage?.getBoundingClientRect();
-        const headphoneDetailRect = headphoneDetail?.getBoundingClientRect();
-        const soundSpeakerRect = soundSpeaker?.getBoundingClientRect();
         const finaleRect = finale?.getBoundingClientRect();
-        const isHeadphoneActive = Boolean(
-            (headphoneRect && headphoneRect.top <= activePoint && headphoneRect.bottom > activePoint) ||
-            (headphoneDetailRect &&
-                headphoneDetailRect.top <= activePoint &&
-                headphoneDetailRect.bottom > activePoint) ||
-            (soundSpeakerRect &&
-                soundSpeakerRect.top <= activePoint &&
-                soundSpeakerRect.bottom > activePoint)
-        );
         fixedUi.classList.toggle("is-headphone-stage", isHeadphoneActive);
         fixedUi.classList.toggle(
             "is-final-stage",
@@ -1170,7 +1258,7 @@ function updateFixedGauge() {
     fixedGaugeTicks.forEach((tick, index) => {
         const tickAngle = fixedGaugeTickAngles[index];
         const passedDistance = getClockwiseAngleDistance(fixedGaugeStartAngle, tickAngle);
-        const hasBeenPassed = passedDistance <= rotation + fixedGaugeActivationRange;
+        const hasBeenPassed = passedDistance <= rotation + (index === 5 ? 1 : fixedGaugeActivationRange);
         const isStartingTick = getAngleDistance(fixedGaugeStartAngle, tickAngle) <= fixedGaugeActivationRange;
         const isCurrentTick = getAngleDistance(dotAngle, tickAngle) <= fixedGaugeActivationRange;
 
