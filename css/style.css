@@ -903,6 +903,7 @@ a {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: rgba(0, 0, 0, 0.5);
     pointer-events: none;
 }
@@ -933,29 +934,48 @@ a {
     overflow: hidden;
 }
 
-.design-feature__design-sticky::before {
-    content: '';
+.design-feature__design-grid {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background-image: url("../assets/images/marshall_stage_white.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
+    display: flex;
     opacity: calc(var(--design-entry-opacity) * var(--design-exit-opacity));
     will-change: opacity;
 }
 
-.design-feature__design-sticky::after {
+.design-feature__design-panel {
+    position: relative;
+    width: 25vw;
+    height: 100vh;
+    overflow: hidden;
+    flex-shrink: 0;
+    transform: translate3d(0, var(--design-panel-y, 0%), 0);
+    will-change: transform;
+}
+
+.design-feature__design-panel::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    opacity: var(--design-entry-opacity);
     z-index: 1;
-    will-change: opacity;
+    background: rgba(0, 0, 0, 0.7);
+    pointer-events: none;
 }
+
+.design-feature__design-img {
+    position: absolute;
+    bottom: 0;
+    width: 400%;
+    height: 100vh;
+    max-width: none;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.design-feature__design-panel--01 .design-feature__design-img { left: 0; }
+.design-feature__design-panel--02 .design-feature__design-img { left: -100%; }
+.design-feature__design-panel--03 .design-feature__design-img { left: -200%; }
+.design-feature__design-panel--04 .design-feature__design-img { left: -300%; }
 
 .design-feature__design-sticky.is-crossfading,
 .design-feature__design-sticky.is-pinned {

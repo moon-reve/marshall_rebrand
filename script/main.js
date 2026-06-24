@@ -21,6 +21,7 @@ const designSoundSticky = document.querySelector(".design-feature__sound-sticky"
 const designTextFlowInner = document.querySelector(".design-feature__text-flow-inner");
 const designTitleBox = document.querySelector(".design-feature__title-box");
 const designSticky = document.querySelector(".design-feature__design-sticky");
+const designPanelItems = document.querySelectorAll(".design-feature__design-panel");
 const designCopyTrack = document.querySelector("[data-design-copy-track]");
 const designCopyOne = document.querySelector("[data-design-copy-one]");
 const designCopyTwo = document.querySelector("[data-design-copy-scroll]");
@@ -86,6 +87,9 @@ let speakersPreviousTargetProgress = 0;
 let speakersFirstPanelProgress = 0;
 let speakersFirstPanelHoldUntil = 0;
 let speakersFirstPanelIsSequenced = false;
+let designPanelExitTargetProgress = 0;
+let designPanelExitRenderedProgress = 0;
+let designPanelExitAnimationFrame = null;
 let heroLightsOn = false;
 let heroLightsAnimating = false;
 let speakersEntryIsAutoAnimating = false;
@@ -165,6 +169,49 @@ function renderSpeakersEntry(progress) {
     speakersImages.forEach((image) => {
         image.style.setProperty("--speakers-entry-y", `${(1 - easedProgress) * 100}vh`);
     });
+}
+
+function renderDesignPanelExit(progress) {
+    designPanelItems.forEach((panel, index) => {
+        const [start, end] = speakersPanelTimings[index] || [0, 1];
+        const panelProgress = sequenceProgress(progress, start, end);
+        const easedProgress = panelProgress * panelProgress * (3 - 2 * panelProgress);
+
+        panel.style.setProperty("--design-panel-y", `${-easedProgress * 100}%`);
+    });
+}
+
+function updateDesignPanelExitProgress(progress) {
+    designPanelExitTargetProgress = progress;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        if (designPanelExitAnimationFrame) cancelAnimationFrame(designPanelExitAnimationFrame);
+        designPanelExitAnimationFrame = null;
+        designPanelExitRenderedProgress = designPanelExitTargetProgress;
+        renderDesignPanelExit(designPanelExitRenderedProgress);
+        return;
+    }
+
+    if (designPanelExitAnimationFrame) return;
+
+    function renderDesignPanelExitFrame() {
+        const distance = designPanelExitTargetProgress - designPanelExitRenderedProgress;
+        designPanelExitRenderedProgress += distance * 0.08;
+
+        if (Math.abs(distance) < 0.0001) {
+            designPanelExitRenderedProgress = designPanelExitTargetProgress;
+        }
+
+        renderDesignPanelExit(designPanelExitRenderedProgress);
+
+        if (designPanelExitRenderedProgress !== designPanelExitTargetProgress) {
+            designPanelExitAnimationFrame = requestAnimationFrame(renderDesignPanelExitFrame);
+        } else {
+            designPanelExitAnimationFrame = null;
+        }
+    }
+
+    designPanelExitAnimationFrame = requestAnimationFrame(renderDesignPanelExitFrame);
 }
 
 function renderHeroContentExit(progress) {
@@ -675,8 +722,8 @@ function updateDesignSectionTransition() {
         const easedEntryProgress =
             designEntryProgress * designEntryProgress * (3 - 2 * designEntryProgress);
         const isCrossfading = designRect.top > 0 && designRect.top < window.innerHeight;
-        const isDesignPinned = designRect.top <= 0 && designRect.bottom > window.innerHeight;
-        const isDesignEnded = designRect.bottom <= window.innerHeight;
+        const isDesignPinned = designRect.top <= 0 && designRect.bottom > 0;
+        const isDesignEnded = designRect.bottom <= 0;
 
         designSticky.classList.toggle("is-crossfading", isCrossfading);
         designSticky.classList.toggle("is-pinned", isDesignPinned);
@@ -686,10 +733,14 @@ function updateDesignSectionTransition() {
             `${easedEntryProgress}`
         );
         designSticky.style.setProperty("--design-exit-opacity", "1");
-        designSoundSticky?.style.setProperty(
-            "--sound-section-opacity",
-            `${1 - easedEntryProgress}`
-        );
+        const evolutionRect = evolutionStage?.getBoundingClientRect();
+        const designPanelExitProgress = evolutionRect
+            ? clamp((window.innerHeight - evolutionRect.top) / window.innerHeight, 0, 1)
+            : 0;
+        const soundOpacity = designPanelExitProgress > 0.001 ? 0 : 1;
+
+        designSoundSticky?.style.setProperty("--sound-section-opacity", `${soundOpacity}`);
+        updateDesignPanelExitProgress(designPanelExitProgress);
     }
 }
 
