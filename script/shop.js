@@ -17,7 +17,6 @@ let shopAnimationFrame = null;
 let shopArtTargetProgress = 0;
 let shopArtRenderedProgress = 0;
 let shopArtAnimationFrame = null;
-let shopArtPaths = [];
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -31,69 +30,16 @@ function easeSmooth(progress) {
     return progress * progress * (3 - 2 * progress);
 }
 
-function prepareShopArtPaths() {
-    if (!shopProductsScrollArt || shopArtPaths.length) return Boolean(shopArtPaths.length);
-
-    const svgDocument = shopProductsScrollArt.contentDocument;
-    if (!svgDocument) return false;
-
-    const svgNamespace = "http://www.w3.org/2000/svg";
-    const svgRoot = svgDocument.documentElement;
-    let defs = svgRoot.querySelector("defs");
-
-    if (!defs) {
-        defs = svgDocument.createElementNS(svgNamespace, "defs");
-        svgRoot.prepend(defs);
-    }
-
-    shopArtPaths = Array.from(svgDocument.querySelectorAll("path"))
-        .sort((firstPath, secondPath) => firstPath.getBBox().x - secondPath.getBBox().x)
-        .map((sourcePath, index) => {
-        const mask = svgDocument.createElementNS(svgNamespace, "mask");
-        const maskId = `shop-products-art-mask-${index}`;
-        mask.setAttribute("id", maskId);
-        mask.setAttribute("maskUnits", "userSpaceOnUse");
-        mask.setAttribute("x", "-1000");
-        mask.setAttribute("y", "-1000");
-        mask.setAttribute("width", "4000");
-        mask.setAttribute("height", "4000");
-
-        const path = sourcePath.cloneNode(false);
-        const length = path.getTotalLength();
-        const firstPoint = path.getPointAtLength(0);
-        const lastPoint = path.getPointAtLength(length);
-        const shouldRevealFromEnd = lastPoint.x < firstPoint.x;
-
-        path.style.fill = "none";
-        path.style.stroke = "#ffffff";
-        path.style.strokeWidth = "8";
-        path.style.strokeLinecap = "round";
-        path.style.strokeLinejoin = "round";
-        path.style.strokeDasharray = `${length}`;
-        path.style.strokeDashoffset = `${shouldRevealFromEnd ? -length : length}`;
-
-        mask.appendChild(path);
-        defs.appendChild(mask);
-
-        sourcePath.style.fill = "#000000";
-        sourcePath.style.stroke = "none";
-        sourcePath.setAttribute("mask", `url(#${maskId})`);
-
-        return { path, length, shouldRevealFromEnd };
-        });
-
-    return Boolean(shopArtPaths.length);
-}
-
 function updateShopArtReveal() {
-    if (!shopProductsIntro || !shopProductsScrollArt || !prepareShopArtPaths()) return;
+    if (!shopProductsIntro || !shopProductsScrollArt) return;
 
     const introRect = shopProductsIntro.getBoundingClientRect();
-    const revealDistance = Math.max(introRect.height * 1.1, 1);
-    shopArtTargetProgress = clamp((window.innerHeight - introRect.top) / revealDistance, 0, 1);
+    const revealStart = window.innerHeight * 0.85;
+    const revealDistance = Math.max(introRect.height * 0.8, 1);
+    shopArtTargetProgress = clamp((revealStart - introRect.top) / revealDistance, 0, 1);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        shopArtPaths.forEach(({ path }) => path.style.strokeDashoffset = "0");
+        shopProductsScrollArt.style.setProperty("--shop-art-reveal", "100%");
         return;
     }
 
@@ -107,15 +53,7 @@ function updateShopArtReveal() {
             shopArtRenderedProgress = shopArtTargetProgress;
         }
 
-        const pathCount = shopArtPaths.length;
-
-        shopArtPaths.forEach(({ path, length, shouldRevealFromEnd }, index) => {
-            const pathStart = index / pathCount;
-            const pathProgress = clamp((shopArtRenderedProgress - pathStart) * pathCount, 0, 1);
-            const hiddenOffset = shouldRevealFromEnd ? -length : length;
-
-            path.style.strokeDashoffset = `${hiddenOffset * (1 - pathProgress)}`;
-        });
+        shopProductsScrollArt.style.setProperty("--shop-art-reveal", `${shopArtRenderedProgress * 100}%`);
 
         if (shopArtRenderedProgress !== shopArtTargetProgress) {
             shopArtAnimationFrame = requestAnimationFrame(renderShopArtReveal);
@@ -182,7 +120,6 @@ function updateShopScrollEffects() {
     updateShopArtReveal();
 }
 
-shopProductsScrollArt?.addEventListener("load", updateShopArtReveal);
 renderShopHeroPanels(0);
 window.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
