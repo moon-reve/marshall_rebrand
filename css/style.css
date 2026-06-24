@@ -985,7 +985,7 @@ a {
     margin: 0;
 }
 
-.design-feature__headline p:last-child {
+.design-feature__headline p:not(:first-child) {
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: 0.833vw;
     font-weight: 300;

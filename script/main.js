@@ -620,24 +620,14 @@ function updateDesignSectionTransition() {
         designSoundSticky.classList.toggle("is-ended", isSoundEnded);
     }
 
-    if (beginningDesign && beginningDesignSticky) {
-        const designRect = beginningDesign.getBoundingClientRect();
-        const entryProgress = clamp(
-            (window.innerHeight - designRect.top) / window.innerHeight,
-            0,
-            1
-        );
-        const designEntryProgress = sequenceProgress(entryProgress, 0.08, 1);
+    if (designPanel && designSticky) {
+        const designRect = designPanel.getBoundingClientRect();
+        const titleRect = designTitleBox?.getBoundingClientRect();
+        const designEntryProgress = titleRect
+            ? clamp(-titleRect.top / (window.innerHeight * 0.65), 0, 1)
+            : 0;
         const easedEntryProgress =
             designEntryProgress * designEntryProgress * (3 - 2 * designEntryProgress);
-        const soundFadeProgress = sequenceProgress(entryProgress, 0.28, 1);
-        const easedSoundFadeProgress =
-            soundFadeProgress * soundFadeProgress * (3 - 2 * soundFadeProgress);
-        const designDistance = Math.max(beginningDesign.offsetHeight - window.innerHeight, 1);
-        const designProgress = clamp(-designRect.top / designDistance, 0, 1);
-        const designExitProgress = sequenceProgress(designProgress, 0.68, 1);
-        const easedExitProgress =
-            designExitProgress * designExitProgress * (3 - 2 * designExitProgress);
         const isCrossfading = designRect.top > 0 && designRect.top < window.innerHeight;
         const isDesignPinned = designRect.top <= 0 && designRect.bottom > window.innerHeight;
         const isDesignEnded = designRect.bottom <= window.innerHeight;
@@ -649,13 +639,10 @@ function updateDesignSectionTransition() {
             "--design-entry-opacity",
             `${easedEntryProgress}`
         );
-        beginningDesignSticky.style.setProperty(
-            "--design-exit-opacity",
-            `${1 - easedExitProgress}`
-        );
-        beginningSoundSticky?.style.setProperty(
+        designSticky.style.setProperty("--design-exit-opacity", "1");
+        designSoundSticky?.style.setProperty(
             "--sound-section-opacity",
-            `${1 - easedSoundFadeProgress}`
+            `${1 - easedEntryProgress}`
         );
     }
 }
@@ -936,6 +923,7 @@ function updateFixedNav() {
     let isLegacyHeroActive = false;
     let isLegacyNavExiting = false;
     let isBeginningSoundActive = false;
+    let isDesignSectionActive = false;
     let isEvolutionActive = false;
     let isHeadphoneActive = false;
 
@@ -1073,17 +1061,18 @@ function updateFixedNav() {
         }
     });
 
-    if (beginningSound || beginningDesignSticky) {
-        const beginningSoundRect = beginningSound?.getBoundingClientRect();
-        const beginningDesignStickyRect = beginningDesignSticky?.getBoundingClientRect();
-        isBeginningSoundActive = !isEvolutionActive && Boolean(
-            (beginningSoundRect &&
-                beginningSoundRect.top <= activePoint &&
-                beginningSoundRect.bottom > activePoint) ||
-            (beginningDesignStickyRect &&
-                beginningDesignStickyRect.top <= activePoint &&
-                beginningDesignStickyRect.bottom > activePoint)
+    if (designSound || designSticky) {
+        const designSoundRect = designSound?.getBoundingClientRect();
+        const designStickyRect = designSticky?.getBoundingClientRect();
+        isDesignSectionActive = !isEvolutionActive && Boolean(
+            (designSoundRect &&
+                designSoundRect.top <= activePoint &&
+                designSoundRect.bottom > activePoint) ||
+            (designStickyRect &&
+                designStickyRect.top <= activePoint &&
+                designStickyRect.bottom > activePoint)
         );
+        isBeginningSoundActive = isDesignSectionActive;
 
         if (isDesignSectionActive) {
             const designLink = Array.from(fixedNavLinks).find(
@@ -1101,7 +1090,7 @@ function updateFixedNav() {
 
     if (fixedNav && activeSection.link) {
         fixedNav.style.setProperty("--fixed-nav-indicator-top", `${activeSection.link.offsetTop}px`);
-        fixedNav.classList.toggle("is-beginning-sound", isBeginningSoundActive);
+        fixedNav.classList.toggle("is-design-section", isBeginningSoundActive);
         fixedNav.classList.toggle("is-legacy-exiting", isLegacyNavExiting);
     }
 
