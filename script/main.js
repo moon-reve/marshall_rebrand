@@ -1,6 +1,7 @@
 const heroStage = document.querySelector("[data-hero-stage]");
 const heroMediaGrid = document.querySelector(".hero__media-grid");
 const heroContent = document.querySelector(".hero__content");
+const heroAbout = document.querySelector(".hero__about");
 const heroPlaceholders = document.querySelectorAll(".hero__media-placeholder");
 const speakersStage = document.querySelector("[data-speakers-stage]");
 const speakersGrid = speakersStage?.querySelector(".speakers-grid");
@@ -142,12 +143,15 @@ function renderSpeakersEntry(progress) {
 function renderHeroContentExit(progress) {
     const exitProgress = clamp(progress, 0, 1);
     const easedProgress = exitProgress * exitProgress * (3 - 2 * exitProgress);
+    const opacityProgress = clamp(exitProgress / 0.65, 0, 1);
+    const easedOpacityProgress =
+        opacityProgress * opacityProgress * (3 - 2 * opacityProgress);
 
     if (!heroContent) return;
 
     heroContent.classList.toggle("is-active", exitProgress < 0.995);
     heroContent.style.setProperty("--hero-content-y", `${-easedProgress * 100}vh`);
-    heroContent.style.setProperty("--hero-content-opacity", `${1 - easedProgress}`);
+    heroContent.style.setProperty("--hero-content-opacity", `${1 - easedOpacityProgress}`);
 }
 
 function renderFixedGaugeReveal(progress) {
@@ -254,6 +258,7 @@ function updateHeroScroll() {
     const isHeroContentVisible = heroRect.bottom > 0 && speakersRect.top > 0;
 
     speakersGrid.classList.toggle("is-entry", isEntryPhase);
+    heroAbout?.classList.toggle("is-speakers-entering", isEntryPhase);
     heroContent?.classList.toggle("is-active", isHeroContentVisible);
 
     if (isEntryPhase) {
@@ -813,6 +818,7 @@ function animateSpeakersEntryToEnd() {
 
     speakersEntryIsAutoAnimating = true;
     speakersGrid.classList.add("is-entry");
+    heroAbout?.classList.add("is-speakers-entering");
     renderHeroContentExit(0);
     renderHeroMediaExit(0);
     renderSpeakersTransitionBackground(0);
@@ -1254,14 +1260,24 @@ function updateFixedGauge() {
     });
 }
 
-function initializeFinaleCreditTypewriter() {
-    finaleCreditItems.forEach((item) => {
-        const fullText = item.dataset.credit || item.textContent.trim();
+function initializeHoverTypewriter(items, options = {}) {
+    items.forEach((item) => {
+        const fullText = options.dataAttribute
+            ? item.dataset[options.dataAttribute] || item.textContent.trim()
+            : item.textContent.trim();
         let typeTimer = null;
 
-        item.dataset.credit = fullText;
-        item.style.setProperty("--credit-width", `${item.getBoundingClientRect().width}px`);
-        item.tabIndex = 0;
+        if (options.dataAttribute) {
+            item.dataset[options.dataAttribute] = fullText;
+        }
+
+        if (options.widthProperty) {
+            item.style.setProperty(options.widthProperty, `${item.getBoundingClientRect().width}px`);
+        }
+
+        if (options.setTabIndex) {
+            item.tabIndex = 0;
+        }
 
         const stopTyping = () => {
             if (typeTimer) {
@@ -1306,6 +1322,20 @@ function initializeFinaleCreditTypewriter() {
         item.addEventListener("focus", typeText);
         item.addEventListener("mouseleave", restoreText);
         item.addEventListener("blur", restoreText);
+    });
+}
+
+function initializeFinaleCreditTypewriter() {
+    initializeHoverTypewriter(finaleCreditItems, {
+        dataAttribute: "credit",
+        widthProperty: "--credit-width",
+        setTabIndex: true,
+    });
+}
+
+function initializeFixedNavTypewriter() {
+    initializeHoverTypewriter(fixedNavLinks, {
+        widthProperty: "--nav-link-width",
     });
 }
 
@@ -1363,6 +1393,7 @@ beginningScrollArt?.addEventListener("load", () => {
 });
 initializeSoundLightRays();
 initializeFinaleCreditTypewriter();
+initializeFixedNavTypewriter();
 initializeFinaleTitleSlideDown();
 headphoneStageArt?.addEventListener("load", () => {
     prepareHeadphoneArtPaths();
