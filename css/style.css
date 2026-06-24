@@ -636,6 +636,26 @@ a {
     color: #ffeac6;
 }
 
+.hero__year-slot {
+    display: inline-block;
+    overflow: visible;
+    height: 1.2em;
+    vertical-align: bottom;
+    clip-path: inset(0 -100vw);
+}
+
+.hero__year-strip {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+}
+
+.hero__year-strip > span {
+    display: block;
+    line-height: 1.2;
+    height: 1.2em;
+}
+
 .hero__about {
     position: absolute;
     bottom: 5.3vh;
