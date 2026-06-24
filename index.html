@@ -49,8 +49,6 @@
             </span>
             <span class="fixed-gauge__knob"></span>
             <span class="fixed-gauge__dot"></span>
-            <span class="fixed-gauge__label fixed-gauge__label--min">0</span>
-            <span class="fixed-gauge__label fixed-gauge__label--max">10</span>
         </div>
     </div>
 
@@ -178,14 +176,15 @@
                         </div>
                     </div>
 
-                    <div class="design-feature__copy-track" data-design-copy-track>
-                        <div class="design-feature__copy design-feature__copy--one" data-design-copy-one>
-                            <p>Design Shaped By Sound</p>
-                            <p>Marshall의 디자인은 장식을 위해 만들어지지 않았다.<br>
-                            검은 외장, 브라스 노브, 토글 스위치, 우븐 그릴까지.<br>
-                            모든 요소는 무대 위에서 더 나은 사운드를 전달하기 위한 기능에서 시작되었다.<br>
-                            60년이 지난 지금도 그 디자인 언어는 그대로 이어지고 있다.</p>
-                        </div>
+                <div class="beginning-feature beginning-feature--design" id="design" data-beginning-design>
+                    <div class="beginning-feature__design-sticky">
+                    <div class="beginning-feature__copy beginning-feature__copy--one" data-beginning-copy-one>
+                        <p>Design Shaped By Sound</p>
+                        <p>Marshall의 디자인은 장식을 위해 만들어지지 않았다.<br>
+                        검은 외장, 브라스 노브, 토글 스위치, 우븐 그릴까지.<br>
+                        모든 요소는 무대 위에서 더 나은 사운드를 전달하기 위한 기능에서 시작되었다.<br>
+                        60년이 지난 지금도 그 디자인 언어는 그대로 이어지고 있다.</p>
+                    </div>
 
                         <div class="design-feature__copy design-feature__copy--two" data-design-copy-scroll>
                             <p>Built For The Stage</p>
@@ -331,8 +330,8 @@
             </div>
         </section>
 
-        <section class="sound-stage" id="sound" data-sound-stage aria-label="Sound control timeline">
-            <div class="sound-sticky">
+        <section class="sound-stage" data-sound-stage aria-label="Sound control timeline">
+            <div class="sound-sticky" id="analog">
                 <div class="sound-light-rays" data-sound-light-rays aria-hidden="true"></div>
                 <div class="sound-track" data-sound-track>
                     <div class="sound-panel sound-panel--console">
@@ -457,7 +456,7 @@
             </div>
         </section>
 
-        <section class="signature-sound" data-signature-sound aria-labelledby="signature-sound-title">
+        <section class="signature-sound" id="sound" data-signature-sound aria-labelledby="signature-sound-title">
             <h2 class="signature-sound__title" id="signature-sound-title">Signature Sound</h2>
             <div class="signature-sound__grid" aria-hidden="true">
                 <span></span>
@@ -546,7 +545,7 @@
                 <img src="./assets/images/the-legacy-background.png" alt="" />
             </div>
 
-        <section class="legacy-hero" data-legacy-hero aria-labelledby="legacy-hero-title">
+        <section class="legacy-hero" id="legacy" data-legacy-hero aria-labelledby="legacy-hero-title">
 
             <div class="legacy-hero__meta" aria-hidden="true">
                 <span class="legacy-hero__volume">VOLUME 11</span>
