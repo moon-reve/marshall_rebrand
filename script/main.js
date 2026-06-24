@@ -1354,6 +1354,180 @@ function updateScrollEffects() {
     updateLegacySequence();
 }
 
+// Hero year slot machine animation
+(function () {
+    var yearEl = document.querySelector(".hero__year");
+    if (!yearEl) return;
+    var slotEls = Array.from(yearEl.querySelectorAll(".hero__year-slot"));
+    if (!slotEls.length) return;
+
+    // targetMod: 각 슬롯이 2026을 표시하기 위한 progress % 10 값
+    var SLOTS = [
+        { el: slotEls[0], start: 1, dir: "up",   targetMod2026: 1,  targetMod1962: 0 },
+        { el: slotEls[1], start: 9, dir: "down",  targetMod2026: 9,  targetMod1962: 0 },
+        { el: slotEls[2], start: 6, dir: "up",    targetMod2026: 6,  targetMod1962: 0 },
+        { el: slotEls[3], start: 2, dir: "down",  targetMod2026: 6,  targetMod1962: 0 },
+    ];
+    SLOTS.forEach(function (s) {
+        s.strip = s.el.querySelector(".hero__year-strip");
+        s.progress = 0;
+        s.velocity = 0;
+        s.settleTarget = null;
+    });
+
+    var settling = false;
+    var settledModKey = "targetMod1962";
+    var activeSettleModKey = null;
+    var animFrame = null;
+    var digitH = 0;
+    var lastScrollY = window.scrollY;
+
+    function getDigitH() {
+        var span = slotEls[0].querySelector(".hero__year-strip > span");
+        return span ? span.offsetHeight : 0;
+    }
+
+    function updateYear() {
+        if (!digitH) digitH = getDigitH();
+        if (!digitH) return;
+        SLOTS.forEach(function (s) {
+            var rawIndex = s.dir === "up"
+                ? ((s.start + s.progress) % 10 + 10) % 10
+                : ((s.start - s.progress) % 10 + 10) % 10;
+            s.strip.style.transform = "translateY(" + (-rawIndex * digitH) + "px)";
+        });
+    }
+
+    function nearestSettleTarget(currentProgress, targetMod, modKey) {
+        var currentMod = ((currentProgress % 10) + 10) % 10;
+        var delta = modKey === "targetMod1962"
+            ? -((currentMod - targetMod + 10) % 10)
+            : (targetMod - currentMod + 10) % 10;
+        return currentProgress + delta;
+    }
+
+    function stopAndClear() {
+        settling = false;
+        settledModKey = null;
+        activeSettleModKey = null;
+        if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+        SLOTS.forEach(function (s) { s.velocity = 0; s.settleTarget = null; });
+    }
+
+    function startSettle(modKey) {
+        if (!settling && settledModKey === modKey) return;
+        settling = true;
+        settledModKey = null;
+        activeSettleModKey = modKey;
+        SLOTS.forEach(function (s) {
+            s.settleTarget = nearestSettleTarget(s.progress, s[modKey], modKey);
+            s.velocity = 0;
+        });
+        if (animFrame) cancelAnimationFrame(animFrame);
+        animFrame = requestAnimationFrame(animateSettle);
+    }
+
+    function animateSpin() {
+        if (settling) { animFrame = null; return; }
+        var anyMoving = SLOTS.some(function (s) { return Math.abs(s.velocity) >= 0.001; });
+        if (!anyMoving) {
+            SLOTS.forEach(function (s) { s.velocity = 0; });
+            animFrame = null;
+            return;
+        }
+        SLOTS.forEach(function (s) {
+            s.progress += s.velocity;
+            s.velocity *= 0.9;
+        });
+        updateYear();
+        animFrame = requestAnimationFrame(animateSpin);
+    }
+
+    function applyScrollSpin(scrollDelta) {
+        if (!scrollDelta) return;
+        if (settling) stopAndClear();
+        settledModKey = null;
+        SLOTS.forEach(function (s) { s.velocity += scrollDelta * 0.006; });
+        if (!animFrame) animFrame = requestAnimationFrame(animateSpin);
+    }
+
+    function animateSettle() {
+        if (!settling) { animFrame = null; return; }
+        var allDone = true;
+        SLOTS.forEach(function (s) {
+            if (s.settleTarget === null) return;
+            var diff = s.settleTarget - s.progress;
+            if (Math.abs(diff) < 0.005) {
+                s.progress = s.settleTarget;
+            } else {
+                s.progress += diff * 0.24;
+                allDone = false;
+            }
+        });
+        updateYear();
+        if (!allDone) {
+            animFrame = requestAnimationFrame(animateSettle);
+        } else {
+            settling = false;
+            settledModKey = activeSettleModKey;
+            activeSettleModKey = null;
+            animFrame = null;
+        }
+    }
+
+    window.addEventListener("scroll", function () {
+        if (!heroStage || !speakersStage) return;
+        var currentScrollY = window.scrollY;
+        var scrollDelta = currentScrollY - lastScrollY;
+        var scrollingUp = currentScrollY < lastScrollY;
+        lastScrollY = currentScrollY;
+        var speakersRect = speakersStage.getBoundingClientRect();
+
+        if (currentScrollY === 0) {
+            // 최상단: 현재 위치에서 1962로 수렴
+            var needsSettle = SLOTS.some(function (s) {
+                return Math.abs(((s.progress % 10) + 10) % 10) > 0.01;
+            });
+            if (needsSettle) {
+                stopAndClear();
+                startSettle("targetMod1962");
+            }
+            return;
+        }
+
+        if (heroLightsOn && !heroLightsAnimating && speakersRect.top < window.innerHeight * 2.5) {
+            // 다음 섹션 진입: 2026으로 수렴
+            var isReturningToHeroStart = scrollingUp && speakersRect.top > window.innerHeight * 1.8;
+            var targetModKey = isReturningToHeroStart ? "targetMod1962" : "targetMod2026";
+            if (scrollingUp && !isReturningToHeroStart) {
+                applyScrollSpin(scrollDelta);
+                return;
+            }
+            if (!settling || activeSettleModKey !== targetModKey) startSettle(targetModKey);
+        } else {
+            // 히어로 구간으로 돌아옴: settling 해제 → 스핀 허용
+            if (settling) stopAndClear();
+        }
+    }, { passive: true });
+
+    window.addEventListener("wheel", function (e) {
+        if (!heroStage || !speakersStage) return;
+        var rect = heroStage.getBoundingClientRect();
+        if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+        if (!heroLightsOn || heroLightsAnimating) return;
+        if (settling) return; // settle 중에는 휠 무시
+        var delta = e.deltaY * 0.006;
+        settledModKey = null;
+        SLOTS.forEach(function (s) { s.velocity += delta; });
+        if (!animFrame) animFrame = requestAnimationFrame(animateSpin);
+    }, { passive: true });
+
+    requestAnimationFrame(function () {
+        digitH = getDigitH();
+        updateYear();
+    });
+})();
+
 window.addEventListener("scroll", updateScrollEffects, { passive: true });
 window.addEventListener("wheel", handleSpeakersWheel, { passive: false });
 window.addEventListener("resize", updateScrollEffects);
