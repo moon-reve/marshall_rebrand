@@ -48,6 +48,9 @@ const legacySequenceArt = document.querySelector(".legacy-sequence__art");
 const legacyHero = document.querySelector("[data-legacy-hero]");
 const legacyStatement = document.querySelector("[data-legacy-statement]");
 const legacyClosing = document.querySelector("[data-legacy-closing]");
+const legacyClosingCopy = document.querySelector(".legacy-closing__copy");
+const legacyClosingSteps = document.querySelector(".legacy-closing__steps");
+const legacyClosingPanels = document.querySelectorAll(".legacy-closing__steps span");
 const finale = document.querySelector("[data-finale]");
 const finaleTitle = document.querySelector(".finale__title");
 const finaleCreditItems = document.querySelectorAll(".finale__credits span");
@@ -71,6 +74,10 @@ if (heroContent) {
     heroContent.classList.add("hero__content-overlay");
     document.body.appendChild(heroContent);
 }
+
+const legacyPanelTargetY = [100, 100, 100, 100];
+const legacyPanelRenderedY = [100, 100, 100, 100];
+let legacyPanelAnimationFrame = null;
 
 let speakersTargetProgress = 0;
 let speakersRenderedProgress = 0;
@@ -112,6 +119,13 @@ fixedNavLinks.forEach((link) => {
         target.scrollIntoView({ behavior: "smooth" });
     });
 });
+
+const legacyPanelTimings = [
+    [0, 0.5],
+    [0.05, 0.55],
+    [0.1, 0.6],
+    [0.15, 0.65],
+];
 
 const speakersPanelTimings = [
     [0, 0.56],
@@ -1218,6 +1232,54 @@ function updateSoundSpeakerSequence() {
     soundSpeakerSticky.classList.toggle("is-ended", isEnded);
 }
 
+function updateLegacyClosingPanels() {
+    if (!legacyClosingCopy || !legacyClosingPanels.length || !legacyClosingSteps) return;
+
+    const rect = legacyClosingCopy.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const triggerStart = vh * 0.2;
+
+    // copy 박스 상단이 뷰포트 10vh에 도달했을 때 시작
+    const isActive = rect.top < triggerStart;
+    legacyClosingSteps.classList.toggle("is-active", isActive);
+
+    if (!isActive) return;
+
+    // progress: copy.top=0.1vh → 0, copy.top=0.1vh - vh → 1
+    const progress = clamp((triggerStart - rect.top) / vh, 0, 1);
+
+    legacyClosingPanels.forEach((panel, index) => {
+        const [start, end] = legacyPanelTimings[index] || [0, 1];
+        const panelProgress = sequenceProgress(progress, start, end);
+        // ease-out: 빠르게 시작 → 느리게 끝
+        const easedProgress = 1 - Math.pow(1 - panelProgress, 3);
+        legacyPanelTargetY[index] = (1 - easedProgress) * 100;
+    });
+
+    if (!legacyPanelAnimationFrame) {
+        legacyPanelAnimationFrame = requestAnimationFrame(renderLegacyPanels);
+    }
+}
+
+function renderLegacyPanels() {
+    let isSettled = true;
+
+    legacyClosingPanels.forEach((panel, index) => {
+        const distance = legacyPanelTargetY[index] - legacyPanelRenderedY[index];
+        legacyPanelRenderedY[index] += distance * 0.05;
+
+        if (Math.abs(distance) < 0.01) {
+            legacyPanelRenderedY[index] = legacyPanelTargetY[index];
+        } else {
+            isSettled = false;
+        }
+
+        panel.style.setProperty("--legacy-panel-y", `${legacyPanelRenderedY[index]}vh`);
+    });
+
+    legacyPanelAnimationFrame = isSettled ? null : requestAnimationFrame(renderLegacyPanels);
+}
+
 function updateLegacySequence() {
     if (!legacySequence || !legacySequenceArt) return;
 
@@ -1227,6 +1289,7 @@ function updateLegacySequence() {
 
     legacySequenceArt.classList.toggle("is-pinned", isPinned);
     legacySequenceArt.classList.toggle("is-ended", isEnded);
+    updateLegacyClosingPanels();
 }
 
 function getAngleDistance(angle, targetAngle) {

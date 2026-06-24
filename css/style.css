@@ -108,8 +108,7 @@ a {
     color: #fff;
 }
 
-.fixed-ui.is-final-stage .fixed-nav,
-.fixed-ui.is-final-stage .fixed-grid-lines {
+.fixed-ui.is-final-stage .fixed-nav {
     opacity: 0;
 }
 
@@ -2203,33 +2202,31 @@ a {
 }
 
 .legacy-closing__steps {
-    position: absolute;
+    position: fixed;
     inset: 0;
-    z-index: 2;
+    z-index: 20;
     pointer-events: none;
+    visibility: hidden;
+}
+
+.legacy-closing__steps.is-active {
+    visibility: visible;
 }
 
 .legacy-closing__steps span {
     position: absolute;
-    bottom: 0;
+    top: 0;
     width: 25vw;
+    height: 100vh;
     background: #fff;
+    transform: translateY(var(--legacy-panel-y, 100vh));
+    will-change: transform;
 }
 
-.legacy-closing__steps span:nth-child(1) {
-    left: 0;
-    height: 57.87vh;
-}
-
-.legacy-closing__steps span:nth-child(2) {
-    left: 25vw;
-    height: 48.9vh;
-}
-
-.legacy-closing__steps span:nth-child(3) {
-    left: 50vw;
-    height: 31.76vh;
-}
+.legacy-closing__steps span:nth-child(1) { left: 0; }
+.legacy-closing__steps span:nth-child(2) { left: 25vw; }
+.legacy-closing__steps span:nth-child(3) { left: 50vw; }
+.legacy-closing__steps span:nth-child(4) { left: 75vw; }
 
 .finale {
     position: absolute;
