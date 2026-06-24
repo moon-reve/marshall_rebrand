@@ -1391,6 +1391,98 @@ function updateScrollEffects() {
     var slotEls = Array.from(yearEl.querySelectorAll(".hero__year-slot"));
     if (!slotEls.length) return;
 
+    var entranceOffsets = [-7.5, -8.5, -6.5, -7.25];
+    var entranceSlots = slotEls.map(function (slot, index) {
+        return {
+            strip: slot.querySelector(".hero__year-strip"),
+            start: Number(slot.dataset.start) || 0,
+            dir: slot.dataset.dir || "up",
+            progress: entranceOffsets[index] || -7,
+        };
+    });
+    var entranceDigitH = 0;
+    var entranceFrame = null;
+    var entrancePlayed = false;
+
+    function getEntranceDigitH() {
+        var span = slotEls[0].querySelector(".hero__year-strip > span");
+        return span ? span.offsetHeight : 0;
+    }
+
+    function renderEntranceYear() {
+        if (!entranceDigitH) entranceDigitH = getEntranceDigitH();
+        if (!entranceDigitH) return;
+
+        entranceSlots.forEach(function (slot) {
+            var rawIndex = slot.dir === "up"
+                ? ((slot.start + slot.progress) % 10 + 10) % 10
+                : ((slot.start - slot.progress) % 10 + 10) % 10;
+
+            slot.strip.style.transform = "translateY(" + (-rawIndex * entranceDigitH) + "px)";
+        });
+    }
+
+    function finishEntranceYear() {
+        entranceSlots.forEach(function (slot) { slot.progress = 0; });
+        renderEntranceYear();
+        entranceFrame = null;
+    }
+
+    function playEntranceYear() {
+        if (entrancePlayed) return;
+        entrancePlayed = true;
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            finishEntranceYear();
+            return;
+        }
+
+        function animateEntranceYear() {
+            var allDone = true;
+
+            entranceSlots.forEach(function (slot) {
+                var diff = -slot.progress;
+
+                if (Math.abs(diff) < 0.004) {
+                    slot.progress = 0;
+                } else {
+                    slot.progress += diff * 0.055;
+                    allDone = false;
+                }
+            });
+
+            renderEntranceYear();
+
+            if (allDone) {
+                finishEntranceYear();
+                return;
+            }
+
+            entranceFrame = requestAnimationFrame(animateEntranceYear);
+        }
+
+        if (entranceFrame) cancelAnimationFrame(entranceFrame);
+        entranceFrame = requestAnimationFrame(animateEntranceYear);
+    }
+
+    requestAnimationFrame(function () {
+        entranceDigitH = getEntranceDigitH();
+        renderEntranceYear();
+        requestAnimationFrame(playEntranceYear);
+    });
+
+    if ("IntersectionObserver" in window) {
+        var entranceObserver = new IntersectionObserver(function (entries) {
+            if (!entries[0].isIntersecting) return;
+            entranceObserver.disconnect();
+            playEntranceYear();
+        }, { threshold: 0.35 });
+
+        entranceObserver.observe(yearEl);
+    }
+
+    return;
+
     // targetMod: 각 슬롯이 2026을 표시하기 위한 progress % 10 값
     var SLOTS = [
         { el: slotEls[0], start: 1, dir: "up",   targetMod2026: 1,  targetMod1962: 0 },
