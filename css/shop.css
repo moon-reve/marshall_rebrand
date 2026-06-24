@@ -230,6 +230,10 @@
 .shop-best {
     position: relative;
     z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8vh;
     margin-top: calc(-100vh + 7.18vw);
     min-height: 100vh;
     background: #e9e9e9;
@@ -250,24 +254,20 @@
 }
 
 .shop-best__title {
-    position: absolute;
-    top: 19vh;
-    left: 50%;
+    position: relative;
     z-index: 4;
-    margin: 0;
+    align-self: center;
+    margin: 19vh 0 0;
     color: #2b2118;
     font-family: "Olivera Demo", "Bodoni Moda", serif;
     font-size: 7.81vw;
     font-weight: 400;
     line-height: normal;
     white-space: nowrap;
-    transform: translateX(-50%);
 }
 
 .shop-best__grid {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    position: relative;
     z-index: 2;
     display: grid;
     grid-template-columns: repeat(4, 25vw);
@@ -434,15 +434,21 @@
     align-items: center;
     justify-content: center;
     width: 100vw;
-    height: 50vh;
+    min-height: calc(100vh - 7.18vw);
     overflow: hidden;
     background: #e9e9e9;
 }
 
 .shop-products__scroll-art {
+    display: block;
     position: static;
     z-index: 1;
     width: 50.2vw;
+    height: 12.81vw;
+    object-fit: contain;
+    opacity: 1;
+    clip-path: inset(0 calc(100% - var(--shop-art-reveal, 8%)) 0 0);
+    will-change: clip-path;
 }
 
 .shop-product {
@@ -631,20 +637,19 @@
 }
 
 .shop-product__color--cream {
-    background: #f4eee3;
-    border: 0.05vw solid #cba672;
+    background: #3c3c3c;
 }
 
 .shop-product__color--brown {
-    background: #8a5a35;
+    background: #c8bcac;
 }
 
 .shop-product__color--gray {
-    background: #9a9a9a;
+    background: #86573a;
 }
 
 .shop-product__color--black {
-    background: #17120f;
+    background: #4a2d32;
 }
 
 .shop-product__color--selected {
@@ -652,7 +657,7 @@
     width: 1.77vw;
     height: 1.77vw;
     background: #ffffff;
-    border: 0.05vw solid #000000;
+    border: 0.05vw solid #222222;
 }
 
 .shop-product__color--selected::before {
@@ -660,7 +665,7 @@
     position: absolute;
     inset: 0.21vw;
     border-radius: 50%;
-    background: #c7baa8;
+    background: #4c5564;
 }
 
 .shop-product__scroll {
