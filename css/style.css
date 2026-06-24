@@ -132,7 +132,7 @@ a {
     will-change: transform;
 }
 
-.fixed-nav.is-beginning-sound {
+.fixed-nav.is-design-section {
     color: #fff;
 }
 
@@ -355,6 +355,33 @@ a {
     background: #302822;
     transform: translate(-50%, -50%) rotate(calc(30deg + var(--fixed-gauge-rotation, 0deg))) translateY(29px);
     transform-origin: 50% 50%;
+}
+
+.fixed-gauge__label {
+    position: absolute;
+    top: 91.76%;
+    color: #302822;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 0;
+    transition: color 0.35s ease;
+}
+
+.fixed-ui.is-dark .fixed-gauge__label {
+    color: #fff;
+}
+
+.fixed-ui.is-design-section .fixed-gauge__label {
+    color: #fff;
+}
+
+.fixed-gauge__label--min {
+    left: 14.73%;
+}
+
+.fixed-gauge__label--max {
+    left: 75.64%;
 }
 
 .hero-stage {
@@ -691,11 +718,11 @@ a {
 }
 
 .beginning-stage {
-    height: 530vh;
+    height: 84vh;
 }
 
 .beginning {
-    height: 530vh;
+    height: 84vh;
     overflow: visible;
     background: #fff;
 }
@@ -774,10 +801,23 @@ a {
     height: auto;
     aspect-ratio: 964 / 246;
     object-fit: contain;
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 0.2s ease;
 }
 
-.beginning-feature {
+.beginning__scroll-art.is-ready {
+    opacity: 1;
+}
+
+.design-stage {
+    position: relative;
+    width: 100vw;
+    height: 190vh;
+    overflow: visible;
+}
+
+.design-feature {
     position: absolute;
     left: 0;
     width: 100vw;
@@ -786,20 +826,20 @@ a {
     background-position: center;
 }
 
-.beginning-feature--sound {
-    top: 84vh;
-    height: 316vh;
+.design-feature--sound {
+    top: 0;
+    height: 190vh;
     background-image: none;
 }
 
-.beginning-feature__sound-sticky {
+.design-feature__sound-sticky {
     --sound-section-opacity: 1;
     position: sticky;
     top: 0;
     z-index: 3;
     width: 100vw;
     height: 100vh;
-    background-image: url("../assets/images/bg-hero_13.png");
+    background-image: url("../assets/images/bg-hero_15.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -808,29 +848,37 @@ a {
     will-change: opacity;
 }
 
-.beginning-feature__sound-sticky.is-pinned {
+.design-feature__sound-sticky.is-pinned {
     position: sticky;
     top: 0;
 }
 
-.beginning-feature__sound-sticky.is-ended {
+.design-feature__sound-sticky.is-ended {
     position: sticky;
     top: 0;
 }
 
-.beginning-feature--design {
-    top: 300vh;
-    height: 230vh;
+.design-feature--design {
+    top: 0;
+    height: 190vh;
     background-image: none;
 }
 
-.beginning-feature__design-sticky {
+.design-feature__design-sticky {
     --design-entry-opacity: 0;
     --design-exit-opacity: 1;
     position: absolute;
     top: 0;
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
+}
+
+.design-feature__design-sticky::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
     background-image: url("../assets/images/marshall_stage_white.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -840,38 +888,58 @@ a {
     will-change: opacity;
 }
 
-.beginning-feature__design-sticky::after {
+.design-feature__design-sticky::after {
     content: '';
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
+    opacity: var(--design-entry-opacity);
     z-index: 1;
+    will-change: opacity;
 }
 
-.beginning-feature__design-sticky.is-crossfading,
-.beginning-feature__design-sticky.is-pinned {
+.design-feature__design-sticky.is-crossfading,
+.design-feature__design-sticky.is-pinned {
     position: fixed;
     inset: 0;
     z-index: 4;
 }
 
-.beginning-feature__design-sticky.is-ended {
+.design-feature__design-sticky.is-ended {
     position: absolute;
     top: auto;
     bottom: 0;
 }
 
-.beginning-feature__title-box {
+.design-feature__text-flow {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    height: 100%;
+    pointer-events: none;
+}
+
+.design-feature__text-flow-inner {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+.design-feature__title-box {
     position: absolute;
     top: 32.85%;
-    left: 19.95vw;
+    left: 50%;
+    transform: translateX(-50%);
     width: 57.29vw;
     color: #ffeac6;
     z-index: 2;
     will-change: transform;
 }
 
-.beginning-feature__meta {
+.design-feature__meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -883,13 +951,13 @@ a {
     letter-spacing: -0.03em;
 }
 
-.beginning-feature__label {
+.design-feature__label {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.beginning-feature__marker {
+.design-feature__marker {
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
@@ -898,12 +966,12 @@ a {
     flex-shrink: 0;
 }
 
-.beginning-feature__slashes {
+.design-feature__slashes {
     font-family: 'SUIT', sans-serif;
     letter-spacing: 0.25em;
 }
 
-.beginning-feature__headline {
+.design-feature__headline {
     text-align: center;
     font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
     font-size: 5.82vw;
@@ -913,53 +981,68 @@ a {
     white-space: nowrap;
 }
 
-.beginning-feature__headline p {
+.design-feature__headline p {
     margin: 0;
 }
 
-.beginning-feature__copy {
+.design-feature__headline p:last-child {
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 0.833vw;
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin-top: 5.56vh;
+    white-space: normal;
+    text-align: center;
+}
+
+.design-feature__copy-track {
     position: absolute;
-    top: 28.7vh;
+    top: 132.85vh;
     left: 1.77vw;
-    width: 46.67vw;
-    color: #AE915A;
+    width: 95vw;
+    z-index: 2;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+.design-feature__copy {
+    width: 100%;
+    color: #ffeac6;
     font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: 1.667vw;
     line-height: 1.3;
     letter-spacing: -0.022em;
-    z-index: 2;
 }
 
-.beginning-feature__copy p:first-child {
+.design-feature__copy p:first-child {
     font-family: Arial, sans-serif;
-    font-size: 2.5vw;
+    font-size: 2.0833vw;
     letter-spacing: -0.022em;
 }
 
-.beginning-feature__copy--one {
-    width: 50vw;
-    will-change: transform;
+.design-feature__copy--one {
+    width: 100%;
 }
 
-.beginning-feature__copy--one p:not(:first-child) {
+.design-feature__copy--one p:not(:first-child) {
     font-size: 0.9375vw;
     font-weight: 300;
     line-height: 1.3;
 }
 
-.beginning-feature__copy--two {
-    top: 0;
-    left: 50.1vw;
+.design-feature__copy--two {
     width: 46.67vw;
-    will-change: transform;
+    margin-top: 34vh;
+    margin-left: 48.33vw;
 }
 
-.beginning-feature__copy--two p:not(:first-child) {
+.design-feature__copy--two p:not(:first-child) {
     font-size: 0.9375vw;
     line-height: 1.3;
 }
 
-.beginning-feature__copy p {
+.design-feature__copy p {
     margin: 0 0 1.3vh;
 }
 
@@ -984,7 +1067,7 @@ a {
     left: 50%;
     display: flex;
     flex-direction: column-reverse;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     transform: translate(-50%, -50%);
 }
@@ -992,11 +1075,11 @@ a {
 .evolution-intro__title {
     margin: 0;
     color: #2b2118;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 7.8125vw;
+    font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
+    font-size: 5.82vw;
     font-weight: 400;
-    line-height: 0.95;
-    letter-spacing: -0.03em;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
     white-space: nowrap;
 }
 
@@ -1018,6 +1101,19 @@ a {
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
     border-left: 6px solid #f5a000;
+}
+
+.evolution-intro__subtitle {
+    order: -1;
+    align-self: center;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 0.833vw;
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin-top: 5.56vh;
+    white-space: normal;
+    text-align: center;
 }
 
 .milestone {
@@ -1054,7 +1150,7 @@ a {
 
 .milestone__scroll {
     min-height: 100vh;
-    padding: 5.56vh 1.56vw 3.43vh;
+    padding: 2.78vh 3.125vw;
     background: #d9c5a9;
 }
 
@@ -1067,11 +1163,15 @@ a {
 }
 
 .milestone__heading {
-    padding: 3.24vh 1.56vw;
-    background: #1b1410;
+    padding: 2.78vh 3.125vw;
+    background-color: #1b1410;
+    background-image: url("../assets/images/bg_milestone_heading.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: #fff;
     font-family: Arial, sans-serif;
-    font-size: 4.17vw;
+    font-size: 2.9167vw;
     line-height: 1.15;
 }
 
@@ -1089,17 +1189,18 @@ a {
     flex: 1;
     flex-direction: column;
     justify-content: space-between;
-    padding: 3.15vh 1.77vw;
+    padding: 2.78vh 3.125vw;
     overflow: hidden;
     background: #e9e9e9;
 }
 
 .milestone__lead {
     margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 2.5vw;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 2.0833vw;
+    font-weight: 200;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
 }
 
 .milestone__table {
@@ -1141,13 +1242,13 @@ a {
 }
 
 .milestone__copy p:first-child {
-    font-size: 1.67vw;
+    font-size: 1.25vw;
     line-height: 1.3;
     letter-spacing: -0.022em;
 }
 
 .milestone__copy p:last-child {
-    font-size: 1.25vw;
+    font-size: 0.9375vw;
     line-height: 1.52;
     letter-spacing: -0.022em;
     color: rgba(27, 21, 16, 0.75);
@@ -1511,7 +1612,7 @@ a {
     margin: 0;
     color: #ddc7a8;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 9.9vw;
+    font-size: 7.8125vw;
     font-weight: 400;
     line-height: 0.9;
     letter-spacing: -0.052em;
@@ -1520,8 +1621,8 @@ a {
 
 .sound-detail__copy {
     position: absolute;
-    top: 5.83vh;
-    left: 1.77vw;
+    top: 12.04vh;
+    left: 4.6875vw;
     z-index: 2;
     color: #d9c5a9;
     font-weight: 400;
@@ -1533,46 +1634,46 @@ a {
 }
 
 .sound-detail__copy-en {
-    font-size: 1.875vw;
+    font-size: 1.25vw;
     line-height: 1.3;
 }
 
 .sound-detail__copy-ko {
     margin-top: 3.7vh !important;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 1.458vw;
+    font-size: 0.9375vw;
     line-height: 1.52;
     color: rgba(217, 197, 169, 0.75);
 }
 
 .sound-detail__image {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 50vw;
-    height: 55.56vh;
-    background-image: url("../assets/images/analog-control-reference.png");
+    right: 3.125vw;
+    bottom: 12.04vh;
+    width: 40vw;
+    height: 22.5vw;
+    background-image: url("../assets/images/sound_image_1.png");
     background-repeat: no-repeat;
     background-position: right bottom;
-    background-size: 200% 180%;
+    background-size: 100%;
 }
 
 .sound-ritual__image {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 50vw;
-    height: 58.52vh;
-    background-image: url("../assets/images/analog-ritual-reference.png");
+    top: 12.04vh;
+    right: 3.125vw;
+    width: 40vw;
+    height: 22.5vw;
+    background-image: url("../assets/images/sound_image_2.png");
     background-repeat: no-repeat;
     background-position: right top;
-    background-size: 200% 170.88%;
+    background-size: 100%;
 }
 
 .sound-ritual__copy {
     position: absolute;
-    top: 63.5vh;
-    left: 1.77vw;
+    bottom: 12.04vh;
+    left: 4.6875vw;
     color: #d9c5a9;
     font-weight: 400;
     letter-spacing: -0.022em;
@@ -1583,14 +1684,14 @@ a {
 }
 
 .sound-ritual__copy-en {
-    font-size: 1.875vw;
+    font-size: 1.25vw;
     line-height: 1.3;
 }
 
 .sound-ritual__copy-ko {
     margin-top: 3.7vh !important;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 1.458vw;
+    font-size: 0.9375vw;
     font-weight: 400;
     line-height: 1.52;
     color: rgba(217, 197, 169, 0.75);
@@ -1746,29 +1847,8 @@ a {
 .headphone-detail__copy {
     position: absolute;
     top: 3.8vh;
-    left: 1.77vw;
+    left: 4.6875vw;
     z-index: 3;
-    color: #d9c5a9;
-    font-weight: 400;
-    letter-spacing: -0.022em;
-}
-
-.headphone-detail__copy p {
-    margin: 0;
-}
-
-.headphone-detail__copy-en {
-    font-size: 1.875vw;
-    line-height: 1.3;
-}
-
-.headphone-detail__copy-ko {
-    margin-top: 3.7vh !important;
-    font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 1.458vw;
-    font-weight: 400;
-    line-height: 1.52;
-    color: rgba(217, 197, 169, 0.75);
 }
 
 .sound-speaker {
@@ -1842,27 +1922,34 @@ a {
 .sound-speaker__copy {
     position: absolute;
     top: 3.8vh;
-    right: 1.77vw;
+    right: 4.6875vw;
     z-index: 3;
-    color: #d9c5a9;
-    font-weight: 400;
-    letter-spacing: -0.022em;
     text-align: right;
 }
 
+.headphone-detail__copy,
+.sound-speaker__copy {
+    color: #d9c5a9;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+}
+
+.headphone-detail__copy p,
 .sound-speaker__copy p {
     margin: 0;
 }
 
+.headphone-detail__copy-en,
 .sound-speaker__copy-en {
-    font-size: 1.875vw;
+    font-size: 1.25vw;
     line-height: 1.3;
 }
 
+.headphone-detail__copy-ko,
 .sound-speaker__copy-ko {
     margin-top: 3.7vh !important;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 1.458vw;
+    font-size: 0.9375vw;
     font-weight: 400;
     line-height: 1.52;
     color: rgba(217, 197, 169, 0.75);
