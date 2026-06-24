@@ -1021,8 +1021,8 @@ a {
 .design-feature__copy-track {
     position: absolute;
     top: 132.85vh;
-    left: 1.77vw;
-    width: 95vw;
+    left: 4.6875vw;
+    width: calc(100vw - 9.375vw);
     z-index: 2;
     transform: translate3d(0, 0, 0);
     will-change: transform;
@@ -1056,7 +1056,8 @@ a {
 .design-feature__copy--two {
     width: 46.67vw;
     margin-top: 34vh;
-    margin-left: 48.33vw;
+    margin-left: auto;
+    text-align: right;
 }
 
 .design-feature__copy--two p:not(:first-child) {
