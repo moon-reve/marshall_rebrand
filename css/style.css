@@ -1711,15 +1711,16 @@ a {
 .signature-sound__title {
     position: absolute;
     top: 28.7vh;
-    left: 29.17vw;
+    left: 50%;
     margin: 0;
     color: #ddc7a8;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 9.9vw;
+    font-size: 7.8125vw;
     font-weight: 400;
     line-height: 0.9;
     letter-spacing: -0.052em;
     white-space: nowrap;
+    transform: translateX(-50%);
 }
 
 .signature-sound__grid {
@@ -2035,18 +2036,24 @@ a {
     overflow: hidden;
 }
 
-.legacy-hero__meta {
+.legacy-hero__content {
     position: absolute;
     z-index: 3;
-    top: 35.2%;
-    left: 30.7%;
-    right: 30.7%;
+    top: 50%;
+    left: 50%;
+    width: max-content;
+    transform: translate(-50%, -50%);
+}
+
+.legacy-hero__meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2.78vh;
     color: #ddc7a8;
     font-family: Arial, sans-serif;
-    font-size: clamp(12px, 0.83vw, 16px);
+    font-size: 0.833vw;
     font-weight: 400;
     line-height: 1;
 }
@@ -2071,18 +2078,17 @@ a {
 }
 
 .legacy-hero__title {
-    position: absolute;
-    z-index: 3;
-    top: 40.8%;
-    left: 26.45%;
+    width: max-content;
     margin: 0;
     color: #ddc7a8;
-    font-family: "Bodoni Moda", "Bodoni MT", Didot, serif;
-    font-size: clamp(104px, 11.82vw, 227px);
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-size: 7.8125vw;
     font-weight: 400;
     line-height: 0.9;
     letter-spacing: -0.052em;
+    text-align: center;
     white-space: nowrap;
+    margin-inline: auto;
 }
 
 .legacy-statement {
@@ -2477,7 +2483,7 @@ a {
     }
 
     .signature-sound__title {
-        left: 22vw;
+        left: 50%;
         font-size: 11vw;
     }
 
