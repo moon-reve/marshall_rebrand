@@ -10,17 +10,19 @@ const fixedNav = document.querySelector(".fixed-nav");
 const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
 const fixedGauge = document.querySelector(".fixed-gauge");
 const fixedGaugeTicks = document.querySelectorAll(".fixed-gauge__tick");
-const beginningDesign = document.querySelector("[data-beginning-design]");
+const designPanel = document.querySelector("[data-design-panel]");
 const beginningSection = document.querySelector(".beginning");
 const beginningText = document.querySelector(".beginning__text");
 const beginningTextChars = [];
 const beginningScrollArt = document.querySelector(".beginning__scroll-art");
-const beginningSound = document.querySelector(".beginning-feature--sound");
-const beginningSoundSticky = document.querySelector(".beginning-feature__sound-sticky");
-const beginningSoundTitle = document.querySelector(".beginning-feature--sound .beginning-feature__title-box");
-const beginningDesignSticky = document.querySelector(".beginning-feature__design-sticky");
-const beginningCopyOne = document.querySelector("[data-beginning-copy-one]");
-const beginningCopyTwo = document.querySelector("[data-beginning-copy-scroll]");
+const designSound = document.querySelector(".design-feature--sound");
+const designSoundSticky = document.querySelector(".design-feature__sound-sticky");
+const designTextFlowInner = document.querySelector(".design-feature__text-flow-inner");
+const designTitleBox = document.querySelector(".design-feature__title-box");
+const designSticky = document.querySelector(".design-feature__design-sticky");
+const designCopyTrack = document.querySelector("[data-design-copy-track]");
+const designCopyOne = document.querySelector("[data-design-copy-one]");
+const designCopyTwo = document.querySelector("[data-design-copy-scroll]");
 const evolutionStage = document.querySelector("[data-evolution-stage]");
 const soundStage = document.querySelector("[data-sound-stage]");
 const soundSticky = document.querySelector(".sound-sticky");
@@ -217,7 +219,7 @@ function triggerHeroLightsOn() {
             heroLightsOn = true;
             heroLightsAnimating = false;
         }, 1050);
-    }, 800);
+    }, 500);
 }
 
 function updateHeroScroll() {
@@ -399,43 +401,48 @@ function prepareBeginningArtPaths() {
         svgRoot.prepend(defs);
     }
 
-    beginningArtPaths = sortConnectedPathsLeftToRight(Array.from(svgDocument.querySelectorAll("path")).map((sourcePath, index) => {
-        const mask = svgDocument.createElementNS(svgNamespace, "mask");
-        const maskId = `beginning-art-mask-${index}`;
-        mask.setAttribute("id", maskId);
-        mask.setAttribute("maskUnits", "userSpaceOnUse");
-        mask.setAttribute("x", "-1000");
-        mask.setAttribute("y", "-1000");
-        mask.setAttribute("width", "4000");
-        mask.setAttribute("height", "4000");
+    beginningArtPaths = Array.from(svgDocument.querySelectorAll("path"))
+        .map((sourcePath, index) => {
+            const bounds = sourcePath.getBBox();
+            const maskPadding = Math.max(bounds.width, bounds.height) * 0.08;
+            const mask = svgDocument.createElementNS(svgNamespace, "mask");
+            const maskId = `beginning-art-mask-${index}`;
+            mask.setAttribute("id", maskId);
+            mask.setAttribute("maskUnits", "userSpaceOnUse");
+            mask.setAttribute("x", `${bounds.x - maskPadding}`);
+            mask.setAttribute("y", `${bounds.y - maskPadding}`);
+            mask.setAttribute("width", `${bounds.width + maskPadding * 2}`);
+            mask.setAttribute("height", `${bounds.height + maskPadding * 2}`);
 
-        const path = sourcePath.cloneNode(false);
+            const revealRect = svgDocument.createElementNS(svgNamespace, "rect");
 
-        path.style.fill = "none";
-        path.style.stroke = "#fff";
-        path.style.strokeWidth = "8";
-        path.style.strokeLinecap = "round";
-        path.style.strokeLinejoin = "round";
+            revealRect.setAttribute("x", `${bounds.x - maskPadding}`);
+            revealRect.setAttribute("y", `${bounds.y - maskPadding}`);
+            revealRect.setAttribute("width", "0");
+            revealRect.setAttribute("height", `${bounds.height + maskPadding * 2}`);
+            revealRect.setAttribute("fill", "#fff");
 
-        mask.appendChild(path);
-        defs.appendChild(mask);
+            mask.appendChild(revealRect);
+            defs.appendChild(mask);
 
-        const length = path.getTotalLength();
-        const firstPoint = path.getPointAtLength(0);
-        const lastPoint = path.getPointAtLength(length);
-        const shouldRevealFromEnd = lastPoint.x < firstPoint.x;
-        const start = shouldRevealFromEnd ? lastPoint : firstPoint;
-        const end = shouldRevealFromEnd ? firstPoint : lastPoint;
+            sourcePath.style.fill = "#000";
+            sourcePath.style.stroke = "none";
+            sourcePath.setAttribute("mask", `url(#${maskId})`);
 
-        path.style.strokeDasharray = `${length}`;
-        path.style.strokeDashoffset = `${shouldRevealFromEnd ? -length : length}`;
+            return {
+                revealRect,
+                bounds,
+                maskPadding,
+                index,
+            };
+        })
+        .sort((firstPath, secondPath) => {
+            if (firstPath.bounds.x !== secondPath.bounds.x) return firstPath.bounds.x - secondPath.bounds.x;
+            if (firstPath.bounds.y !== secondPath.bounds.y) return firstPath.bounds.y - secondPath.bounds.y;
+            return firstPath.index - secondPath.index;
+        });
 
-        sourcePath.style.fill = "#000";
-        sourcePath.style.stroke = "none";
-        sourcePath.setAttribute("mask", `url(#${maskId})`);
-
-        return { path, length, shouldRevealFromEnd, start, end, index };
-    }));
+    beginningScrollArt.classList.add("is-ready");
 
     return Boolean(beginningArtPaths.length);
 }
@@ -445,12 +452,14 @@ function updateBeginningArtReveal() {
 
     const artRect = beginningScrollArt.getBoundingClientRect();
     const revealStart = window.innerHeight * 0.8;
-    const revealEnd = window.innerHeight * 0.4 - artRect.height;
+    const revealEnd = window.innerHeight * 0.55 - artRect.height;
     const revealDistance = Math.max(revealStart - revealEnd, 1);
     beginningArtTargetProgress = clamp((revealStart - artRect.top) / revealDistance, 0, 1);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        beginningArtPaths.forEach(({ path }) => path.style.strokeDashoffset = "0");
+        beginningArtPaths.forEach(({ revealRect, bounds, maskPadding }) => {
+            revealRect.setAttribute("width", `${bounds.width + maskPadding * 2}`);
+        });
         return;
     }
 
@@ -466,16 +475,16 @@ function updateBeginningArtReveal() {
 
         const pathCount = beginningArtPaths.length;
 
-        beginningArtPaths.forEach(({ path, length, shouldRevealFromEnd }, index) => {
+        beginningArtPaths.forEach(({ revealRect, bounds, maskPadding }, index) => {
             const pathStart = index / pathCount;
             const pathProgress = clamp(
                 (beginningArtRenderedProgress - pathStart) * pathCount,
                 0,
                 1
             );
-            const hiddenOffset = shouldRevealFromEnd ? -length : length;
+            const revealWidth = (bounds.width + maskPadding * 2) * pathProgress;
 
-            path.style.strokeDashoffset = `${hiddenOffset * (1 - pathProgress)}`;
+            revealRect.setAttribute("width", `${revealWidth}`);
         });
 
         if (beginningArtRenderedProgress !== beginningArtTargetProgress) {
@@ -588,43 +597,37 @@ function updateSoundSpeakerArtReveal() {
     });
 }
 
-function updateBeginningSectionTransition() {
-    if (beginningSound && beginningSoundSticky && beginningSoundTitle) {
-        const soundRect = beginningSound.getBoundingClientRect();
-        const soundDistance = Math.max(beginningSound.offsetHeight - window.innerHeight, 1);
-        const soundProgress = clamp(-soundRect.top / soundDistance, 0, 1);
+function updateDesignSectionTransition() {
+    if (designSound && designSoundSticky) {
+        const soundRect = designSound.getBoundingClientRect();
+        const soundDistance = Math.max(designSound.offsetHeight - window.innerHeight, 1);
         const isSoundPinned = soundRect.top <= 0 && soundRect.bottom > window.innerHeight;
         const isSoundEnded = soundRect.bottom <= window.innerHeight;
-        const titleProgress = sequenceProgress(soundProgress, 0.08, 0.72);
-        const easedTitleProgress = titleProgress * titleProgress * (3 - 2 * titleProgress);
 
-        beginningSoundSticky.classList.toggle("is-pinned", isSoundPinned);
-        beginningSoundSticky.classList.toggle("is-ended", isSoundEnded);
-        beginningSoundTitle.style.transform = `translate3d(0, ${-easedTitleProgress * 115}vh, 0)`;
+        designSoundSticky.classList.toggle("is-pinned", isSoundPinned);
+        designSoundSticky.classList.toggle("is-ended", isSoundEnded);
     }
 
-    if (beginningDesign && beginningDesignSticky) {
-        const designRect = beginningDesign.getBoundingClientRect();
-        const entryProgress = clamp(
-            (window.innerHeight - designRect.top) / window.innerHeight,
-            0,
-            1
-        );
-        const designEntryProgress = sequenceProgress(entryProgress, 0.5, 1);
+    if (designPanel && designSticky) {
+        const designRect = designPanel.getBoundingClientRect();
+        const titleRect = designTitleBox?.getBoundingClientRect();
+        const designEntryProgress = titleRect
+            ? clamp(-titleRect.top / (window.innerHeight * 0.65), 0, 1)
+            : 0;
         const easedEntryProgress =
             designEntryProgress * designEntryProgress * (3 - 2 * designEntryProgress);
         const isCrossfading = designRect.top > 0 && designRect.top < window.innerHeight;
         const isDesignPinned = designRect.top <= 0 && designRect.bottom > window.innerHeight;
         const isDesignEnded = designRect.bottom <= window.innerHeight;
 
-        beginningDesignSticky.classList.toggle("is-crossfading", isCrossfading);
-        beginningDesignSticky.classList.toggle("is-pinned", isDesignPinned);
-        beginningDesignSticky.classList.toggle("is-ended", isDesignEnded);
-        beginningDesignSticky.style.setProperty(
+        designSticky.classList.toggle("is-crossfading", isCrossfading);
+        designSticky.classList.toggle("is-pinned", isDesignPinned);
+        designSticky.classList.toggle("is-ended", isDesignEnded);
+        designSticky.style.setProperty(
             "--design-entry-opacity",
             `${easedEntryProgress}`
         );
-        beginningSoundSticky?.style.setProperty(
+        designSoundSticky?.style.setProperty(
             "--sound-section-opacity",
             `${1 - easedEntryProgress}`
         );
@@ -905,7 +908,7 @@ function updateFixedNav() {
     let activeSection = fixedNavSections[0];
     let isSignatureActive = false;
     let isLegacyHeroActive = false;
-    let isBeginningSoundActive = false;
+    let isDesignSectionActive = false;
 
     fixedNavSections.forEach((section) => {
         const rect = section.target.getBoundingClientRect();
@@ -969,19 +972,19 @@ function updateFixedNav() {
         }
     });
 
-    if (beginningSound || beginningDesignSticky) {
-        const beginningSoundRect = beginningSound?.getBoundingClientRect();
-        const beginningDesignStickyRect = beginningDesignSticky?.getBoundingClientRect();
-        isBeginningSoundActive = Boolean(
-            (beginningSoundRect &&
-                beginningSoundRect.top <= activePoint &&
-                beginningSoundRect.bottom > activePoint) ||
-            (beginningDesignStickyRect &&
-                beginningDesignStickyRect.top <= activePoint &&
-                beginningDesignStickyRect.bottom > activePoint)
+    if (designSound || designSticky) {
+        const designSoundRect = designSound?.getBoundingClientRect();
+        const designStickyRect = designSticky?.getBoundingClientRect();
+        isDesignSectionActive = Boolean(
+            (designSoundRect &&
+                designSoundRect.top <= activePoint &&
+                designSoundRect.bottom > activePoint) ||
+            (designStickyRect &&
+                designStickyRect.top <= activePoint &&
+                designStickyRect.bottom > activePoint)
         );
 
-        if (isBeginningSoundActive) {
+        if (isDesignSectionActive) {
             const designLink = Array.from(fixedNavLinks).find(
                 (link) => link.getAttribute("href") === "#design"
             );
@@ -989,7 +992,7 @@ function updateFixedNav() {
             if (designLink) {
                 activeSection = {
                     link: designLink,
-                    target: beginningDesignSticky || beginningSound,
+                    target: designSticky || designSound,
                 };
             }
         }
@@ -997,10 +1000,10 @@ function updateFixedNav() {
 
     if (fixedNav && activeSection.link) {
         fixedNav.style.setProperty("--fixed-nav-indicator-top", `${activeSection.link.offsetTop}px`);
-        fixedNav.classList.toggle("is-beginning-sound", isBeginningSoundActive);
+        fixedNav.classList.toggle("is-design-section", isDesignSectionActive);
     }
 
-    fixedUi?.classList.toggle("is-beginning-sound", isBeginningSoundActive);
+    fixedUi?.classList.toggle("is-design-section", isDesignSectionActive);
 
     if (fixedUi && soundStage) {
         const evolutionRect = evolutionStage?.getBoundingClientRect();
@@ -1036,23 +1039,17 @@ function updateFixedNav() {
     }
 }
 
-function updateBeginningCopyScroll() {
-    if (!beginningDesign || !beginningCopyOne || !beginningCopyTwo) return;
+function updateDesignCopyScroll() {
+    if (!designSound || !designTextFlowInner || !designCopyTrack || !designCopyOne || !designCopyTwo) return;
 
-    const fixedGap = window.innerHeight * 0.5;
-    const copyTwoTop = beginningCopyOne.offsetTop + beginningCopyOne.offsetHeight + fixedGap;
-    const trackExit = copyTwoTop + beginningCopyTwo.offsetHeight + window.innerHeight * 0.12;
+    const soundRect = designSound.getBoundingClientRect();
+    const copyScrollDistance = window.innerHeight * 1.65;
+    const textProgress = clamp(-soundRect.top / copyScrollDistance, 0, 1);
+    const easedTextProgress = textProgress * textProgress * (3 - 2 * textProgress);
+    const trackEnd = -(designCopyTrack.offsetTop + designCopyTrack.offsetHeight + window.innerHeight * 0.16);
+    const trackMove = easedTextProgress * trackEnd;
 
-    const stageRect = beginningDesign.getBoundingClientRect();
-    const copyStartPoint = window.innerHeight * 0.75;
-    const textProgress = clamp((window.innerHeight - stageRect.top - copyStartPoint) / trackExit, 0, 1);
-    const entryProgress = sequenceProgress(textProgress, 0, 0.3);
-    const easedEntryProgress = entryProgress * entryProgress * (3 - 2 * entryProgress);
-    const trackMove = (1 - easedEntryProgress) * window.innerHeight * 0.7 + textProgress * -trackExit;
-
-    beginningCopyTwo.style.top = `${copyTwoTop}px`;
-    beginningCopyOne.style.transform = `translate3d(0, ${trackMove}px, 0)`;
-    beginningCopyTwo.style.transform = `translate3d(0, ${trackMove}px, 0)`;
+    designTextFlowInner.style.transform = `translate3d(0, ${trackMove}px, 0)`;
 }
 
 function updateSoundHorizontalScroll() {
@@ -1266,10 +1263,10 @@ function updateScrollEffects() {
     updateSpeakersTransition();
     updateBeginningTextReveal();
     updateBeginningArtReveal();
-    updateBeginningSectionTransition();
+    updateDesignCopyScroll();
+    updateDesignSectionTransition();
     updateFixedNav();
     updateFixedGauge();
-    updateBeginningCopyScroll();
     updateSoundHorizontalScroll();
     updateHeadphoneSequence();
     updateHeadphoneArtReveal();
