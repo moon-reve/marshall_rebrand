@@ -192,6 +192,11 @@ a {
     animation: finale-credit-caret-blink 0.7s step-end infinite;
 }
 
+.fixed-nav__shop {
+    margin-top: 1.5625vw;
+    font-size: 0.9375vw;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .fixed-nav {
         transition: none;
@@ -889,6 +894,14 @@ a {
     will-change: opacity;
 }
 
+.design-feature__sound-sticky::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
 .design-feature__sound-sticky.is-pinned {
     position: sticky;
     top: 0;
@@ -971,9 +984,9 @@ a {
 
 .design-feature__title-box {
     position: absolute;
-    top: 32.85%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 57.29vw;
     color: #ffeac6;
     z-index: 2;
@@ -1190,9 +1203,14 @@ a {
     grid-column: 2;
 }
 
+.milestone__sticky--right .milestone__heading,
+.milestone__sticky--right .milestone__lead {
+    text-align: right;
+}
+
 .milestone__scroll {
     min-height: 100vh;
-    padding: 2.78vh 4.6875vw;
+    padding: 6.48vh 4.6875vw;
     background: #d9c5a9;
 }
 
@@ -1207,13 +1225,8 @@ a {
 .milestone__heading {
     padding: 2.78vh 4.6875vw;
     background-color: #1b1410;
-    background-image: url("../assets/images/bg_milestone_heading.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     color: #fff;
     font-family: Arial, sans-serif;
-    font-size: 2.9167vw;
     line-height: 1.15;
 }
 
@@ -1224,6 +1237,10 @@ a {
 .milestone__heading p:first-child {
     color: #c8922a;
     font-size: 1.3021vw;
+}
+
+.milestone__heading p:last-child {
+    font-size: 4.1667vw;
 }
 
 .milestone__spec {
@@ -1239,7 +1256,7 @@ a {
 .milestone__lead {
     margin: 0;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 2.0833vw;
+    font-size: 1.875vw;
     font-weight: 200;
     line-height: 1.1;
     letter-spacing: -0.02em;

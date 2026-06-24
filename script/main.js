@@ -134,6 +134,19 @@ const speakersPanelTimings = [
     [0.4, 0.96],
 ];
 
+const lineArtTransition = "stroke-dashoffset 0.22s cubic-bezier(0.22, 1, 0.36, 1)";
+
+function getLineArtPathProgress(drawLength, startLength, length, totalLength) {
+    const overlapLength = Math.min(totalLength * 0.018, length * 0.45);
+    const rawProgress = clamp(
+        (drawLength - startLength + overlapLength) / (length + overlapLength * 2),
+        0,
+        1
+    );
+
+    return rawProgress * rawProgress * (3 - 2 * rawProgress);
+}
+
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
@@ -545,6 +558,8 @@ function prepareHeadphoneArtPaths() {
         path.style.fill = "none";
         path.style.strokeDasharray = `${length}`;
         path.style.strokeDashoffset = `${length}`;
+        path.style.transition = lineArtTransition;
+        path.style.willChange = "stroke-dashoffset";
 
         return { path, length, startLength };
     });
@@ -572,7 +587,12 @@ function updateHeadphoneArtReveal() {
     const drawLength = progress * headphoneArtTotalLength;
 
     headphoneArtPaths.forEach(({ path, length, startLength }) => {
-        const pathProgress = clamp((drawLength - startLength) / length, 0, 1);
+        const pathProgress = getLineArtPathProgress(
+            drawLength,
+            startLength,
+            length,
+            headphoneArtTotalLength
+        );
 
         path.style.strokeDashoffset = `${length * (1 - pathProgress)}`;
     });
@@ -595,6 +615,8 @@ function prepareSoundSpeakerArtPaths() {
         path.style.fill = "none";
         path.style.strokeDasharray = `${length}`;
         path.style.strokeDashoffset = `${length}`;
+        path.style.transition = lineArtTransition;
+        path.style.willChange = "stroke-dashoffset";
 
         return { path, length, startLength };
     });
@@ -622,7 +644,12 @@ function updateSoundSpeakerArtReveal() {
     const drawLength = progress * soundSpeakerArtTotalLength;
 
     soundSpeakerArtPaths.forEach(({ path, length, startLength }) => {
-        const pathProgress = clamp((drawLength - startLength) / length, 0, 1);
+        const pathProgress = getLineArtPathProgress(
+            drawLength,
+            startLength,
+            length,
+            soundSpeakerArtTotalLength
+        );
 
         path.style.strokeDashoffset = `${length * (1 - pathProgress)}`;
     });
@@ -946,6 +973,7 @@ function updateFixedNav() {
     let isDesignSectionActive = false;
     let isEvolutionActive = false;
     let isHeadphoneActive = false;
+    let isFinalStageActive = false;
 
     fixedNavSections.forEach((section) => {
         const rect = section.target.getBoundingClientRect();
@@ -1070,6 +1098,12 @@ function updateFixedNav() {
         }
     }
 
+    if (finale) {
+        const finaleRect = finale.getBoundingClientRect();
+        isFinalStageActive = finaleRect.top <= activePoint;
+        isLegacyNavExiting = isLegacyNavExiting || isFinalStageActive;
+    }
+
     fixedNavLinks.forEach((link) => {
         const isActive = link === activeSection.link;
         link.classList.toggle("is-active", isActive);
@@ -1129,12 +1163,8 @@ function updateFixedNav() {
         fixedUi.classList.toggle("is-dark", isSoundActive || isLegacyHeroActive);
         fixedUi.classList.toggle("is-signature-sound", isSignatureActive);
 
-        const finaleRect = finale?.getBoundingClientRect();
         fixedUi.classList.toggle("is-headphone-stage", isHeadphoneActive);
-        fixedUi.classList.toggle(
-            "is-final-stage",
-            Boolean(finaleRect && finaleRect.top <= activePoint && finaleRect.bottom > activePoint)
-        );
+        fixedUi.classList.toggle("is-final-stage", isFinalStageActive);
     }
 }
 
@@ -1645,7 +1675,7 @@ function updateScrollEffects() {
             if (Math.abs(diff) < 0.005) {
                 s.progress = s.settleTarget;
             } else {
-                s.progress += diff * 0.24;
+                s.progress += diff * 0.45;
                 allDone = false;
             }
         });
