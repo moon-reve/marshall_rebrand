@@ -313,11 +313,19 @@
 }
 
 .support-panel {
+    box-sizing: border-box;
     background: #f4efe7;
     border-radius: 14px;
 }
 
+.support-notice,
+.support-service {
+    display: flex;
+    flex-direction: column;
+}
+
 .support-panel--notice {
+    flex: 1;
     min-height: 632px;
     padding: 39px 48px 33px;
 }
@@ -382,6 +390,9 @@
 }
 
 .support-panel--service {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     min-height: 632px;
     padding: 45px 48px 28px;
 }
@@ -543,6 +554,126 @@
     line-height: 1;
 }
 
+.support-footer {
+    position: relative;
+    overflow: hidden;
+    color: #f4f0ec;
+    background-color: #151515;
+    background-image: url("../assets/images/support-leather-texture.png");
+    background-repeat: repeat;
+    background-size: 220px 118px;
+    background-position: left top;
+}
+
+.support-footer__lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(90deg, transparent calc(28.95% - 0.5px), rgba(185, 67, 31, 0.85) calc(28.95% - 0.5px), rgba(185, 67, 31, 0.85) calc(28.95% + 0.5px), transparent calc(28.95% + 0.5px)),
+        linear-gradient(90deg, transparent calc(48.15% - 0.5px), rgba(185, 67, 31, 0.85) calc(48.15% - 0.5px), rgba(185, 67, 31, 0.85) calc(48.15% + 0.5px), transparent calc(48.15% + 0.5px)),
+        linear-gradient(90deg, transparent calc(56.85% - 0.5px), rgba(185, 67, 31, 0.85) calc(56.85% - 0.5px), rgba(185, 67, 31, 0.85) calc(56.85% + 0.5px), transparent calc(56.85% + 0.5px)),
+        linear-gradient(90deg, transparent calc(95.35% - 0.5px), rgba(185, 67, 31, 0.85) calc(95.35% - 0.5px), rgba(185, 67, 31, 0.85) calc(95.35% + 0.5px), transparent calc(95.35% + 0.5px));
+    pointer-events: none;
+}
+
+.support-footer__main {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 20.85vw 1fr;
+    gap: 7.7vw;
+    min-height: 320px;
+    padding: 80px 4.25vw 58px;
+}
+
+.support-footer__brand {
+    padding-top: 1px;
+}
+
+.support-footer__logo {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: #ffe4b9;
+    font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
+    font-size: clamp(32px, 2.08vw, 40px);
+    line-height: 1;
+    text-decoration: none;
+}
+
+.support-footer__brand p {
+    margin: 0;
+    color: #f5f1ed;
+    font-size: clamp(16px, 0.94vw, 18px);
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: 0;
+}
+
+.support-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(120px, 1fr));
+    gap: 3.8vw;
+}
+
+.support-footer__group h2 {
+    margin: 0 0 28px;
+    color: #f6f3ef;
+    font-size: clamp(16px, 0.94vw, 18px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
+.support-footer__group a {
+    display: block;
+    width: fit-content;
+    color: rgba(246, 243, 239, 0.9);
+    font-size: clamp(15px, 0.88vw, 17px);
+    font-weight: 400;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.support-footer__group a + a {
+    margin-top: 24px;
+}
+
+.support-footer__bottom {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 78px;
+    padding: 0 4.5vw;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(245, 241, 237, 0.46);
+}
+
+.support-footer__bottom p {
+    margin: 0;
+    font-size: clamp(13px, 0.78vw, 15px);
+    line-height: 1;
+}
+
+.support-footer__bottom nav {
+    display: flex;
+    align-items: center;
+    gap: 43px;
+}
+
+.support-footer__bottom a {
+    color: rgba(245, 241, 237, 0.6);
+    font-size: clamp(14px, 0.78vw, 15px);
+    text-decoration: none;
+}
+
+.support-footer__bottom span {
+    width: 1px;
+    height: 15px;
+    background: rgba(245, 241, 237, 0.45);
+}
+
 @media (max-width: 75em) {
     .shop-topbar__nav {
         width: 68%;
@@ -597,7 +728,17 @@
     .support-panel--service,
     .support-panel--faq,
     .support-panel--guide {
+        height: auto;
         min-height: 0;
+    }
+
+    .support-footer__main {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .support-footer__nav {
+        gap: 28px;
     }
 }
 
@@ -720,5 +861,34 @@
     .guide-item {
         grid-template-columns: 38px minmax(0, 1fr) 14px;
         gap: 16px;
+    }
+
+    .support-footer {
+        background-size: cover;
+    }
+
+    .support-footer__lines {
+        display: none;
+    }
+
+    .support-footer__main {
+        padding: 48px 8vw 42px;
+    }
+
+    .support-footer__nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 36px 24px;
+    }
+
+    .support-footer__bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+        padding: 24px 8vw;
+    }
+
+    .support-footer__bottom nav {
+        flex-wrap: wrap;
+        gap: 14px 22px;
     }
 }
