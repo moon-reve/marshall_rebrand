@@ -30,6 +30,24 @@
                     </ul>
                 </nav>
             </div>
+
+            <div class="shop-toolbar" data-node-id="2696:23" aria-label="Shop tools">
+                <div class="shop-toolbar__inner" data-node-id="2696:22">
+                    <button class="shop-toolbar__button" type="button" data-node-id="2696:21" aria-label="Open category menu" aria-expanded="false" aria-controls="shop-category-drawer" data-shop-menu-toggle>
+                        <img class="shop-toolbar__menu-icon" src="./assets/svg/shop-menu-icon.svg" alt="" aria-hidden="true" />
+                    </button>
+                    <div class="shop-toolbar__actions" data-node-id="2696:20" aria-label="Shop actions">
+                        <img class="shop-toolbar__action-icons" src="./assets/svg/shop-wordmark.svg" alt="" aria-hidden="true" />
+                    </div>
+                </div>
+            </div>
+
+            <nav class="shop-category-drawer" id="shop-category-drawer" aria-label="Shop category drawer" data-shop-category-drawer hidden>
+                <button type="button" data-shop-category="speaker">SPEAKER</button>
+                <button type="button" data-shop-category="headphones">HEADPHONES</button>
+                <button type="button" data-shop-category="analog">ANALOG</button>
+                <button type="button" data-shop-category="amp">AMP</button>
+            </nav>
         </header>
 
         <section class="shop-hero-stage" data-shop-hero-stage>
@@ -76,7 +94,7 @@
         <section class="shop-best" aria-labelledby="shop-best-title">
             <h2 class="shop-best__title" id="shop-best-title">Our Best Selling Product</h2>
             <div class="shop-best__grid" aria-label="Best selling products">
-                <article class="product-card" data-node-id="2696:164">
+                <article class="product-card" data-node-id="2696:164" data-shop-product-card="woburn-iii" tabindex="0" role="button" aria-label="View Woburn III details">
                     <div class="product-card__media" data-node-id="2696:165">
                         <div class="product-card__image-box" data-node-id="2696:166">
                             <img class="product-card__image" src="./assets/images/products/speaker-woburn-iii.png" alt="Woburn III speaker" />
@@ -99,7 +117,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="product-card" data-node-id="2696:184">
+                <article class="product-card" data-node-id="2696:184" data-shop-product-card="major-v" tabindex="0" role="button" aria-label="View Major V details">
                     <div class="product-card__media" data-node-id="2696:185">
                         <div class="product-card__image-box" data-node-id="2696:186">
                             <img class="product-card__image" src="./assets/images/products/headphones-major-v.png" alt="MAJOR V headphones" />
@@ -122,7 +140,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="product-card" data-node-id="2696:204">
+                <article class="product-card" data-node-id="2696:204" data-shop-product-card="stockwell-iii" tabindex="0" role="button" aria-label="View Stockwell III details">
                     <div class="product-card__media" data-node-id="2696:205">
                         <div class="product-card__image-box" data-node-id="2696:206">
                             <img class="product-card__image" src="./assets/images/products/portable-stockwell-iii.png" alt="Stockwell III portable speaker" />
@@ -145,7 +163,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="product-card" data-node-id="2696:224">
+                <article class="product-card" data-node-id="2696:224" data-shop-product-card="dsl-overdrive" tabindex="0" role="button" aria-label="View DSL Overdrive Pedal details">
                     <div class="product-card__media" data-node-id="2696:225">
                         <div class="product-card__image-box" data-node-id="2696:226">
                             <img class="product-card__image" src="./assets/images/products/pedal-dsl.png" alt="DSL pedal" />
@@ -186,10 +204,10 @@
                         <div class="shop-product__category">
                             <div class="shop-product__category-inner">
                                 <nav class="shop-product__category-nav" aria-label="Product categories" data-node-id="2696:266">
-                                    <a href="#">AMP</a>
-                                    <a class="is-active" href="#">SPEAKER</a>
-                                    <a href="#">HEADPHONES</a>
-                                    <a href="#">ANALOG</a>
+                                    <button type="button" data-shop-category="amp">AMP</button>
+                                    <button class="is-active" type="button" data-shop-category="speaker">SPEAKER</button>
+                                    <button type="button" data-shop-category="headphones">HEADPHONES</button>
+                                    <button type="button" data-shop-category="analog">ANALOG</button>
                                 </nav>
                                 <h2 class="shop-product__category-title" data-node-id="2696:274">SPEAKER</h2>
                             </div>
@@ -211,11 +229,11 @@
                                     <dt data-node-id="2696:339">Color</dt>
                                     <dd>
                                         <span class="shop-product__color-list" aria-label="Available colors" data-node-id="2696:356">
-                                            <span class="shop-product__color shop-product__color--cream" data-node-id="2696:357"></span>
-                                            <span class="shop-product__color shop-product__color--brown" data-node-id="2696:359"></span>
-                                            <span class="shop-product__color shop-product__color--gray" data-node-id="2696:361"></span>
-                                            <span class="shop-product__color shop-product__color--black" data-node-id="2696:363"></span>
-                                            <span class="shop-product__color shop-product__color--selected" data-node-id="2696:365"></span>
+                                            <button class="shop-product__color shop-product__color--cream" type="button" aria-label="Color 1"></button>
+                                            <button class="shop-product__color shop-product__color--brown" type="button" aria-label="Color 2"></button>
+                                            <button class="shop-product__color shop-product__color--gray" type="button" aria-label="Color 3"></button>
+                                            <button class="shop-product__color shop-product__color--black" type="button" aria-label="Color 4"></button>
+                                            <button class="shop-product__color shop-product__color--selected" type="button" aria-label="Selected color" aria-pressed="true"></button>
                                         </span>
                                     </dd>
                                 </div>
