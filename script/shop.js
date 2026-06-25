@@ -11,9 +11,9 @@ const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
 const productCardSwatches = document.querySelectorAll(".product-card__swatch");
 const shopProductSection = document.querySelector(".shop-product");
-const shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
+const shopProductScroll = document.querySelector(".shop-product__scroll");
+let shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
 const shopProductName = document.querySelector(".shop-product__headline h3");
-const shopProductPrice = document.querySelector(".shop-product__headline p");
 const shopProductDescription = document.querySelector(".shop-product__description");
 const shopProductCategoryTitle = document.querySelector(".shop-product__category-title");
 const shopProductColorList = document.querySelector(".shop-product__color-list");
@@ -24,63 +24,260 @@ const shopPanelTimings = [
     [0.24, 0.82],
     [0.4, 0.96],
 ];
-const shopProductDetails = [
-    {
-        id: "acton-iii",
-        category: "speaker",
-        categoryLabel: "SPEAKER",
-        name: "ACTON lll",
-        price: "460,000",
-        description: "컴팩트한 사이즈에 담아낸 시그니처 마샬 사운드",
-        colorCount: 5,
-        weight: "2.85kg",
-        output: "60W",
-    },
-    {
-        id: "stanmore-iii",
-        category: "speaker",
-        categoryLabel: "SPEAKER",
-        name: "STANMORE lll",
-        price: "950,000",
-        description: "강력한 퍼포먼스와 균형 잡힌 사운드의 베스트 셀러",
-        colorCount: 3,
-        weight: "4.25kg",
-        output: "80W",
-    },
-    {
-        id: "woburn-iii",
-        category: "speaker",
-        categoryLabel: "SPEAKER",
-        name: "WOBURN lll",
-        price: "950,000",
-        description: "압도적인 출력으로 공간을 가득 채우는 플래그십 스피커",
-        colorCount: 4,
-        weight: "7.45kg",
-        output: "150W",
-    },
-    {
-        id: "heston-120",
-        category: "speaker",
-        categoryLabel: "SPEAKER",
-        name: "HESTON 120",
-        price: "460,000",
-        description: "Dolby Atmos로 완성한 입체 음향",
-        colorCount: 2,
-        weight: "7.04kg",
-        output: "150W",
-    },
-    {
-        id: "heston-sub-200",
-        category: "speaker",
-        categoryLabel: "SPEAKER",
-        name: "HESTON SUB 200",
-        price: "1,090,000",
-        description: "깊고 강력한 저음을 더하는 무선 서브우퍼",
-        colorCount: 2,
-        weight: "7.62kg",
-        output: "236W",
-    },
-];
+const shopProductCatalog = {
+    speaker: [
+        {
+            id: "acton-iii",
+            category: "speaker",
+            categoryLabel: "SPEAKER",
+            name: "ACTON lll",
+            price: "460,000",
+            description: "컴팩트한 사이즈에 담아낸 시그니처 마샬 사운드",
+            colorCount: 5,
+            weight: "2.85kg",
+            output: "60W",
+            imageSrc: "./assets/images/products/speaker-acton-iii-blue.png",
+            imageClass: "shop-product__image--acton-iii",
+            imageSizeClass: "shop-product__image--small",
+            imageAlt: "Marshall Acton III speaker",
+        },
+        {
+            id: "stanmore-iii",
+            category: "speaker",
+            categoryLabel: "SPEAKER",
+            name: "STANMORE lll",
+            price: "950,000",
+            description: "강력한 퍼포먼스와 균형 잡힌 사운드의 베스트셀러 스피커",
+            colorCount: 3,
+            weight: "4.25kg",
+            output: "80W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-brown.png",
+            imageClass: "shop-product__image--stanmore-iii",
+            imageSizeClass: "shop-product__image--small",
+            imageAlt: "Marshall Stanmore III speaker",
+        },
+        {
+            id: "woburn-iii",
+            category: "speaker",
+            categoryLabel: "SPEAKER",
+            name: "WOBURN lll",
+            price: "950,000",
+            description: "압도적인 출력으로 공간을 가득 채우는 플래그십 스피커",
+            colorCount: 4,
+            weight: "7.45kg",
+            output: "150W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--woburn-iii",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Marshall Woburn III black speaker",
+        },
+        {
+            id: "heston-120",
+            category: "speaker",
+            categoryLabel: "SPEAKER",
+            name: "HESTON 120",
+            price: "460,000",
+            description: "Dolby Atmos로 완성한 입체 사운드",
+            colorCount: 2,
+            weight: "7.04kg",
+            output: "150W",
+            imageSrc: "./assets/images/products/speaker-heston120-Cream.png",
+            imageClass: "shop-product__image--heston-120",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Marshall Heston 120 cream speaker",
+        },
+        {
+            id: "heston-sub-200",
+            category: "speaker",
+            categoryLabel: "SPEAKER",
+            name: "HESTON SUB 200",
+            price: "1,090,000",
+            description: "깊고 강력한 저음을 더하는 무선 서브우퍼",
+            colorCount: 2,
+            weight: "7.62kg",
+            output: "236W",
+            imageSrc: "./assets/images/products/speaker-heston-sub200-black.png",
+            imageClass: "shop-product__image--heston-sub-200",
+            imageSizeClass: "shop-product__image--xlarge",
+            imageAlt: "Marshall Heston Sub 200 black speaker",
+        },
+    ],
+    amp: [
+        {
+            id: "dsl40-combo",
+            category: "amp",
+            categoryLabel: "AMP",
+            name: "DSL40 COMBO",
+            price: "1,450,000~",
+            description: "라이브와 스튜디오를 위한 시그니처 진공관 콤보 앰프",
+            colorClasses: ["shop-product__color--true-black"],
+            weight: "22.9kg",
+            output: "40W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--dsl40-combo",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "DSL40 Combo amplifier",
+        },
+        {
+            id: "jvm410h",
+            category: "amp",
+            categoryLabel: "AMP",
+            name: "JVM410H",
+            price: "2,900,000~",
+            description: "최고의 퍼포먼스를 위한 플래그십 헤드 앰프",
+            colorClasses: ["shop-product__color--true-black"],
+            weight: "22.5kg",
+            output: "100W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--jvm410h",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "JVM410H amplifier",
+        },
+        {
+            id: "origin50c",
+            category: "amp",
+            categoryLabel: "AMP",
+            name: "Origin50C",
+            price: "1,250,000~",
+            description: "전통적인 브리티시 톤을 담아낸 올밸브 앰프",
+            colorClasses: ["shop-product__color--true-black"],
+            weight: "18.3kg",
+            output: "50W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--origin50c",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Origin50C amplifier",
+        },
+        {
+            id: "jtm-st20c",
+            category: "amp",
+            categoryLabel: "AMP",
+            name: "Studio JTM ST20C",
+            price: "2,100,000~",
+            description: "전설적인 JTM 사운드를 현대적으로 재해석한 앰프",
+            colorClasses: ["shop-product__color--true-black"],
+            weight: "19.4kg",
+            output: "20W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--jtm-st20c",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Studio JTM ST20C amplifier",
+        },
+        {
+            id: "mg30gfx",
+            category: "amp",
+            categoryLabel: "AMP",
+            name: "MG30GFX",
+            price: "430,000~",
+            description: "연습부터 공연까지 활용 가능한 디지털 콤보 앰프",
+            colorClasses: ["shop-product__color--true-black"],
+            weight: "10.8kg",
+            output: "30W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--mg30gfx",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "MG30GFX amplifier",
+        },
+        {
+            id: "code50",
+            category: "amp",
+            categoryLabel: "AMP",
+            name: "CODE50",
+            price: "520,000~",
+            description: "다양한 마샬 톤을 구현하는 모델링 앰프",
+            colorClasses: ["shop-product__color--true-black"],
+            weight: "13.0kg",
+            output: "50W",
+            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageClass: "shop-product__image--code50",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "CODE50 amplifier",
+        },
+    ],
+    headphones: [
+        {
+            id: "major-v",
+            category: "headphones",
+            categoryLabel: "HEADPHONES",
+            name: "Major V",
+            price: "219,000~",
+            description: "마샬의 시그니처 사운드를 담은 대표 온이어 헤드폰",
+            colorClasses: ["shop-product__color--headphone-black", "shop-product__color--headphone-brown", "shop-product__color--headphone-cream"],
+            weight: "186g",
+            outputLabel: "Battery Life",
+            output: "Up to 100 Hours",
+            imageSrc: "./assets/images/products/headphones-major-v.png",
+            imageClass: "shop-product__image--major-v",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Major V headphones",
+        },
+        {
+            id: "monitor-iii-anc",
+            category: "headphones",
+            categoryLabel: "HEADPHONES",
+            name: "Monitor III A.N.C.",
+            price: "549,000~",
+            description: "프리미엄 노이즈 캔슬링을 갖춘 플래그십 헤드폰",
+            colorClasses: ["shop-product__color--headphone-black"],
+            weight: "250g",
+            outputLabel: "Battery Life",
+            output: "Up to 70 Hours",
+            imageSrc: "./assets/images/products/headphones-major-v.png",
+            imageClass: "shop-product__image--monitor-iii-anc",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Monitor III A.N.C. headphones",
+        },
+        {
+            id: "minor-iv",
+            category: "headphones",
+            categoryLabel: "HEADPHONES",
+            name: "Minor IV",
+            price: "189,000~",
+            description: "가볍고 자유로운 착용감을 제공하는 무선 이어버드",
+            colorClasses: ["shop-product__color--headphone-black", "shop-product__color--headphone-cream"],
+            weight: "39g",
+            outputLabel: "Battery Life",
+            output: "Up to 30 Hours",
+            imageSrc: "./assets/images/products/headphones-major-v.png",
+            imageClass: "shop-product__image--minor-iv",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Minor IV earbuds",
+        },
+        {
+            id: "motif-ii-anc",
+            category: "headphones",
+            categoryLabel: "HEADPHONES",
+            name: "Motif II A.N.C.",
+            price: "299,000~",
+            description: "강력한 노이즈 캔슬링을 제공하는 프리미엄 이어버드",
+            colorClasses: ["shop-product__color--headphone-black"],
+            weight: "47g",
+            outputLabel: "Battery Life",
+            output: "Up to 43 Hours",
+            imageSrc: "./assets/images/products/headphones-major-v.png",
+            imageClass: "shop-product__image--motif-ii-anc",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Motif II A.N.C. earbuds",
+        },
+        {
+            id: "mode-eq",
+            category: "headphones",
+            categoryLabel: "HEADPHONES",
+            name: "Mode EQ",
+            price: "129,000~",
+            description: "두 가지 사운드 모드를 지원하는 유선 인이어 이어폰",
+            colorClasses: ["shop-product__color--headphone-black"],
+            weight: "20g",
+            outputLabel: "Battery Life",
+            output: "Not Required",
+            imageSrc: "./assets/images/products/headphones-major-v.png",
+            imageClass: "shop-product__image--mode-eq",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "Mode EQ in-ear headphones",
+        },
+    ],
+};
+let shopProductDetails = shopProductCatalog.speaker;
 const shopBestProductDetails = {
     "major-v": {
         category: "headphones",
@@ -114,7 +311,7 @@ const shopBestProductDetails = {
     },
 };
 const shopCategoryDefaultProduct = {
-    amp: "dsl-overdrive",
+    amp: "dsl40-combo",
     speaker: "acton-iii",
     headphones: "major-v",
     analog: "dsl-overdrive",
@@ -186,14 +383,15 @@ function easeSmooth(progress) {
 }
 
 function getProductById(productId) {
-    return shopProductDetails.find((product) => product.id === productId) || shopBestProductDetails[productId];
+    return Object.values(shopProductCatalog)
+        .flat()
+        .find((product) => product.id === productId) || shopBestProductDetails[productId];
 }
 
 function formatShopPrice(product) {
     if (!product.price) return "판매처 알아보기";
     return `<strong>₩</strong> ${product.price}`;
 }
-
 function setShopDrawerOpen(isOpen) {
     if (!shopCategoryDrawer) return;
 
@@ -223,15 +421,48 @@ function updateShopBestCardState(productId) {
     });
 }
 
-function renderShopProductColors(colorCount) {
+function renderShopProductImages(products) {
+    if (!shopProductScroll) return;
+
+    shopProductScroll.innerHTML = products.map((product) => {
+        const imageClasses = [
+            "shop-product__image",
+            product.imageSizeClass,
+            product.imageClass,
+        ].filter(Boolean).join(" ");
+
+        return `
+            <figure class="shop-product__image-card" data-shop-product-id="${product.id}">
+                <img class="${imageClasses}" src="${product.imageSrc}" alt="${product.imageAlt}" />
+            </figure>
+        `;
+    }).join("");
+
+    shopProductCards = Array.from(shopProductScroll.querySelectorAll(".shop-product__image-card"));
+    shopActiveProductIndex = -1;
+}
+
+function setShopProductCategory(category) {
+    const products = shopProductCatalog[category];
+    if (!products) return false;
+
+    shopProductDetails = products;
+    renderShopProductImages(products);
+    return true;
+}
+
+function renderShopProductColors(product) {
     if (!shopProductColorList) return;
 
-    const plainCount = Math.max(colorCount - 1, 0);
-    const colorNodes = shopProductColorClasses.slice(0, plainCount).map((colorClass, index) => {
-        return `<button class="shop-product__color ${colorClass}" type="button" aria-label="Color ${index + 1}" aria-pressed="false"></button>`;
-    });
+    const colorClasses = product.colorClasses || [
+        ...shopProductColorClasses.slice(0, Math.max(product.colorCount - 1, 0)),
+        "shop-product__color--selected",
+    ];
 
-    colorNodes.push('<button class="shop-product__color shop-product__color--selected" type="button" aria-label="Selected color" aria-pressed="true"></button>');
+    const colorNodes = colorClasses.map((colorClass, index) => {
+        const isSelected = index === colorClasses.length - 1;
+        return `<button class="shop-product__color ${colorClass}" type="button" aria-label="Color ${index + 1}" aria-pressed="${isSelected}"></button>`;
+    });
     shopProductColorList.innerHTML = colorNodes.join("");
 
     shopProductColorList.querySelectorAll(".shop-product__color").forEach((button) => {
@@ -246,24 +477,31 @@ function renderShopProductColors(colorCount) {
 
 function renderShopProductDetails(productOrIndex) {
     const product = typeof productOrIndex === "number" ? shopProductDetails[productOrIndex] : productOrIndex;
-    if (!product || !shopProductName || !shopProductPrice || !shopProductDescription) return;
+    if (!product || !shopProductName || !shopProductDescription) return;
 
     shopProductSection?.classList.add("is-changing");
 
     window.setTimeout(() => {
         shopProductName.textContent = product.name;
-        shopProductPrice.innerHTML = formatShopPrice(product);
         shopProductDescription.textContent = product.description;
         if (shopProductCategoryTitle) shopProductCategoryTitle.textContent = product.categoryLabel || "SPEAKER";
-        renderShopProductColors(product.colorCount);
+        renderShopProductColors(product);
         updateShopCategoryState(product.category);
         updateShopBestCardState(product.id);
 
         const weightRow = shopProductSpecRows.find((row) => row.querySelector("dt")?.textContent.trim() === "Weight");
-        const outputRow = shopProductSpecRows.find((row) => row.querySelector("dt")?.textContent.trim() === "Output");
+        const outputRow = shopProductSpecRows.find((row) => {
+            const label = row.querySelector("dt")?.textContent.trim();
+            return label === "Output" || label === "Battery Life";
+        });
+        const priceRow = shopProductSpecRows.find((row) => row.querySelector("dt")?.textContent.trim() === "Price");
 
         if (weightRow) weightRow.querySelector("dd").textContent = product.weight;
-        if (outputRow) outputRow.querySelector("dd").textContent = product.output;
+        if (outputRow) {
+            outputRow.querySelector("dt").textContent = product.outputLabel || "Output";
+            outputRow.querySelector("dd").textContent = product.output;
+        }
+        if (priceRow) priceRow.querySelector("dd").innerHTML = formatShopPrice(product);
 
         requestAnimationFrame(() => {
             shopProductSection?.classList.remove("is-changing");
@@ -272,7 +510,7 @@ function renderShopProductDetails(productOrIndex) {
 }
 
 function updateShopProductDetails() {
-    if (!shopProductCards.length || !shopProductName || !shopProductPrice || !shopProductDescription) return;
+    if (!shopProductCards.length || !shopProductName || !shopProductDescription) return;
 
     const switchLine = window.innerWidth * 0.0359;
     const activeIndex = shopProductCards.reduce((currentIndex, card, index) => {
@@ -321,11 +559,14 @@ function initializeShopInteractions() {
         button.addEventListener("click", () => {
             const category = button.dataset.shopCategory;
             const productId = shopCategoryDefaultProduct[category] || "acton-iii";
+            const hasCategoryProducts = setShopProductCategory(category);
             const product = getProductById(productId);
 
-            shopManualProductId = productId;
+            shopManualProductId = hasCategoryProducts ? null : productId;
             renderShopProductDetails(product);
-            scrollToShopProduct(productId);
+            if (hasCategoryProducts) {
+                scrollToShopProduct(productId);
+            }
             setShopDrawerOpen(false);
         });
     });
@@ -481,6 +722,7 @@ function updateShopScrollEffects() {
 }
 
 renderShopHeroPanels(0);
+renderShopProductImages(shopProductDetails);
 renderShopProductDetails(0);
 initializeShopInteractions();
 smoothScrollEl?.addEventListener("touchstart", (event) => {
@@ -497,3 +739,4 @@ window.addEventListener("keydown", (event) => {
 smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
 updateShopScrollEffects();
+
