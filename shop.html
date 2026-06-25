@@ -17,6 +17,7 @@
 </head>
 
 <body>
+<div id="smooth-scroll-container">
     <main class="shop-page" aria-labelledby="shop-title">
         <header class="shop-topbar" data-node-id="2638:219" aria-label="Shop header">
             <div class="shop-topbar__main">
@@ -24,21 +25,18 @@
                 <nav class="shop-topbar__nav" data-node-id="2638:211" aria-label="Shop navigation">
                     <ul>
                         <li><a class="is-active" href="./shop.html" data-node-id="2638:213">SHOP</a></li>
-                        <li><a href="#" data-node-id="2638:214">COMPARE</a></li>
+                        <li><a href="./compare.html" data-node-id="2638:214">COMPARE</a></li>
                         <li><a href="./artist.html" data-node-id="2638:215">RECORD</a></li>
                         <li><a href="#" data-node-id="2638:216">SUPPORT</a></li>
                     </ul>
                 </nav>
-            </div>
-
-            <div class="shop-toolbar" data-node-id="2696:23" aria-label="Shop tools">
-                <div class="shop-toolbar__inner" data-node-id="2696:22">
-                    <button class="shop-toolbar__button" type="button" data-node-id="2696:21" aria-label="Open category menu" aria-expanded="false" aria-controls="shop-category-drawer" data-shop-menu-toggle>
-                        <img class="shop-toolbar__menu-icon" src="./assets/svg/shop-menu-icon.svg" alt="" aria-hidden="true" />
-                    </button>
-                    <div class="shop-toolbar__actions" data-node-id="2696:20" aria-label="Shop actions">
-                        <img class="shop-toolbar__action-icons" src="./assets/svg/shop-wordmark.svg" alt="" aria-hidden="true" />
-                    </div>
+                <div class="shop-topbar__actions" aria-label="Shop actions">
+                    <a class="shop-topbar__action" href="#" aria-label="Search">
+                        <img src="./assets/svg/search.svg" alt="" aria-hidden="true" />
+                    </a>
+                    <a class="shop-topbar__action" href="#" aria-label="My page">
+                        <img src="./assets/svg/mypage.svg" alt="" aria-hidden="true" />
+                    </a>
                 </div>
             </div>
 
@@ -78,14 +76,10 @@
                 <div class="shop-hero__content">
                     <p class="shop-hero__headline" data-node-id="2696:64">
                         The Sound Collection.<br />
-                        Find your Marshall.
+                        Find your <span>Marshall.</span>
                     </p>
                     <div class="shop-hero__copy" data-node-id="2696:65">
-                        <p>사운드는 들리는 것을 넘어, 분위기를 만들고 순간을 기억하게 합니다.</p>
-                        <p>마샬은 음악이 흐르는 모든 공간에 변함없는 가치를 전합니다.</p>
-                    </div>
-                    <div class="shop-hero__node" data-node-id="2696:74">
-                        <img src="./assets/images/shop-hero-node.png" alt="" aria-hidden="true" />
+                        <p>사운드는 들리는 것을 넘어, 분위기를 만들고 순간을 기억하게 합니다.<br />마샬은 음악이 흐르는 모든 공간에 변함없는 가치를 전합니다.</p>
                     </div>
                 </div>
             </div>
@@ -111,8 +105,8 @@
                         <div class="product-card__meta" data-node-id="2696:173">
                             <p class="product-card__price" data-node-id="2696:172">₩ 950,000</p>
                             <div class="product-card__swatches" aria-label="Available colors" data-node-id="2696:179">
-                                <span class="product-card__swatch product-card__swatch--black" data-node-id="2696:180"></span>
-                                <span class="product-card__swatch product-card__swatch--cream" data-node-id="2696:182"></span>
+                                <span class="product-card__swatch product-card__swatch--black" role="button" tabindex="0" aria-label="Black color" aria-pressed="true" data-node-id="2696:180"></span>
+                                <span class="product-card__swatch product-card__swatch--cream" role="button" tabindex="0" aria-label="Cream color" aria-pressed="false" data-node-id="2696:182"></span>
                             </div>
                         </div>
                     </div>
@@ -134,8 +128,8 @@
                         <div class="product-card__meta" data-node-id="2696:193">
                             <p class="product-card__price" data-node-id="2696:192">₩ 199,000</p>
                             <div class="product-card__swatches" aria-label="Available colors" data-node-id="2696:199">
-                                <span class="product-card__swatch product-card__swatch--black" data-node-id="2696:200"></span>
-                                <span class="product-card__swatch product-card__swatch--cream" data-node-id="2696:202"></span>
+                                <span class="product-card__swatch product-card__swatch--black" role="button" tabindex="0" aria-label="Black color" aria-pressed="true" data-node-id="2696:200"></span>
+                                <span class="product-card__swatch product-card__swatch--cream" role="button" tabindex="0" aria-label="Cream color" aria-pressed="false" data-node-id="2696:202"></span>
                             </div>
                         </div>
                     </div>
@@ -157,8 +151,8 @@
                         <div class="product-card__meta" data-node-id="2696:213">
                             <p class="product-card__price" data-node-id="2696:212">₩ 399,000</p>
                             <div class="product-card__swatches" aria-label="Available colors" data-node-id="2696:219">
-                                <span class="product-card__swatch product-card__swatch--black" data-node-id="2696:220"></span>
-                                <span class="product-card__swatch product-card__swatch--cream" data-node-id="2696:222"></span>
+                                <span class="product-card__swatch product-card__swatch--black" role="button" tabindex="0" aria-label="Black color" aria-pressed="true" data-node-id="2696:220"></span>
+                                <span class="product-card__swatch product-card__swatch--cream" role="button" tabindex="0" aria-label="Cream color" aria-pressed="false" data-node-id="2696:222"></span>
                             </div>
                         </div>
                     </div>
@@ -180,8 +174,8 @@
                         <div class="product-card__meta" data-node-id="2696:233">
                             <p class="product-card__price" data-node-id="2696:232">판매처 알아보기</p>
                             <div class="product-card__swatches" aria-label="Available colors" data-node-id="2696:239">
-                                <span class="product-card__swatch product-card__swatch--black" data-node-id="2696:240"></span>
-                                <span class="product-card__swatch product-card__swatch--cream" data-node-id="2696:242"></span>
+                                <span class="product-card__swatch product-card__swatch--black" role="button" tabindex="0" aria-label="Black color" aria-pressed="true" data-node-id="2696:240"></span>
+                                <span class="product-card__swatch product-card__swatch--cream" role="button" tabindex="0" aria-label="Cream color" aria-pressed="false" data-node-id="2696:242"></span>
                             </div>
                         </div>
                     </div>
@@ -270,6 +264,7 @@
             </article>
         </section>
     </main>
+</div>
 </body>
 
 </html>
