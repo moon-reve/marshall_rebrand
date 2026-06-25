@@ -2,12 +2,14 @@ const shopHeroStage = document.querySelector("[data-shop-hero-stage]");
 const shopHero = document.querySelector(".shop-hero");
 const shopHeroPanels = document.querySelectorAll(".shop-hero__media-panel");
 const shopHeroContent = document.querySelector(".shop-hero__content");
+const shopTopbarMain = document.querySelector(".shop-topbar__main");
+const shopBestSection = document.querySelector(".shop-best");
 const shopProductsIntro = document.querySelector(".shop-products__intro");
 const shopProductsScrollArt = document.querySelector(".shop-products__scroll-art");
-const shopMenuToggle = document.querySelector("[data-shop-menu-toggle]");
 const shopCategoryDrawer = document.querySelector("[data-shop-category-drawer]");
 const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
+const productCardSwatches = document.querySelectorAll(".product-card__swatch");
 const shopProductSection = document.querySelector(".shop-product");
 const shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
 const shopProductName = document.querySelector(".shop-product__headline h3");
@@ -132,6 +134,8 @@ let shopArtRenderedProgress = 0;
 let shopArtAnimationFrame = null;
 let shopActiveProductIndex = -1;
 let shopManualProductId = null;
+let hasSkippedHeroOnScroll = false;
+let shopHeroTouchStartY = 0;
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -155,9 +159,8 @@ function formatShopPrice(product) {
 }
 
 function setShopDrawerOpen(isOpen) {
-    if (!shopMenuToggle || !shopCategoryDrawer) return;
+    if (!shopCategoryDrawer) return;
 
-    shopMenuToggle.setAttribute("aria-expanded", String(isOpen));
     shopCategoryDrawer.hidden = false;
     shopCategoryDrawer.classList.toggle("is-open", isOpen);
 
@@ -259,11 +262,24 @@ function scrollToShopProduct(productId) {
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function initializeShopInteractions() {
-    shopMenuToggle?.addEventListener("click", () => {
-        setShopDrawerOpen(shopMenuToggle.getAttribute("aria-expanded") !== "true");
-    });
+function scrollToShopBest() {
+    if (!shopBestSection) return;
 
+    const headerHeight = shopTopbarMain?.offsetHeight || 70;
+    const targetTop = Math.max(shopBestSection.offsetTop - headerHeight, 0);
+    hasSkippedHeroOnScroll = true;
+    window.scrollTo({ top: targetTop, behavior: "auto" });
+}
+
+function skipHeroOnFirstScroll(event) {
+    if (hasSkippedHeroOnScroll || !shopHeroStage || !shopBestSection) return;
+    if (window.scrollY > 2) return;
+
+    event?.preventDefault?.();
+    scrollToShopBest();
+}
+
+function initializeShopInteractions() {
     shopCategoryButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const category = button.dataset.shopCategory;
@@ -294,6 +310,24 @@ function initializeShopInteractions() {
         });
     });
 
+    productCardSwatches.forEach((swatch) => {
+        swatch.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const swatchList = swatch.closest(".product-card__swatches");
+            swatchList?.querySelectorAll(".product-card__swatch").forEach((colorSwatch) => {
+                colorSwatch.setAttribute("aria-pressed", "false");
+            });
+            swatch.setAttribute("aria-pressed", "true");
+        });
+
+        swatch.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            event.stopPropagation();
+            swatch.click();
+        });
+    });
+
     window.addEventListener("scroll", () => {
         if (!shopManualProductId || !shopProductSection) return;
         const sectionRect = shopProductSection.getBoundingClientRect();
@@ -307,7 +341,7 @@ function initializeShopInteractions() {
 
     document.addEventListener("click", (event) => {
         if (!shopCategoryDrawer?.classList.contains("is-open")) return;
-        if (shopCategoryDrawer.contains(event.target) || shopMenuToggle?.contains(event.target)) return;
+        if (shopCategoryDrawer.contains(event.target)) return;
         setShopDrawerOpen(false);
     });
 
@@ -366,7 +400,7 @@ function updateShopHeroTransition() {
     if (!shopHeroStage || !shopHero || !shopHeroPanels.length) return;
 
     const stageRect = shopHeroStage.getBoundingClientRect();
-    const scrollDistance = Math.max(shopHeroStage.offsetHeight - shopHero.offsetHeight, 1);
+    const scrollDistance = Math.max(shopHeroStage.offsetHeight - shopHero.offsetHeight, window.innerHeight * 0.45, 1);
     shopTargetProgress = clamp(-stageRect.top / scrollDistance, 0, 1);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -400,6 +434,10 @@ function updateShopHeroTransition() {
 }
 
 function updateShopScrollEffects() {
+    if (window.scrollY <= 2) {
+        hasSkippedHeroOnScroll = false;
+    }
+
     updateShopHeroTransition();
     updateShopArtReveal();
     updateShopProductDetails();
@@ -408,6 +446,20 @@ function updateShopScrollEffects() {
 renderShopHeroPanels(0);
 renderShopProductDetails(0);
 initializeShopInteractions();
+window.addEventListener("wheel", (event) => {
+    if (event.deltaY > 0) skipHeroOnFirstScroll(event);
+}, { passive: false });
+window.addEventListener("touchstart", (event) => {
+    shopHeroTouchStartY = event.touches[0]?.clientY || 0;
+}, { passive: true });
+window.addEventListener("touchmove", (event) => {
+    const touchY = event.touches[0]?.clientY || 0;
+    if (shopHeroTouchStartY - touchY > 8) skipHeroOnFirstScroll(event);
+}, { passive: false });
+window.addEventListener("keydown", (event) => {
+    const scrollDownKeys = [" ", "PageDown", "ArrowDown"];
+    if (scrollDownKeys.includes(event.key)) skipHeroOnFirstScroll(event);
+});
 window.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
 updateShopScrollEffects();
