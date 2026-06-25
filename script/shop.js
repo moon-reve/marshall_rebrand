@@ -274,8 +274,27 @@ const shopProductCatalog = {
             imageAlt: "Mode EQ in-ear headphones",
         },
     ],
+    analog: [
+        {
+            id: "dsl-overdrive",
+            category: "analog",
+            categoryLabel: "ANALOG",
+            name: "DSL OVERDRIVE PEDAL",
+            price: null,
+            description: "앰프의 질감을 발끝에서 제어하는 오버드라이브 페달",
+            colorClasses: ["shop-product__color--true-black", "shop-product__color--headphone-cream"],
+            weight: "800g",
+            output: "해당없음",
+            imageSrc: "./assets/images/products/pedal-dsl.png",
+            imageClass: "shop-product__image--dsl-overdrive",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "DSL Overdrive pedal",
+        },
+    ],
 };
-let shopProductDetails = shopProductCatalog.speaker;
+const shopProductCategoryOrder = ["amp", "speaker", "headphones", "analog"];
+const getAllShopProducts = () => shopProductCategoryOrder.flatMap((category) => shopProductCatalog[category] || []);
+let shopProductDetails = getAllShopProducts();
 const shopBestProductDetails = {
     "major-v": {
         category: "headphones",
@@ -499,8 +518,7 @@ function setShopProductCategory(category) {
     const products = shopProductCatalog[category];
     if (!products) return false;
 
-    shopProductDetails = products;
-    renderShopProductImages(products);
+    shopProductDetails = getAllShopProducts();
     return true;
 }
 
