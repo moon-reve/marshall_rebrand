@@ -119,11 +119,6 @@
     transition: transform 0.8s cubic-bezier(0.7, 0.024, 0.199, 0.976);
 }
 
-.record-hero__grid {
-    z-index: 6;
-    pointer-events: none;
-}
-
 .record-hero__panel--main {
     background:
         linear-gradient(90deg, rgba(3, 9, 8, 0.42), rgba(3, 9, 8, 0.08) 45%, rgba(3, 9, 8, 0.02)),
@@ -278,6 +273,46 @@
     font-size: 0.83vw;
     line-height: 1.5;
     letter-spacing: -0.022em;
+}
+
+.record-hero__arrows {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+}
+
+.record-hero__arrow {
+    position: absolute;
+    top: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #ffeac6;
+    cursor: pointer;
+    font-size: 2.2vw;
+    font-weight: 300;
+    line-height: 1;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+.record-hero__arrow--prev {
+    left: 90px;
+}
+
+.record-hero__arrow--next {
+    right: 90px;
 }
 
 .artist-catalog {
