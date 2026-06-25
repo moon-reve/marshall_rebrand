@@ -4,8 +4,6 @@ const shopHeroPanels = document.querySelectorAll(".shop-hero__media-panel");
 const shopHeroContent = document.querySelector(".shop-hero__content");
 const shopTopbarMain = document.querySelector(".shop-topbar__main");
 const shopBestSection = document.querySelector(".shop-best");
-const shopProductsIntro = document.querySelector(".shop-products__intro");
-const shopProductsScrollArt = document.querySelector(".shop-products__scroll-art");
 const shopCategoryDrawer = document.querySelector("[data-shop-category-drawer]");
 const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
@@ -276,8 +274,27 @@ const shopProductCatalog = {
             imageAlt: "Mode EQ in-ear headphones",
         },
     ],
+    analog: [
+        {
+            id: "dsl-overdrive",
+            category: "analog",
+            categoryLabel: "ANALOG",
+            name: "DSL OVERDRIVE PEDAL",
+            price: null,
+            description: "앰프의 질감을 발끝에서 제어하는 오버드라이브 페달",
+            colorClasses: ["shop-product__color--true-black", "shop-product__color--headphone-cream"],
+            weight: "800g",
+            output: "해당없음",
+            imageSrc: "./assets/images/products/pedal-dsl.png",
+            imageClass: "shop-product__image--dsl-overdrive",
+            imageSizeClass: "shop-product__image--large",
+            imageAlt: "DSL Overdrive pedal",
+        },
+    ],
 };
-let shopProductDetails = shopProductCatalog.speaker;
+const shopProductCategoryOrder = ["amp", "speaker", "headphones", "analog"];
+const getAllShopProducts = () => shopProductCategoryOrder.flatMap((category) => shopProductCatalog[category] || []);
+let shopProductDetails = getAllShopProducts();
 const shopBestProductDetails = {
     "major-v": {
         category: "headphones",
@@ -328,6 +345,13 @@ let smoothTargetY = 0;
 let smoothCurrentY = 0;
 let smoothRafId = null;
 
+function updateShopScrollbarWidth() {
+    if (!smoothScrollEl) return;
+
+    const scrollbarWidth = Math.max(smoothScrollEl.offsetWidth - smoothScrollEl.clientWidth, 0);
+    document.documentElement.style.setProperty("--shop-scrollbar-width", `${scrollbarWidth}px`);
+}
+
 function smoothScrollTo(y) {
     if (!smoothScrollEl) return;
     const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
@@ -347,13 +371,62 @@ function smoothScrollTick() {
     if (smoothScrollEl) smoothScrollEl.scrollTop = smoothCurrentY;
 }
 
+function getShopProductInfoLine() {
+    return window.innerHeight * (0.26 + 0.2389);
+}
+
+function getShopProductTop() {
+    if (!shopProductSection) return 0;
+    return shopProductSection.getBoundingClientRect().top + smoothCurrentY;
+}
+
+function getShopProductSnapTarget(index) {
+    if (!shopProductCards.length) return null;
+
+    const productTop = getShopProductTop();
+    const cardHeight = shopProductCards[0]?.offsetHeight || 1;
+    return productTop + (cardHeight * index);
+}
+
+function getShopProductSnapIndex() {
+    if (!shopProductCards.length) return 0;
+
+    const productTop = getShopProductTop();
+    const cardHeight = shopProductCards[0]?.offsetHeight || 1;
+    return clamp(Math.round((smoothTargetY - productTop) / cardHeight), 0, shopProductCards.length - 1);
+}
+
+function snapToShopProductCard(index) {
+    const targetTop = getShopProductSnapTarget(index);
+    if (targetTop === null) return;
+    smoothScrollTo(targetTop);
+}
+
+function handleShopProductWheel(deltaY) {
+    if (!shopProductSection || !shopProductCards.length) return false;
+
+    const productRect = shopProductSection.getBoundingClientRect();
+    const headerHeight = shopTopbarMain?.offsetHeight || 70;
+    const isInProductArea = productRect.top <= getShopProductInfoLine() && productRect.bottom > headerHeight;
+    if (!isInProductArea) return false;
+
+    const currentIndex = getShopProductSnapIndex();
+    const nextIndex = clamp(currentIndex + (deltaY > 0 ? 1 : -1), 0, shopProductCards.length - 1);
+    if (nextIndex === currentIndex) return false;
+
+    shopManualProductId = null;
+    snapToShopProductCard(nextIndex);
+    return true;
+}
+
 smoothScrollEl?.addEventListener("wheel", (event) => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     event.preventDefault();
     if (event.deltaY > 0 && !hasSkippedHeroOnScroll) {
-        skipHeroOnFirstScroll(event);
+        skipHeroOnFirstScroll(event, event.deltaY);
         if (hasSkippedHeroOnScroll) return;
     }
+    if (handleShopProductWheel(event.deltaY)) return;
     const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
     smoothTargetY = Math.max(0, Math.min(smoothTargetY + event.deltaY, maxY));
     if (!smoothRafId) smoothRafId = requestAnimationFrame(smoothScrollTick);
@@ -362,13 +435,12 @@ smoothScrollEl?.addEventListener("wheel", (event) => {
 let shopTargetProgress = 0;
 let shopRenderedProgress = 0;
 let shopAnimationFrame = null;
-let shopArtTargetProgress = 0;
-let shopArtRenderedProgress = 0;
-let shopArtAnimationFrame = null;
 let shopActiveProductIndex = -1;
 let shopManualProductId = null;
 let hasSkippedHeroOnScroll = false;
 let shopHeroTouchStartY = 0;
+let heroSkipScrollAmount = 0;
+const heroSkipThreshold = 120;
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -446,8 +518,7 @@ function setShopProductCategory(category) {
     const products = shopProductCatalog[category];
     if (!products) return false;
 
-    shopProductDetails = products;
-    renderShopProductImages(products);
+    shopProductDetails = getAllShopProducts();
     return true;
 }
 
@@ -512,7 +583,7 @@ function renderShopProductDetails(productOrIndex) {
 function updateShopProductDetails() {
     if (!shopProductCards.length || !shopProductName || !shopProductDescription) return;
 
-    const switchLine = window.innerWidth * 0.0359;
+    const switchLine = getShopProductInfoLine();
     const activeIndex = shopProductCards.reduce((currentIndex, card, index) => {
         return card.getBoundingClientRect().top <= switchLine + 1 ? index : currentIndex;
     }, 0);
@@ -531,26 +602,31 @@ function updateShopProductDetails() {
 
 function scrollToShopProduct(productId) {
     const index = shopProductDetails.findIndex((product) => product.id === productId);
-    const target = index >= 0 ? shopProductCards[index] : shopProductSection;
-    if (!target || !smoothScrollEl) return;
-    const targetTop = target.getBoundingClientRect().top + smoothCurrentY;
-    smoothScrollTo(targetTop);
+    if (index >= 0) {
+        snapToShopProductCard(index);
+        return;
+    }
+    if (!shopProductSection || !smoothScrollEl) return;
+    smoothScrollTo(getShopProductTop());
 }
 
 function scrollToShopBest() {
     if (!shopBestSection || !smoothScrollEl) return;
 
-    const headerHeight = shopTopbarMain?.offsetHeight || 70;
-    const targetTop = Math.max(shopBestSection.getBoundingClientRect().top + smoothCurrentY - headerHeight, 0);
+    const shopBestTop = shopBestSection.getBoundingClientRect().top + smoothCurrentY;
+    const targetTop = Math.max(shopBestTop + shopBestSection.offsetHeight - smoothScrollEl.clientHeight, 0);
     hasSkippedHeroOnScroll = true;
     smoothScrollTo(targetTop);
 }
 
-function skipHeroOnFirstScroll(event) {
+function skipHeroOnFirstScroll(event, scrollAmount = heroSkipThreshold) {
     if (hasSkippedHeroOnScroll || !shopHeroStage || !shopBestSection) return;
     if (smoothCurrentY > 2) return;
 
     event?.preventDefault?.();
+    heroSkipScrollAmount += Math.abs(scrollAmount);
+    if (heroSkipScrollAmount < heroSkipThreshold) return;
+
     scrollToShopBest();
 }
 
@@ -626,41 +702,6 @@ function initializeShopInteractions() {
     setShopDrawerOpen(false);
 }
 
-function updateShopArtReveal() {
-    if (!shopProductsIntro || !shopProductsScrollArt) return;
-
-    const introRect = shopProductsIntro.getBoundingClientRect();
-    const revealStart = window.innerHeight * 0.85;
-    const revealDistance = Math.max(introRect.height * 0.8, 1);
-    shopArtTargetProgress = clamp((revealStart - introRect.top) / revealDistance, 0, 1);
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        shopProductsScrollArt.style.setProperty("--shop-art-reveal", "100%");
-        return;
-    }
-
-    if (shopArtAnimationFrame) return;
-
-    function renderShopArtReveal() {
-        const distance = shopArtTargetProgress - shopArtRenderedProgress;
-        shopArtRenderedProgress += distance * 0.025;
-
-        if (Math.abs(distance) < 0.0001) {
-            shopArtRenderedProgress = shopArtTargetProgress;
-        }
-
-        shopProductsScrollArt.style.setProperty("--shop-art-reveal", `${shopArtRenderedProgress * 100}%`);
-
-        if (shopArtRenderedProgress !== shopArtTargetProgress) {
-            shopArtAnimationFrame = requestAnimationFrame(renderShopArtReveal);
-        } else {
-            shopArtAnimationFrame = null;
-        }
-    }
-
-    shopArtAnimationFrame = requestAnimationFrame(renderShopArtReveal);
-}
-
 function renderShopHeroPanels(progress) {
     shopHeroPanels.forEach((panel, index) => {
         const [start, end] = shopPanelTimings[index];
@@ -711,14 +752,36 @@ function updateShopHeroTransition() {
     shopAnimationFrame = requestAnimationFrame(renderTransition);
 }
 
+function updateShopProductScrollMask() {
+    if (!shopProductSection) return;
+
+    const productRect = shopProductSection.getBoundingClientRect();
+    const headerHeight = shopTopbarMain?.offsetHeight || 70;
+    const infoLine = getShopProductInfoLine();
+    const isActive = productRect.top <= headerHeight && productRect.bottom > infoLine;
+    shopProductSection.classList.toggle("is-scroll-mask-active", isActive);
+}
+
+function updateShopProductScrollArt() {
+    if (!shopProductSection) return;
+
+    const productRect = shopProductSection.getBoundingClientRect();
+    const headerHeight = shopTopbarMain?.offsetHeight || 70;
+    const isVisible = productRect.top <= window.innerHeight * 0.72 && productRect.bottom > headerHeight;
+    shopProductSection.classList.toggle("is-scroll-art-visible", isVisible);
+}
+
 function updateShopScrollEffects() {
     if (smoothCurrentY <= 2) {
         hasSkippedHeroOnScroll = false;
+        heroSkipScrollAmount = 0;
     }
 
+    updateShopScrollbarWidth();
     updateShopHeroTransition();
-    updateShopArtReveal();
     updateShopProductDetails();
+    updateShopProductScrollMask();
+    updateShopProductScrollArt();
 }
 
 renderShopHeroPanels(0);
@@ -730,7 +793,8 @@ smoothScrollEl?.addEventListener("touchstart", (event) => {
 }, { passive: true });
 smoothScrollEl?.addEventListener("touchmove", (event) => {
     const touchY = event.touches[0]?.clientY || 0;
-    if (shopHeroTouchStartY - touchY > 8) skipHeroOnFirstScroll(event);
+    const touchDelta = shopHeroTouchStartY - touchY;
+    if (touchDelta > 8) skipHeroOnFirstScroll(event, touchDelta);
 }, { passive: false });
 window.addEventListener("keydown", (event) => {
     const scrollDownKeys = [" ", "PageDown", "ArrowDown"];
@@ -738,5 +802,6 @@ window.addEventListener("keydown", (event) => {
 });
 smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
+updateShopScrollbarWidth();
 updateShopScrollEffects();
 
