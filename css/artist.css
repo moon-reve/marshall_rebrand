@@ -7,65 +7,81 @@
 }
 
 .artist-header {
-    position: relative;
-    z-index: 10;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
-    height: 3.515625vw;
-    padding: 0 1.55vw 0 2.44vw;
-    background: #1b1410;
-    color: #f5ead7;
+    height: 70px;
+    padding: 0 2.4vw 0 2.35vw;
+    background: #1b120d;
+    border: 1px solid rgba(255, 234, 198, 0.32);
 }
 
 .artist-header__brand {
+    display: inline-flex;
+    align-items: center;
     flex: 0 0 auto;
-    color: #ffeac6;
+    min-width: 7.1vw;
+    color: #d7c4a8;
     font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
-    font-size: 2.08vw;
+    font-size: clamp(30px, 1.9vw, 39px);
     line-height: 1;
     text-decoration: none;
-    transform: translateY(-0.08vw);
 }
 
 .artist-header__nav {
+    width: 25.9vw;
+    min-width: 530px;
+    margin-left: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8789vw;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.artist-header__nav ul {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 5.18vw;
-    margin-left: auto;
-    color: #f1eee8;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.62vw;
-    line-height: 1;
+    justify-content: flex-start;
+    gap: 2.3vw;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .artist-header__nav a {
+    color: #e5d4bb;
     text-decoration: none;
 }
 
 .artist-header__nav a.is-active {
-    color: #c8922a;
+    color: #c89218;
 }
 
-.artist-header__icons {
+.artist-header__actions {
     display: flex;
     align-items: center;
-    gap: 1.37vw;
-    margin-left: 5.22vw;
+    gap: 1.25vw;
+    flex: 0 0 auto;
+    margin-left: 2.5vw;
 }
 
-.artist-icon {
+.artist-header__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35vw;
+    height: 1.35vw;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.artist-header__action img {
     display: block;
-    width: 1.74vw;
-    aspect-ratio: 1;
-    color: #e8ded0;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 3.2;
-    stroke-linecap: square;
-    stroke-linejoin: round;
-    overflow: visible;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .artist-grid {
