@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artist | Marshall Rebrand</title>
+    <link
+        rel="stylesheet"
+        as="style"
+        crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/artist.css" />
+    <script src="./script/artist.js" defer></script>
+</head>
+
+<body>
+    <main class="artist-page" aria-labelledby="record-title">
+        <header class="artist-topbar" aria-label="Record header">
+            <div class="artist-topbar__main">
+                <a class="artist-topbar__brand" href="./index.html" aria-label="Marshall home">Marshall</a>
+                <nav class="artist-topbar__nav" aria-label="Main navigation">
+                    <ul>
+                        <li><a href="./shop.html">SHOP</a></li>
+                        <li><a href="#">COMPARE</a></li>
+                        <li><a class="is-active" href="./artist.html">RECORD</a></li>
+                        <li><a href="#">SUPPORT</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="artist-toolbar" aria-label="Record tools">
+                <button class="artist-toolbar__menu" type="button" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="artist-toolbar__actions" aria-label="User actions">
+                    <span class="artist-icon artist-icon--search" aria-hidden="true"></span>
+                    <span class="artist-icon artist-icon--user" aria-hidden="true"></span>
+                    <span class="artist-icon artist-icon--heart" aria-hidden="true"></span>
+                    <span class="artist-icon artist-icon--globe" aria-hidden="true"></span>
+                </div>
+            </div>
+        </header>
+
+        <section class="record-hero" aria-labelledby="record-title">
+            <img class="record-hero__image" src="./assets/images/artist/record-hero-performer.png" alt="Marshall Records live performance" />
+            <div class="artist-grid" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="record-hero__content">
+                <h1 id="record-title">Record Label</h1>
+                <p>
+                    Jim Marshall이 이뤄낸 모든 일의 원동력은 음악을 사랑하는 열정이었으며,<br />
+                    바로 그 열정이 Marshall Records를 움직이는 힘입니다.<br />
+                    Marshall Records는 비범하고 혁신적인 음악을 응원하고,<br />
+                    언더그라운드 아티스트들이 자신의 가능성을 펼칠 수 있도록 돕고 있습니다.
+                </p>
+            </div>
+            <article class="record-hero__slide record-hero__slide--market" aria-label="Record Label market statement">
+                <div class="record-hero__slide-copy">
+                    <h2>Record Label</h2>
+                    <p>
+                        현재 음악 시장은 그 어느 때보다 경쟁이 치열합니다.<br />
+                        누구나 쉽게 음악을 녹음하고 공유할 수 있게 되면서 무명의 아티스트들도<br />
+                        전 세계 대중에게 다가갈 수 있는 기회를 얻었지만, 무수한 곡들 사이에서 좋은<br />
+                        음악이 눈에 띄는 것은 점점 더 어려워지고 있습니다.<br />
+                        그렇기에, 우리의 역할이 더욱더 중요해졌습니다.
+                    </p>
+                </div>
+            </article>
+            <article class="record-hero__slide record-hero__slide--studio" aria-label="Record Label artist support statement">
+                <div class="record-hero__slide-copy">
+                    <h2>Record Label</h2>
+                    <p>
+                        음악적 잠재력을 최대한 끌어올릴 수 있도록, 아이코닉한 장비와 최첨단 녹음<br />
+                        스튜디오, 그리고 전담 전문 팀을 운영하고 있습니다.<br />
+                        항상 아티스트를 최우선으로 생각하며, 누구나 창작의 자유를 통해 자신만의<br />
+                        사운드를 만들고 개성을 표현할 수 있도록 필요한 모든 도구와 리소스를 아<br />
+                        낌없이 제공합니다.
+                    </p>
+                </div>
+            </article>
+        </section>
+
+        <section class="artist-intro" aria-labelledby="artist-title">
+            <div class="artist-grid artist-grid--dark" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="artist-intro__content">
+                <h2 id="artist-title">Artist</h2>
+                <p>신예부터 거장까지, 장르의 경계를 허물고 독창적인 사운드로 전 세계적 영향력을 넓혀 가고 있습니다.</p>
+                <div class="artist-tabs" aria-label="Artist filters">
+                    <a class="is-active" href="#">Current Artists</a>
+                    <a href="#">Archive</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="artist-list" aria-label="Current artists">
+            <article class="artist-card">
+                <img src="./assets/images/artist/big-truck.png" alt="Big Truck artist group" />
+                <h3>BIG TRUCK</h3>
+            </article>
+            <article class="artist-card">
+                <img src="./assets/images/artist/cancer-bats.png" alt="Cancer Bats artist group" />
+                <h3>CANCER BATS</h3>
+            </article>
+            <article class="artist-card">
+                <img src="./assets/images/artist/the-molotovs.png" alt="The Molotovs artist duo" />
+                <h3>THE MOLOTOVS</h3>
+            </article>
+            <article class="artist-card">
+                <img src="./assets/images/artist/autumn-fires.png" alt="Autumn Fires artist group" />
+                <h3>AUTUMN FIRES</h3>
+            </article>
+        </section>
+
+        <section class="record-feature" aria-labelledby="records-title">
+            <a class="record-feature__arrow" href="#" aria-label="View more records">-></a>
+            <div class="record-feature__heading">
+                <h2 id="records-title">Marshall Records</h2>
+                <p>신예부터 거장까지, 장르의 경계를 허물고 독창적인 사운드로 전 세계적 영향력을 넓혀 가고 있습니다.</p>
+            </div>
+
+            <div class="record-feature__body">
+                <figure class="record-cover">
+                    <img src="./assets/images/artist/record-vinyl.png" alt="The Molotovs Wasted On Youth vinyl record" />
+                </figure>
+
+                <article class="record-detail" aria-labelledby="album-title">
+                    <h3 id="album-title">앨범명</h3>
+                    <p>제품 상세 설명들 ----!!!!!!! 뭐시기 뭐 글쫙한거 사이즈도 여럿이 될수.</p>
+                    <dl>
+                        <div>
+                            <dt>컬러</dt>
+                            <dd>Guitar Amplifier</dd>
+                        </div>
+                        <div>
+                            <dt>YEAR</dt>
+                            <dd>1962</dd>
+                        </div>
+                        <div>
+                            <dt>SIGNATURE</dt>
+                            <dd>The Original Marshall Sound</dd>
+                        </div>
+                    </dl>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

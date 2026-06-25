@@ -1,0 +1,6 @@
+# Reference documents should remain local.
+references/
+*.pdf
+
+# macOS metadata
+.DS_Store
