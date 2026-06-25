@@ -14,47 +14,55 @@
 .shop-topbar__main {
     display: flex;
     align-items: center;
-    gap: 4.06vw;
+    justify-content: space-between;
     width: 100%;
-    height: 3.59vw;
-    padding: 0 3.13vw;
-    background: #1b1410;
+    height: 3.71vw;
+    min-height: 74px;
+    padding: 0 2.4vw 0 2.35vw;
+    background: #1b120d;
+    border: 1px solid rgba(255, 234, 198, 0.32);
 }
 
 .shop-topbar__nav {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.56vw;
-    line-height: normal;
-    white-space: nowrap;
-    width: 50%;
+    width: 25.9vw;
+    min-width: 530px;
     margin-left: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8789vw;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .shop-topbar__nav ul {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: flex-start;
+    gap: 2.3vw;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
 .shop-topbar__nav a {
-    color: #ffffff;
+    color: #e5d4bb;
     text-decoration: none;
 }
 
 .shop-topbar__nav a.is-active {
-    color: #c8922a;
+    color: #c89218;
 }
 
 .shop-topbar__brand {
-    color: #ffeac6;
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 7.1vw;
     font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
-    font-size: 2.07vw;
-    line-height: normal;
+    font-size: clamp(30px, 1.9vw, 39px);
+    line-height: 1;
+    color: #d7c4a8;
     text-decoration: none;
-    white-space: nowrap;
 }
 
 .shop-toolbar {
@@ -849,27 +857,25 @@
         width: 90vw;
     }
 
-    .shop-topbar__main,
+    .shop-topbar__nav {
+        width: 68%;
+    }
+
     .shop-toolbar {
-        height: 54px;
+        height: 72px;
     }
 
     .shop-hero {
-        height: calc(100vh - 108px);
-        min-height: calc(100vh - 108px);
+        height: calc(100vh - 146px);
+        min-height: calc(100vh - 146px);
     }
 
     .shop-category-drawer {
-        top: 108px;
+        top: 146px;
     }
 
     .shop-category-drawer button {
         height: 64px;
-        font-size: 18px;
-    }
-
-    .shop-topbar__nav {
-        width: 100%;
         font-size: 18px;
     }
 
@@ -933,13 +939,27 @@
         --card-width: 100vw;
     }
 
+    .shop-topbar__main {
+        padding: 0 4.5vw;
+    }
+
     .shop-topbar__nav {
-        font-size: 13px;
+        width: 100%;
+        min-width: 0;
+        font-size: 12px;
     }
 
     .shop-topbar__nav ul {
-        gap: 14px;
+        gap: 3vw;
         overflow-x: auto;
+    }
+
+    .shop-topbar__brand {
+        display: none;
+    }
+
+    .shop-toolbar {
+        padding: 0 4.5vw;
     }
 
     .shop-category-drawer {
