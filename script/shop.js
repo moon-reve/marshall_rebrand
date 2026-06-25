@@ -762,15 +762,6 @@ function updateShopProductScrollMask() {
     shopProductSection.classList.toggle("is-scroll-mask-active", isActive);
 }
 
-function updateShopProductScrollArt() {
-    if (!shopProductSection) return;
-
-    const productRect = shopProductSection.getBoundingClientRect();
-    const headerHeight = shopTopbarMain?.offsetHeight || 70;
-    const isVisible = productRect.top <= window.innerHeight * 0.72 && productRect.bottom > headerHeight;
-    shopProductSection.classList.toggle("is-scroll-art-visible", isVisible);
-}
-
 function updateShopScrollEffects() {
     if (smoothCurrentY <= 2) {
         hasSkippedHeroOnScroll = false;
@@ -781,7 +772,6 @@ function updateShopScrollEffects() {
     updateShopHeroTransition();
     updateShopProductDetails();
     updateShopProductScrollMask();
-    updateShopProductScrollArt();
 }
 
 renderShopHeroPanels(0);
