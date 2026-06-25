@@ -37,9 +37,8 @@ body {
     justify-content: space-between;
     width: 100%;
     height: 70px;
-    padding: 0 2.4vw 0 2.35vw;
+    padding: 0 var(--shop-content-margin);
     background: #1b120d;
-    border: 1px solid rgba(255, 234, 198, 0.32);
 }
 
 .shop-topbar__nav {
@@ -249,8 +248,8 @@ body {
 
 .shop-hero__headline {
     position: absolute;
-    top: 12.22vh;
-    left: 2.34vw;
+    top: 50vh;
+    left: var(--shop-content-margin);
     margin: 0;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-size: 3.65vw;
@@ -270,8 +269,8 @@ body {
 
 .shop-hero__copy {
     position: absolute;
-    top: 38.24vh;
-    left: 2.4vw;
+    top: 64vh;
+    left: var(--shop-content-margin);
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: 0.9375vw;
     font-weight: 400;
@@ -491,26 +490,6 @@ body {
     background: #1b1410;
 }
 
-.shop-products__scroll-art {
-    display: block;
-    position: fixed;
-    top: 15vh;
-    left: 62vw;
-    z-index: 30;
-    width: min(31vw, 620px);
-    max-width: calc(50vw - 48px);
-    height: auto;
-    object-fit: contain;
-    opacity: 0;
-    filter: invert(1);
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-}
-
-.shop-product.is-scroll-art-visible .shop-products__scroll-art.is-ready {
-    opacity: 1;
-}
-
 .shop-product {
     --shop-product-sticky-offset: 26vh;
     --shop-product-category-height: 23.89vh;
@@ -579,7 +558,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.74vh;
-    margin-left: calc((50vw - 45.26vw) / 2);
     margin-left: var(--shop-content-margin);
     padding-left: 1.28vw;
     color: #ffeac6;
@@ -792,8 +770,7 @@ body {
     min-height: 100vh;
     background: #1b1410;
     align-items: center;
-    padding: var(--shop-product-category-height) 0 calc(100vh - var(--shop-product-info-line) - 48vh) 0;
-    padding: var(--shop-product-info-line) 0 0 0;
+    padding: var(--shop-product-category-height) 0 0 0;
 }
 
 .shop-product__image-card {

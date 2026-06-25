@@ -9,7 +9,6 @@ const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
 const productCardSwatches = document.querySelectorAll(".product-card__swatch");
 const shopProductSection = document.querySelector(".shop-product");
-const shopProductsScrollArt = document.querySelector(".shop-products__scroll-art");
 const shopProductScroll = document.querySelector(".shop-product__scroll");
 let shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
 const shopProductName = document.querySelector(".shop-product__headline h3");
@@ -438,10 +437,6 @@ let shopRenderedProgress = 0;
 let shopAnimationFrame = null;
 let shopActiveProductIndex = -1;
 let shopManualProductId = null;
-let shopArtPaths = [];
-let shopArtTargetProgress = 0;
-let shopArtRenderedProgress = 0;
-let shopArtAnimationFrame = null;
 let hasSkippedHeroOnScroll = false;
 let shopHeroTouchStartY = 0;
 let heroSkipScrollAmount = 0;
@@ -797,7 +792,6 @@ window.addEventListener("keydown", (event) => {
 });
 smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
-shopProductsScrollArt?.addEventListener("load", updateShopScrollEffects);
 updateShopScrollbarWidth();
 updateShopScrollEffects();
 
