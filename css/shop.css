@@ -1,3 +1,15 @@
+html,
+body {
+    overflow: hidden;
+    height: 100%;
+}
+
+#smooth-scroll-container {
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .shop-page {
     min-height: 100vh;
     background: #d9c5a9;

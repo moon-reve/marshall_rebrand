@@ -126,6 +126,42 @@ const shopProductColorClasses = [
     "shop-product__color--black",
 ];
 
+const smoothScrollEl = document.getElementById("smooth-scroll-container");
+let smoothTargetY = 0;
+let smoothCurrentY = 0;
+let smoothRafId = null;
+
+function smoothScrollTo(y) {
+    if (!smoothScrollEl) return;
+    const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
+    smoothTargetY = Math.max(0, Math.min(y, maxY));
+    if (!smoothRafId) smoothRafId = requestAnimationFrame(smoothScrollTick);
+}
+
+function smoothScrollTick() {
+    const dist = smoothTargetY - smoothCurrentY;
+    if (Math.abs(dist) < 0.1) {
+        smoothCurrentY = smoothTargetY;
+        smoothRafId = null;
+    } else {
+        smoothCurrentY += dist * 0.12;
+        smoothRafId = requestAnimationFrame(smoothScrollTick);
+    }
+    if (smoothScrollEl) smoothScrollEl.scrollTop = smoothCurrentY;
+}
+
+smoothScrollEl?.addEventListener("wheel", (event) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    event.preventDefault();
+    if (event.deltaY > 0 && !hasSkippedHeroOnScroll) {
+        skipHeroOnFirstScroll(event);
+        if (hasSkippedHeroOnScroll) return;
+    }
+    const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
+    smoothTargetY = Math.max(0, Math.min(smoothTargetY + event.deltaY, maxY));
+    if (!smoothRafId) smoothRafId = requestAnimationFrame(smoothScrollTick);
+}, { passive: false });
+
 let shopTargetProgress = 0;
 let shopRenderedProgress = 0;
 let shopAnimationFrame = null;
@@ -258,22 +294,23 @@ function updateShopProductDetails() {
 function scrollToShopProduct(productId) {
     const index = shopProductDetails.findIndex((product) => product.id === productId);
     const target = index >= 0 ? shopProductCards[index] : shopProductSection;
-
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!target || !smoothScrollEl) return;
+    const targetTop = target.getBoundingClientRect().top + smoothCurrentY;
+    smoothScrollTo(targetTop);
 }
 
 function scrollToShopBest() {
-    if (!shopBestSection) return;
+    if (!shopBestSection || !smoothScrollEl) return;
 
     const headerHeight = shopTopbarMain?.offsetHeight || 70;
-    const targetTop = Math.max(shopBestSection.offsetTop - headerHeight, 0);
+    const targetTop = Math.max(shopBestSection.getBoundingClientRect().top + smoothCurrentY - headerHeight, 0);
     hasSkippedHeroOnScroll = true;
-    window.scrollTo({ top: targetTop, behavior: "auto" });
+    smoothScrollTo(targetTop);
 }
 
 function skipHeroOnFirstScroll(event) {
     if (hasSkippedHeroOnScroll || !shopHeroStage || !shopBestSection) return;
-    if (window.scrollY > 2) return;
+    if (smoothCurrentY > 2) return;
 
     event?.preventDefault?.();
     scrollToShopBest();
@@ -328,7 +365,7 @@ function initializeShopInteractions() {
         });
     });
 
-    window.addEventListener("scroll", () => {
+    smoothScrollEl?.addEventListener("scroll", () => {
         if (!shopManualProductId || !shopProductSection) return;
         const sectionRect = shopProductSection.getBoundingClientRect();
         if (sectionRect.top < window.innerHeight * 0.2 && sectionRect.bottom > window.innerHeight * 0.5) return;
@@ -434,7 +471,7 @@ function updateShopHeroTransition() {
 }
 
 function updateShopScrollEffects() {
-    if (window.scrollY <= 2) {
+    if (smoothCurrentY <= 2) {
         hasSkippedHeroOnScroll = false;
     }
 
@@ -446,13 +483,10 @@ function updateShopScrollEffects() {
 renderShopHeroPanels(0);
 renderShopProductDetails(0);
 initializeShopInteractions();
-window.addEventListener("wheel", (event) => {
-    if (event.deltaY > 0) skipHeroOnFirstScroll(event);
-}, { passive: false });
-window.addEventListener("touchstart", (event) => {
+smoothScrollEl?.addEventListener("touchstart", (event) => {
     shopHeroTouchStartY = event.touches[0]?.clientY || 0;
 }, { passive: true });
-window.addEventListener("touchmove", (event) => {
+smoothScrollEl?.addEventListener("touchmove", (event) => {
     const touchY = event.touches[0]?.clientY || 0;
     if (shopHeroTouchStartY - touchY > 8) skipHeroOnFirstScroll(event);
 }, { passive: false });
@@ -460,6 +494,6 @@ window.addEventListener("keydown", (event) => {
     const scrollDownKeys = [" ", "PageDown", "ArrowDown"];
     if (scrollDownKeys.includes(event.key)) skipHeroOnFirstScroll(event);
 });
-window.addEventListener("scroll", updateShopScrollEffects, { passive: true });
+smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
 updateShopScrollEffects();
