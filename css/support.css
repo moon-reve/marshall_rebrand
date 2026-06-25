@@ -129,9 +129,10 @@
 
 .support-hero__title {
     margin: 0 0 0.95rem;
-    font-family: "Bodoni Moda", Georgia, serif;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-size: clamp(6rem, 8vw, 9.5rem);
     font-weight: 400;
+    font-variation-settings: "opsz" 18;
     letter-spacing: 0.03em;
     line-height: 0.95;
     text-transform: uppercase;
