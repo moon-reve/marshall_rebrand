@@ -170,22 +170,22 @@
     const coverDetailsSafe = [
         {
             title: "Wasted On Youth",
-            description: "The Molotovs\uc758 \ub0a0\uce74\ub85c\uc6b4 \uc5d0\ub108\uc9c0\uc640 \uc120\uba85\ud55c \uae30\ud0c0 \uc0ac\uc6b4\ub4dc\ub97c \ub2f4\uc740 Marshall Records \ub9b4\ub9ac\uc988\uc785\ub2c8\ub2e4.",
+            description: "The Molotovs의 날카로운 에너지와 선명한 기타 사운드를 담은 Marshall Records 릴리즈입니다.",
             values: ["Blue Vinyl", "2024", "The Molotovs"],
         },
         {
             title: "Green Vinyl",
-            description: "\uac70\uce5c \uc9c8\uac10\uc758 \ucee4\ubc84 \uc774\ubbf8\uc9c0\uc640 \uadf8\ub9b0 \ubc14\uc774\ub2d0\uc774 \uac15\ub82c\ud558\uac8c \ub9de\ubb3c\ub9ac\ub294 \ud55c\uc815\ud310 \ub808\ucf54\ub4dc\uc785\ub2c8\ub2e4.",
+            description: "거친 질감의 커버 이미지와 그린 바이닐이 강렬하게 맞물리는 한정판 레코드입니다.",
             values: ["Green Vinyl", "2024", "Marshall Records"],
         },
         {
             title: "Nova Twins",
-            description: "Nova Twins\uc758 \ub300\ub2f4\ud55c \ube44\uc8fc\uc5bc\uacfc \ubb35\uc9c1\ud55c \uc0ac\uc6b4\ub4dc\ub97c \uccad\ub85d\ube5b \ubc14\uc774\ub2d0\ub85c \ub2f4\uc544\ub0b8 \ub808\ucf54\ub4dc\uc785\ub2c8\ub2e4.",
+            description: "Nova Twins의 대담한 비주얼과 묵직한 사운드를 청록빛 바이닐로 담아낸 레코드입니다.",
             values: ["Teal Vinyl", "2024", "Nova Twins"],
         },
         {
             title: "Living The Blues",
-            description: "Terry Marshall and Friends\uc758 \ube14\ub8e8\uc2a4 \uac10\uc131\uc744 \ube14\ub799 \ubc14\uc774\ub2d0\uc5d0 \ub2f4\uc740 \ud074\ub798\uc2dd\ud55c \ub9b4\ub9ac\uc988\uc785\ub2c8\ub2e4.",
+            description: "Terry Marshall and Friends의 블루스 감성을 블랙 바이닐에 담은 클래식한 릴리즈입니다.",
             values: ["Black Vinyl", "2024", "Terry Marshall"],
         },
     ];
