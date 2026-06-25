@@ -18,69 +18,60 @@
 
 <body>
     <main class="artist-page" aria-labelledby="record-title">
-        <header class="artist-topbar" aria-label="Record header">
-            <div class="artist-topbar__main">
-                <a class="artist-topbar__brand" href="./index.html" aria-label="Marshall home">Marshall</a>
-                <nav class="artist-topbar__nav" aria-label="Main navigation">
-                    <ul>
-                        <li><a href="./shop.html">SHOP</a></li>
-                        <li><a href="./compare.html">COMPARE</a></li>
-                        <li><a class="is-active" href="./artist.html">RECORD</a></li>
-                        <li><a href="#">SUPPORT</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="artist-toolbar" aria-label="Record tools">
-                <button class="artist-toolbar__menu" type="button" aria-label="Open menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <div class="artist-toolbar__actions" aria-label="User actions">
-                    <span class="artist-icon artist-icon--search" aria-hidden="true"></span>
-                    <span class="artist-icon artist-icon--user" aria-hidden="true"></span>
-                    <span class="artist-icon artist-icon--heart" aria-hidden="true"></span>
-                    <span class="artist-icon artist-icon--globe" aria-hidden="true"></span>
-                </div>
+        <header class="artist-header" aria-label="Marshall navigation">
+            <a class="artist-header__brand" href="./index.html" aria-label="Marshall home">Marshall</a>
+            <nav class="artist-header__nav" aria-label="Main navigation">
+                <a class="is-active" href="./shop.html">SHOP</a>
+                <a href="#">COMPARE</a>
+                <a href="./artist.html">RECORD</a>
+                <a href="#">SUPPORT</a>
+            </nav>
+            <div class="artist-header__icons" aria-hidden="true">
+                <svg class="artist-icon" viewBox="0 0 44 44" focusable="false">
+                    <circle cx="18" cy="18" r="12.5"></circle>
+                    <path d="M28 28L39 39"></path>
+                </svg>
+                <svg class="artist-icon" viewBox="0 0 44 44" focusable="false">
+                    <circle cx="22" cy="11.5" r="6"></circle>
+                    <path d="M8.5 38V30C8.5 23.5 14 20 22 20C30 20 35.5 23.5 35.5 30V38"></path>
+                </svg>
             </div>
         </header>
 
         <section class="record-hero" aria-labelledby="record-title">
-            <img class="record-hero__image" src="./assets/images/artist/record-hero-performer.png" alt="Marshall Records live performance" />
-            <div class="artist-grid" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="artist-grid artist-grid--light record-hero__grid" aria-hidden="true"></div>
+            <div class="record-hero__panel record-hero__panel--main">
+                <img class="record-hero__performer" src="./assets/images/artist/record-hero-performer.png" alt="" />
+                <div class="record-hero__copy">
+                    <h1 id="record-title">Record Label</h1>
+                    <p>
+                        Jim Marshall&#51060; &#51060;&#47364;&#45240; &#47784;&#46304; &#51068;&#51032; &#50896;&#46041;&#47141;&#51008; &#51020;&#50501;&#51012; &#49324;&#46993;&#54616;&#45716; &#50676;&#51221;&#51060;&#50632;&#51004;&#47728;,<br />
+                        &#48148;&#47196; &#44536; &#50676;&#51221;&#51060; Marshall Records&#47484; &#50880;&#51649;&#51060;&#45716; &#55192;&#51077;&#45768;&#45796;.<br />
+                        Marshall Records&#45716; &#48708;&#48276;&#54616;&#44256; &#54785;&#49888;&#51201;&#51064; &#51020;&#50501;&#51012; &#51025;&#50896;&#54616;&#44256;,<br />
+                        &#50616;&#45908;&#44536;&#46972;&#50868;&#46300; &#50500;&#54000;&#49828;&#53944;&#46308;&#51060; &#51088;&#49888;&#47564;&#51032; &#44032;&#45733;&#49457;&#51012; &#54204;&#52832; &#49688; &#51080;&#46020;&#47197; &#46037;&#44256; &#51080;&#49845;&#45768;&#45796;.
+                    </p>
+                </div>
             </div>
-            <div class="record-hero__content">
-                <h1 id="record-title">Record Label</h1>
-                <p>
-                    Jim Marshall이 이뤄낸 모든 일의 원동력은 음악을 사랑하는 열정이었으며,<br />
-                    바로 그 열정이 Marshall Records를 움직이는 힘입니다.<br />
-                    Marshall Records는 비범하고 혁신적인 음악을 응원하고,<br />
-                    언더그라운드 아티스트들이 자신의 가능성을 펼칠 수 있도록 돕고 있습니다.
-                </p>
-            </div>
-            <article class="record-hero__slide record-hero__slide--market" aria-label="Record Label market statement">
+            <article class="record-hero__slide record-hero__slide--market" aria-hidden="true">
+                <img class="record-hero__slide-image" src="./assets/images/artist/record-hero-slide-02.png" alt="" />
                 <div class="record-hero__slide-copy">
                     <h2>Record Label</h2>
                     <p>
-                        현재 음악 시장은 그 어느 때보다 경쟁이 치열합니다.<br />
-                        누구나 쉽게 음악을 녹음하고 공유할 수 있게 되면서 무명의 아티스트들도<br />
-                        전 세계 대중에게 다가갈 수 있는 기회를 얻었지만, 무수한 곡들 사이에서 좋은<br />
-                        음악이 눈에 띄는 것은 점점 더 어려워지고 있습니다.<br />
-                        그렇기에, 우리의 역할이 더욱더 중요해졌습니다.
+                        &#54788;&#51116; &#51020;&#50501; &#49884;&#51109;&#51008; &#44536; &#50612;&#45712; &#46412;&#48372;&#45796; &#44221;&#51137;&#51060; &#52824;&#50676;&#54633;&#45768;&#45796;.<br />
+                        &#45572;&#44396;&#45208; &#49789;&#44172; &#51020;&#50501;&#51012; &#45433;&#51020;&#54616;&#44256; &#44277;&#50976;&#54624; &#49688; &#51080;&#44172; &#46104;&#47732;&#49436; &#47924;&#47749;&#51032; &#50500;&#54000;&#49828;&#53944;&#46308;&#46020;<br />
+                        &#51204; &#49464;&#44228; &#45824;&#51473;&#50640;&#44172; &#45796;&#44032;&#44040; &#49688; &#51080;&#45716; &#44592;&#54924;&#47484; &#50619;&#50632;&#51648;&#47564;, &#47924;&#49688;&#54620; &#44257;&#46308; &#49324;&#51060;&#50640;&#49436; &#51339;&#51008;<br />
+                        &#51020;&#50501;&#51060; &#45576;&#50640; &#46916;&#45716; &#44163;&#51008; &#51216;&#51216; &#45908; &#50612;&#47140;&#50892;&#51648;&#44256; &#51080;&#49845;&#45768;&#45796;.<br />
+                        &#44536;&#47111;&#44592;&#50640;, &#50864;&#47532;&#51032; &#50669;&#54624;&#51060; &#45908;&#50865;&#45908; &#51473;&#50836;&#54644;&#51276;&#49845;&#45768;&#45796;.
                     </p>
                 </div>
             </article>
-            <article class="record-hero__slide record-hero__slide--studio" aria-label="Record Label artist support statement">
+            <article class="record-hero__slide record-hero__slide--studio" aria-hidden="true">
+                <img class="record-hero__slide-image" src="./assets/images/artist/record-hero-slide-03.png" alt="" />
                 <div class="record-hero__slide-copy">
                     <h2>Record Label</h2>
                     <p>
-                        음악적 잠재력을 최대한 끌어올릴 수 있도록, 아이코닉한 장비와 최첨단 녹음<br />
-                        스튜디오, 그리고 전담 전문 팀을 운영하고 있습니다.<br />
+                        음악적 잠재력을 최대한 끌어올릴 수 있도록, 아이코닉한 장비와 최첨단 녹<br />
+                        음 스튜디오, 그리고 전담 전문 팀을 운영하고 있습니다.<br />
                         항상 아티스트를 최우선으로 생각하며, 누구나 창작의 자유를 통해 자신만의<br />
                         사운드를 만들고 개성을 표현할 수 있도록 필요한 모든 도구와 리소스를 아<br />
                         낌없이 제공합니다.
@@ -89,60 +80,105 @@
             </article>
         </section>
 
-        <section class="artist-intro" aria-labelledby="artist-title">
-            <div class="artist-grid artist-grid--dark" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="artist-intro__content">
+        <section class="artist-catalog" aria-labelledby="artist-title">
+            <div class="artist-grid artist-grid--dark" aria-hidden="true"></div>
+            <div class="artist-catalog__intro">
                 <h2 id="artist-title">Artist</h2>
-                <p>신예부터 거장까지, 장르의 경계를 허물고 독창적인 사운드로 전 세계적 영향력을 넓혀 가고 있습니다.</p>
-                <div class="artist-tabs" aria-label="Artist filters">
-                    <a class="is-active" href="#">Current Artists</a>
+                <p>&#49888;&#50696;&#48512;&#53552; &#44144;&#51109;&#44620;&#51648;, &#51109;&#47476;&#51032; &#44221;&#44228;&#47484; &#54728;&#47932;&#44256; &#46021;&#52285;&#51201;&#51064; &#49324;&#50868;&#46300;&#47196; &#51204; &#49464;&#44228;&#51201; &#50689;&#54693;&#47141;&#51012; &#45331;&#54784; &#44032;&#44256; &#51080;&#49845;&#45768;&#45796;.</p>
+                <div class="artist-catalog__filters" aria-label="Artist filters">
+                    <a href="#">Current Artists</a>
                     <a href="#">Archive</a>
                 </div>
             </div>
-        </section>
 
-        <section class="artist-list" aria-label="Current artists">
-            <article class="artist-card">
-                <img src="./assets/images/artist/big-truck.png" alt="Big Truck artist group" />
-                <h3>BIG TRUCK</h3>
-            </article>
-            <article class="artist-card">
-                <img src="./assets/images/artist/cancer-bats.png" alt="Cancer Bats artist group" />
-                <h3>CANCER BATS</h3>
-            </article>
-            <article class="artist-card">
-                <img src="./assets/images/artist/the-molotovs.png" alt="The Molotovs artist duo" />
-                <h3>THE MOLOTOVS</h3>
-            </article>
-            <article class="artist-card">
-                <img src="./assets/images/artist/autumn-fires.png" alt="Autumn Fires artist group" />
-                <h3>AUTUMN FIRES</h3>
-            </article>
+            <div class="artist-catalog__list" aria-label="Current artists">
+                <article class="artist-card">
+                    <img src="./assets/images/artist/big-truck.png" alt="BIG TRUCK" />
+                    <h3>BIG TRUCK</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/cancer-bats.png" alt="CANCER BATS" />
+                    <h3>CANCER BATS</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/the-molotovs.png" alt="THE MOLOTOVS" />
+                    <h3>THE MOLOTOVS</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/autumn-fires.png" alt="AUTUMN FIRES" />
+                    <h3>AUTUMN FIRES</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/nova-twins.png" alt="NOVA TWINS" />
+                    <h3>NOVA TWINS</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/daytime-tv.png" alt="DAYTIME TV" />
+                    <h3>DAYTIME TV</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/dream-nails.png" alt="DREAM NAILS" />
+                    <h3>DREAM NAILS</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/gallus.png" alt="GALLUS" />
+                    <h3>GALLUS</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/gen-and-the-degenerates.png" alt="GEN AND THE DEGENERATES" />
+                    <h3>GEN AND THE DEGENERATES</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/jarki-monno.png" alt="JARKI MONNO" />
+                    <h3>JARKI MONNO</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/king-nun.png" alt="KING NUN" />
+                    <h3>KING NUN</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/knives.png" alt="KNIVES" />
+                    <h3>KNIVES</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/rejizz.png" alt="RÉJIZZ" />
+                    <h3>RÉJIZZ</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/terry-marshall.png" alt="TERRY MARSHALL" />
+                    <h3>TERRY MARSHALL</h3>
+                </article>
+                <article class="artist-card">
+                    <img src="./assets/images/artist/therapy.png" alt="THERAPY?" />
+                    <h3>THERAPY?</h3>
+                </article>
+            </div>
         </section>
 
         <section class="record-feature" aria-labelledby="records-title">
-            <a class="record-feature__arrow" href="#" aria-label="View more records">-></a>
             <div class="record-feature__heading">
                 <h2 id="records-title">Marshall Records</h2>
-                <p>신예부터 거장까지, 장르의 경계를 허물고 독창적인 사운드로 전 세계적 영향력을 넓혀 가고 있습니다.</p>
+                <p>&#49888;&#50696;&#48512;&#53552; &#44144;&#51109;&#44620;&#51648;, &#51109;&#47476;&#51032; &#44221;&#44228;&#47484; &#54728;&#47932;&#44256; &#46021;&#52285;&#51201;&#51064; &#49324;&#50868;&#46300;&#47196; &#51204; &#49464;&#44228;&#51201; &#50689;&#54693;&#47141;&#51012; &#45331;&#54784; &#44032;&#44256; &#51080;&#49845;&#45768;&#45796;.</p>
             </div>
 
-            <div class="record-feature__body">
-                <figure class="record-cover">
-                    <img src="./assets/images/artist/record-vinyl.png" alt="The Molotovs Wasted On Youth vinyl record" />
+            <a class="record-feature__arrow" href="#" aria-label="Marshall Records more">&rarr;</a>
+
+            <div class="record-feature__content">
+                <figure class="record-feature__cover">
+                    <div class="record-feature__cover-track">
+                        <img src="./assets/images/artist/record-vinyl.png" alt="The Molotovs Wasted On Youth vinyl record" />
+                        <img src="./assets/images/artist/record-cover-green.png" alt="Green vinyl record cover" />
+                        <img src="./assets/images/artist/record-cover-nova.png" alt="Nova Twins vinyl record cover" />
+                        <img src="./assets/images/artist/record-cover-terry.png" alt="Terry Marshall vinyl record cover" />
+                    </div>
                 </figure>
 
                 <article class="record-detail" aria-labelledby="album-title">
-                    <h3 id="album-title">앨범명</h3>
-                    <p>제품 상세 설명들 ----!!!!!!! 뭐시기 뭐 글쫙한거 사이즈도 여럿이 될수.</p>
+                    <h3 id="album-title">&#50536;&#48276;&#47749;</h3>
+                    <p>&#51228;&#54408; &#49345;&#49464; &#49444;&#47749;&#46308; ~~~!!!!!! &#47952;&#49884;&#44592; &#47952; &#53092;&#54057;&#53944;&#54620; &#49324;&#51060;&#51592;&#47196; &#50556;&#50808;&#50640; &#54596;&#49688;..</p>
                     <dl>
                         <div>
-                            <dt>컬러</dt>
+                            <dt>&#52972;&#47084;</dt>
                             <dd>Guitar Amplifier</dd>
                         </div>
                         <div>
