@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   MARSHALL – style.css
+   MARSHALL – compare.css
    1920px fixed-width desktop layout
 ═══════════════════════════════════════════════════════ */
 
@@ -267,7 +267,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .quiz-texture {
   position: absolute;
   inset: 0;
-  background: url('assets/quiz-raw-01.png') center/cover no-repeat;
+  background: url('../assets/images/quiz-raw-01.png') center/cover no-repeat;
   mix-blend-mode: exclusion;
   opacity: 0.5;
   pointer-events: none;
@@ -572,7 +572,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-texture {
   position: absolute;
   inset: 0;
-  background: url('assets/footer-raw-01.png') center/cover no-repeat;
+  background: url('../assets/images/footer-raw-01.png') center/cover no-repeat;
   mix-blend-mode: exclusion;
   opacity: 0.35;
   pointer-events: none;
