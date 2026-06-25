@@ -8,8 +8,83 @@
     let startX = 0;
     let isDragging = false;
     let slideIndex = 0;
+    let autoTimer = 0;
 
     const slides = hero.querySelectorAll(".record-hero__slide");
+    const prevButton = hero.querySelector(".record-hero__arrow--prev");
+    const nextButton = hero.querySelector(".record-hero__arrow--next");
+
+    const moveToFirstSlide = () => {
+        const panel = hero.querySelector(".record-hero__panel--main");
+        const marketSlide = hero.querySelector(".record-hero__slide--market");
+        const studioSlide = hero.querySelector(".record-hero__slide--studio");
+
+        panel.style.transition = "none";
+        panel.style.transform = "translateX(100%)";
+        marketSlide.style.transition = "none";
+        marketSlide.style.transform = "translateX(200%)";
+
+        hero.getBoundingClientRect();
+
+        setSlide(0);
+
+        requestAnimationFrame(() => {
+            panel.style.transition = "";
+            marketSlide.style.transition = "";
+            studioSlide.style.transform = "translateX(-100%)";
+            panel.style.transform = "";
+
+            setTimeout(() => {
+                marketSlide.style.transition = "none";
+                marketSlide.style.transform = "";
+                studioSlide.style.transition = "none";
+                studioSlide.style.transform = "";
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        marketSlide.style.transition = "";
+                        studioSlide.style.transition = "";
+                    });
+                });
+            }, 850);
+        });
+    };
+
+    const moveToLastSlide = () => {
+        const panel = hero.querySelector(".record-hero__panel--main");
+        const marketSlide = hero.querySelector(".record-hero__slide--market");
+        const studioSlide = hero.querySelector(".record-hero__slide--studio");
+
+        studioSlide.style.transition = "none";
+        studioSlide.style.transform = "translateX(-100%)";
+        marketSlide.style.transition = "none";
+        marketSlide.style.transform = "translateX(200%)";
+
+        hero.getBoundingClientRect();
+
+        requestAnimationFrame(() => {
+            panel.style.transform = "translateX(100%)";
+            studioSlide.style.transition = "";
+            studioSlide.style.transform = "translateX(0)";
+
+            setTimeout(() => {
+                panel.style.transition = "none";
+                panel.style.transform = "";
+                marketSlide.style.transform = "";
+                studioSlide.style.transition = "none";
+                studioSlide.style.transform = "";
+
+                setSlide(slides.length);
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        panel.style.transition = "";
+                        marketSlide.style.transition = "";
+                        studioSlide.style.transition = "";
+                    });
+                });
+            }, 850);
+        });
+    };
 
     const setSlide = (nextIndex) => {
         slideIndex = Math.max(0, Math.min(slides.length, nextIndex));
@@ -21,10 +96,40 @@
         });
     };
 
+    const scheduleAutoSlide = () => {
+        window.clearTimeout(autoTimer);
+        autoTimer = window.setTimeout(() => {
+            if (slideIndex === slides.length) {
+                moveToFirstSlide();
+            } else {
+                setSlide(slideIndex + 1);
+            }
+
+            scheduleAutoSlide();
+        }, 3500);
+    };
+
+    const moveNext = () => {
+        if (slideIndex === slides.length) {
+            moveToFirstSlide();
+        } else {
+            setSlide(slideIndex + 1);
+        }
+    };
+
+    const movePrev = () => {
+        if (slideIndex === 0) {
+            moveToLastSlide();
+        } else {
+            setSlide(slideIndex - 1);
+        }
+    };
+
     hero.addEventListener("pointerdown", (event) => {
         if (event.button !== 0) return;
         isDragging = true;
         startX = event.clientX;
+        window.clearTimeout(autoTimer);
     });
 
     hero.addEventListener("pointerup", (event) => {
@@ -37,38 +142,17 @@
 
         if (Math.abs(deltaX) > 40) {
             if (deltaX < 0 && slideIndex === slides.length) {
-                const panel = hero.querySelector(".record-hero__panel--main");
-                const marketSlide = hero.querySelector(".record-hero__slide--market");
-                const studioSlide = hero.querySelector(".record-hero__slide--studio");
-
-                panel.style.transition = "none";
-                panel.style.transform = "translateX(100%)";
-                marketSlide.style.transition = "none";
-
-                hero.getBoundingClientRect();
-
-                setSlide(0);
-
-                requestAnimationFrame(() => {
-                    panel.style.transition = "";
-                    marketSlide.style.transition = "";
-                    studioSlide.style.transform = "translateX(-100%)";
-                    panel.style.transform = "";
-
-                    setTimeout(() => {
-                        studioSlide.style.transition = "none";
-                        studioSlide.style.transform = "";
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-                                studioSlide.style.transition = "";
-                            });
-                        });
-                    }, 850);
-                });
+                moveToFirstSlide();
             } else {
-                setSlide(slideIndex + (deltaX < 0 ? 1 : -1));
+                if (deltaX < 0) {
+                    moveNext();
+                } else {
+                    movePrev();
+                }
             }
         }
+
+        scheduleAutoSlide();
     });
 
     hero.addEventListener("pointerleave", () => {
@@ -77,7 +161,32 @@
 
     hero.addEventListener("pointercancel", () => {
         isDragging = false;
+        scheduleAutoSlide();
     });
+
+    prevButton?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        window.clearTimeout(autoTimer);
+        movePrev();
+        scheduleAutoSlide();
+    });
+
+    nextButton?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        window.clearTimeout(autoTimer);
+        moveNext();
+        scheduleAutoSlide();
+    });
+
+    prevButton?.addEventListener("pointerdown", (event) => {
+        event.stopPropagation();
+    });
+
+    nextButton?.addEventListener("pointerdown", (event) => {
+        event.stopPropagation();
+    });
+
+    scheduleAutoSlide();
 })();
 
 (() => {

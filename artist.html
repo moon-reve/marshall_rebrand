@@ -11,6 +11,7 @@
         crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
     />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/artist.css" />
     <script src="./script/artist.js" defer></script>
@@ -39,7 +40,6 @@
         </header>
 
         <section class="record-hero" aria-labelledby="record-title">
-            <div class="artist-grid artist-grid--light record-hero__grid" aria-hidden="true"></div>
             <div class="record-hero__panel record-hero__panel--main">
                 <img class="record-hero__performer" src="./assets/images/artist/record-hero-performer.png" alt="" />
                 <div class="record-hero__copy">
@@ -78,6 +78,10 @@
                     </p>
                 </div>
             </article>
+            <div class="record-hero__arrows" aria-label="Record hero controls">
+                <button class="material-symbols-outlined record-hero__arrow record-hero__arrow--prev" type="button" aria-label="Previous record hero slide">arrow_back_ios_new</button>
+                <button class="material-symbols-outlined record-hero__arrow record-hero__arrow--next" type="button" aria-label="Next record hero slide">arrow_forward_ios</button>
+            </div>
         </section>
 
         <section class="artist-catalog" aria-labelledby="artist-title">
