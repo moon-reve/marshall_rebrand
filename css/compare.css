@@ -3,6 +3,92 @@
    100vw fixed-width desktop layout
 ═══════════════════════════════════════════════════════ */
 
+/* ── Topbar ── */
+.shop-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    width: 100%;
+}
+
+.shop-topbar__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 70px;
+    padding: 0 2.4vw 0 2.35vw;
+    background: #1b120d;
+    border: 1px solid rgba(255, 234, 198, 0.32);
+}
+
+.shop-topbar__nav {
+    width: 25.9vw;
+    min-width: 530px;
+    margin-left: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8789vw;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.shop-topbar__nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2.3vw;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.shop-topbar__nav a {
+    color: #e5d4bb;
+    text-decoration: none;
+}
+
+.shop-topbar__nav a.is-active {
+    color: #c89218;
+}
+
+.shop-topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25vw;
+    flex: 0 0 auto;
+    margin-left: 2.5vw;
+}
+
+.shop-topbar__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35vw;
+    height: 1.35vw;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.shop-topbar__action img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.shop-topbar__brand {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 7.1vw;
+    font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
+    font-size: clamp(30px, 1.9vw, 39px);
+    line-height: 1;
+    color: #d7c4a8;
+    text-decoration: none;
+}
+
 /* ── Custom Fonts ── */
 @font-face {
   font-family: 'AmplifyPersonalUseOnly';
