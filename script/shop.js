@@ -9,6 +9,7 @@ const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
 const productCardSwatches = document.querySelectorAll(".product-card__swatch");
 const shopProductSection = document.querySelector(".shop-product");
+const shopProductsScrollArt = document.querySelector(".shop-products__scroll-art");
 const shopProductScroll = document.querySelector(".shop-product__scroll");
 let shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
 const shopProductName = document.querySelector(".shop-product__headline h3");
@@ -437,6 +438,10 @@ let shopRenderedProgress = 0;
 let shopAnimationFrame = null;
 let shopActiveProductIndex = -1;
 let shopManualProductId = null;
+let shopArtPaths = [];
+let shopArtTargetProgress = 0;
+let shopArtRenderedProgress = 0;
+let shopArtAnimationFrame = null;
 let hasSkippedHeroOnScroll = false;
 let shopHeroTouchStartY = 0;
 let heroSkipScrollAmount = 0;
@@ -762,13 +767,121 @@ function updateShopProductScrollMask() {
     shopProductSection.classList.toggle("is-scroll-mask-active", isActive);
 }
 
+function prepareShopArtPaths() {
+    if (!shopProductsScrollArt || shopArtPaths.length) return Boolean(shopArtPaths.length);
+
+    const svgDocument = shopProductsScrollArt.contentDocument;
+    if (!svgDocument) return false;
+
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const svgRoot = svgDocument.documentElement;
+    let defs = svgRoot.querySelector("defs");
+
+    if (!defs) {
+        defs = svgDocument.createElementNS(svgNamespace, "defs");
+        svgRoot.prepend(defs);
+    }
+
+    shopArtPaths = Array.from(svgDocument.querySelectorAll("path"))
+        .map((sourcePath, index) => {
+            const bounds = sourcePath.getBBox();
+            const maskPadding = Math.max(bounds.width, bounds.height) * 0.08;
+            const mask = svgDocument.createElementNS(svgNamespace, "mask");
+            const maskId = `shop-art-mask-${index}`;
+            mask.setAttribute("id", maskId);
+            mask.setAttribute("maskUnits", "userSpaceOnUse");
+            mask.setAttribute("x", `${bounds.x - maskPadding}`);
+            mask.setAttribute("y", `${bounds.y - maskPadding}`);
+            mask.setAttribute("width", `${bounds.width + maskPadding * 2}`);
+            mask.setAttribute("height", `${bounds.height + maskPadding * 2}`);
+
+            const revealRect = svgDocument.createElementNS(svgNamespace, "rect");
+            revealRect.setAttribute("x", `${bounds.x - maskPadding}`);
+            revealRect.setAttribute("y", `${bounds.y - maskPadding}`);
+            revealRect.setAttribute("width", "0");
+            revealRect.setAttribute("height", `${bounds.height + maskPadding * 2}`);
+            revealRect.setAttribute("fill", "#fff");
+
+            mask.appendChild(revealRect);
+            defs.appendChild(mask);
+
+            sourcePath.style.fill = "#000";
+            sourcePath.style.stroke = "none";
+            sourcePath.setAttribute("mask", `url(#${maskId})`);
+
+            return {
+                revealRect,
+                bounds,
+                maskPadding,
+                index,
+            };
+        })
+        .sort((firstPath, secondPath) => {
+            if (firstPath.bounds.x !== secondPath.bounds.x) return firstPath.bounds.x - secondPath.bounds.x;
+            if (firstPath.bounds.y !== secondPath.bounds.y) return firstPath.bounds.y - secondPath.bounds.y;
+            return firstPath.index - secondPath.index;
+        });
+
+    shopProductsScrollArt.classList.add("is-ready");
+
+    return Boolean(shopArtPaths.length);
+}
+
+function updateShopArtReveal(isVisible) {
+    if (!shopProductsScrollArt || !prepareShopArtPaths()) return;
+
+    shopArtTargetProgress = isVisible ? 1 : 0;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        shopArtPaths.forEach(({ revealRect, bounds, maskPadding }) => {
+            revealRect.setAttribute("width", `${isVisible ? bounds.width + maskPadding * 2 : 0}`);
+        });
+        return;
+    }
+
+    if (shopArtAnimationFrame) return;
+
+    function renderShopArtReveal() {
+        const distance = shopArtTargetProgress - shopArtRenderedProgress;
+        const revealSpeed = shopArtTargetProgress < shopArtRenderedProgress ? 0.18 : 0.04;
+        shopArtRenderedProgress += distance * revealSpeed;
+
+        if (Math.abs(distance) < 0.0001) {
+            shopArtRenderedProgress = shopArtTargetProgress;
+        }
+
+        const pathCount = shopArtPaths.length;
+
+        shopArtPaths.forEach(({ revealRect, bounds, maskPadding }, index) => {
+            const pathStart = index / pathCount;
+            const pathProgress = clamp(
+                (shopArtRenderedProgress - pathStart) * pathCount,
+                0,
+                1
+            );
+            const revealWidth = (bounds.width + maskPadding * 2) * pathProgress;
+
+            revealRect.setAttribute("width", `${revealWidth}`);
+        });
+
+        if (shopArtRenderedProgress !== shopArtTargetProgress) {
+            shopArtAnimationFrame = requestAnimationFrame(renderShopArtReveal);
+        } else {
+            shopArtAnimationFrame = null;
+        }
+    }
+
+    shopArtAnimationFrame = requestAnimationFrame(renderShopArtReveal);
+}
+
 function updateShopProductScrollArt() {
     if (!shopProductSection) return;
 
     const productRect = shopProductSection.getBoundingClientRect();
     const headerHeight = shopTopbarMain?.offsetHeight || 70;
-    const isVisible = productRect.top <= window.innerHeight * 0.72 && productRect.bottom > headerHeight;
+    const isVisible = productRect.top <= headerHeight && productRect.bottom > headerHeight;
     shopProductSection.classList.toggle("is-scroll-art-visible", isVisible);
+    updateShopArtReveal(isVisible);
 }
 
 function updateShopScrollEffects() {
@@ -802,6 +915,7 @@ window.addEventListener("keydown", (event) => {
 });
 smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);
+shopProductsScrollArt?.addEventListener("load", updateShopScrollEffects);
 updateShopScrollbarWidth();
 updateShopScrollEffects();
 
