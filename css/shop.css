@@ -643,7 +643,6 @@ body {
 }
 
 .shop-product__headline h3,
-.shop-product__headline p,
 .shop-product__description,
 .shop-product__spec-list,
 .shop-product__spec-row dt,
@@ -659,16 +658,7 @@ body {
     letter-spacing: -0.075vw;
 }
 
-.shop-product__headline p {
-    color: #1b1410;
-    font-family: "SUIT", "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 0.83vw;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: -0.025vw;
-}
-
-.shop-product__headline strong {
+.shop-product__spec-row strong {
     font-weight: 700;
 }
 
@@ -732,6 +722,22 @@ body {
     background: #4a2d32;
 }
 
+.shop-product__color--true-black {
+    background: #2f2f2f;
+}
+
+.shop-product__color--headphone-black {
+    background: #303030;
+}
+
+.shop-product__color--headphone-brown {
+    background: #8a5a38;
+}
+
+.shop-product__color--headphone-cream {
+    background: #c8bcac;
+}
+
 .shop-product__color--selected {
     position: relative;
     width: 1.46vw;
@@ -753,7 +759,7 @@ body {
     flex-direction: column;
     gap: 2.78vh;
     min-height: 100vh;
-    background: #d9c5a9;
+    background: #1b1410;
     align-items: center;
     padding: 3.59vw 0 max(0vw, calc(40vh - 3.59vw)) 0;
 }
@@ -851,7 +857,6 @@ body {
     }
 
     .shop-product__category-nav,
-    .shop-product__headline p,
     .shop-product__description,
     .shop-product__spec-row {
         font-size: 14px;
