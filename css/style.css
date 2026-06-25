@@ -742,11 +742,11 @@ a {
 }
 
 .beginning-stage {
-    height: 84vh;
+    height: 100vh;
 }
 
 .beginning {
-    height: 84vh;
+    height: 100vh;
     overflow: visible;
     background: #fff;
 }
