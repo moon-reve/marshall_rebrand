@@ -1,19 +1,19 @@
 /* ═══════════════════════════════════════════════════════
    MARSHALL – compare.css
-   1920px fixed-width desktop layout
+   100vw fixed-width desktop layout
 ═══════════════════════════════════════════════════════ */
 
 /* ── Custom Fonts ── */
 @font-face {
   font-family: 'AmplifyPersonalUseOnly';
-  src: url('assets/fonts/AmplifyPersonalUseOnly.ttf') format('truetype');
+  src: url('../assets/fonts/AmplifyPersonalUseOnly.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Olivera_Demo';
-  src: url('assets/fonts/Olivera_Demo.ttf') format('truetype');
+  src: url('../assets/fonts/Olivera_Demo.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -40,12 +40,12 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 0.7552vw;
   -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: #fff;
+  background: var(--cream);
   font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
   overflow-x: auto;
 }
@@ -55,30 +55,40 @@ ul { list-style: none; }
 img { display: block; max-width: 100%; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
-/* ── Page wrapper: 1920px fixed ── */
+/* ── Page wrapper: 100vw fixed ── */
 .page {
-  width: 1920px;
+  width: 100vw;
   margin: 0 auto;
 }
 
+.inner {
+  width: 90.625vw;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* ═══════════════════════════════════════════════════════
    NAV 1 – Dark
 ═══════════════════════════════════════════════════════ */
 .nav-primary {
-  height: 69px;
+  height: 3.5937vw;
   background: var(--dark);
+}
+.nav-inner {
+  position: relative;
+  width: 90.625vw;
+  height: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  position: relative;
 }
 
 /* Marshall script logo – left */
 .nav-logo {
   position: absolute;
-  left: 50px;
+  left: 0;
   font-family: 'AmplifyPersonalUseOnly', cursive;
-  font-size: 39.78px;
+  font-size: 1.8777vw;
   color: var(--cream-light);
   line-height: 1;
 }
@@ -90,12 +100,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 98px;
-  padding: 0 60px;
+  gap: 5.1042vw;
+  padding: 0 3.125vw;
 }
 .nav-links a {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 30px;
+  font-size: 1.4160vw;
   font-weight: 400;
   color: #fff;
   transition: color 0.2s;
@@ -106,11 +116,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* search + user icons – right */
 .nav-icons-img {
   position: absolute;
-  right: 35px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 78px;
-  height: 29px;
+  width: 4.0625vw;
+  height: 1.5104vw;
 }
 
 
@@ -122,8 +132,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .hero {
   position: relative;
-  width: 1920px;
-  height: 940px;
+  width: 100vw;
+  height: 48.9583vw;
   overflow: hidden;
   background: var(--hero-dark);
 }
@@ -131,10 +141,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* lifestyle photo – right side, starts at x=665 */
 .hero-right-bg {
   position: absolute;
-  left: 665px;
+  left: 34.6354vw;
   top: 0;
-  width: 1255px;
-  height: 940px;
+  width: 65.3646vw;
+  height: 48.9583vw;
   z-index: 1;
 }
 .hero-right-bg img {
@@ -149,35 +159,35 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: absolute;
   left: 0;
   top: 0;
-  width: 960px;
-  height: 940px;
+  width: 50vw;
+  height: 48.9583vw;
   background: var(--hero-dark);
   z-index: 2;
-  padding: 100px 80px 80px 80px;
+  padding: 5.2083vw 4.1667vw 4.1667vw 4.6875vw;
   display: flex;
   flex-direction: column;
 }
 
 .hero-eyebrow {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-size: 0.5664vw;
   font-weight: 400;
   letter-spacing: 0.25em;
   color: rgba(255, 234, 198, 0.6);
-  margin-bottom: 28px;
+  margin-bottom: 1.4583vw;
 }
 
 .hero-title {
   font-family: 'Olivera_Demo', serif;
-  font-size: 88px;
+  font-size: 4.1536vw;
   font-weight: 400;
   line-height: 1.04;
   color: var(--cream-light);
-  margin-bottom: 80px;
+  margin-bottom: 4.1667vw;
 }
 
 .hero-desc {
-  font-size: 18px;
+  font-size: 0.8496vw;
   font-weight: 300;
   line-height: 1.7;
   color: rgba(255, 234, 198, 0.75);
@@ -191,13 +201,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    COMPARE SECTION
 ═══════════════════════════════════════════════════════ */
 .compare-section {
-  width: 1920px;
-  height: 376px;
+  width: 100vw;
+  height: 19.5833vw;
   background: var(--cream);
+}
+.compare-inner {
+  width: 90.625vw;
+  height: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: 0 96px;
-  gap: 120px;
+  justify-content: space-between;
 }
 
 .compare-left {
@@ -206,7 +220,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .compare-title {
   font-family: 'Olivera_Demo', serif;
-  font-size: 150px;
+  font-size: 7.0801vw;
   font-weight: 400;
   line-height: 0.9;
   color: var(--dark);
@@ -220,11 +234,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .compare-desc {
   font-family: 'Pretendard Variable', sans-serif;
-  font-size: 24px;
+  font-size: 1.1328vw;
   font-weight: 400;
-  line-height: 35px;
+  line-height: 1.8229vw;
   color: #000;
-  letter-spacing: -0.48px;
+  letter-spacing: -0.025vw;
   text-align: right;
   white-space: nowrap;
 }
@@ -235,8 +249,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .quiz-section {
   position: relative;
-  width: 1920px;
-  height: 803px;
+  width: 100vw;
+  height: 41.8229vw;
   background: var(--dark);
   overflow: hidden;
 }
@@ -255,33 +269,34 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .quiz-inner {
   position: relative;
   z-index: 2;
-  width: 100%;
+  width: 90.625vw;
   height: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 108px 72px 105px;
+  padding: 5.625vw 0 5.4688vw;
 }
 
 /* Marshall script watermark */
 .quiz-logo {
   font-family: 'AmplifyPersonalUseOnly', cursive;
-  font-size: 200px;
+  font-size: 9.4401vw;
   color: transparent;
   -webkit-text-stroke: 1.5px var(--gold);
   line-height: 1;
-  margin-bottom: 95px;
+  margin-bottom: 4.9479vw;
   letter-spacing: 0.02em;
 }
 
 /* 3 step columns */
 .quiz-steps {
   display: flex;
-  gap: 63px;
+  gap: 3.2813vw;
 }
 
 .quiz-step {
-  width: 550px;
+  width: 28.0208vw;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -289,36 +304,36 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .step-num {
-  font-size: 24px;
+  font-size: 1.1328vw;
   font-weight: 500;
   letter-spacing: -0.022em;
   color: #fff;
-  margin-bottom: 9px;
+  margin-bottom: 0.4688vw;
   line-height: 1.5;
 }
 
 .step-question {
-  font-size: 30px;
+  font-size: 1.4160vw;
   font-weight: 500;
   color: #ffeac6;
   letter-spacing: -0.022em;
-  margin-bottom: 55px;
+  margin-bottom: 2.8646vw;
   line-height: 1.5;
   white-space: nowrap;
 }
 
 .step-options {
   display: flex;
-  gap: 10px;
+  gap: 0.5208vw;
   flex-wrap: nowrap;
 }
 
 .step-btn {
-  width: 130px;
-  height: 150px;
+  width: 6.6146vw;
+  height: 7.8125vw;
   flex-shrink: 0;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 0.5208vw;
   position: relative;
   display: block;
   border: none;
@@ -333,26 +348,26 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .step-icon {
   position: absolute;
-  width: 52px;
-  height: 52px;
-  left: 39px;
-  top: 34px;
+  width: 2.7083vw;
+  height: 2.7083vw;
+  left: 1.9531vw;
+  top: 1.7708vw;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .step-icon svg {
-  width: 52px;
-  height: 52px;
+  width: 2.7083vw;
+  height: 2.7083vw;
 }
 
 .step-label {
   position: absolute;
-  top: 100px;
+  top: 5.2083vw;
   left: 0;
   right: 0;
-  padding: 0 10px;
-  font-size: 20px;
+  padding: 0 0.5208vw;
+  font-size: 0.9440vw;
   font-weight: 500;
   color: var(--dark);
   text-align: center;
@@ -365,29 +380,32 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    PRODUCT GRID (shared by all 3 grids)
 ═══════════════════════════════════════════════════════ */
 .product-grid {
-  width: 1920px;
-  height: 1080px;
+  width: 90.625vw;
+  height: 56.25vw;
+  margin: 0 auto;
   display: flex;
 }
 
 .product-card {
   flex: 1;
-  width: 480px;
-  min-width: 480px;
-  height: 1080px;
+  width: 22.65625vw;
+  min-width: 22.65625vw;
+  height: 56.25vw;
   background: var(--white);
   display: flex;
   flex-direction: column;
-  padding: 11px 46px 46px;
+  padding: 0.5729vw 2.3958vw 2.3958vw;
   border-right: 1px solid #ede8e0;
   position: relative;
   transition: background 0.2s;
 }
-.product-card:last-child { border-right: none; }
+.product-card:first-child {
+  border-left: 1px solid #ede8e0;
+}
 
 /* selected (warm bg + wishlist added) */
 .product-card--selected {
-  background: var(--card-sel-bg);
+  background: #fff;
 }
 
 /* ── card top: wishlist + BEST SELLER ── */
@@ -395,7 +413,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: 50px;
+  height: 2.6042vw;
   margin-bottom: 0;
   position: relative;
 }
@@ -405,32 +423,36 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .badge-bestseller {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 0.5192vw;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--white);
   background: var(--dark);
-  padding: 4px 10px;
+  padding: 0.2083vw 0.5208vw;
   border-radius: 2px;
 }
 
 .btn-wishlist {
-  width: 50px;
-  height: 50px;
+  position: absolute;
+  top: 1.0417vw;
+  right: 1.0417vw;
+  width: 1.5625vw;
+  height: 1.5625vw;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  z-index: 10;
 }
 .btn-wishlist svg {
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
 }
 
 /* ── product image ── */
 .card-image {
   flex-shrink: 0;
-  height: 349px;
+  height: 18.1771vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -439,8 +461,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: relative;
 }
 .card-image img {
-  max-height: 329px;
-  max-width: 388px;
+  max-height: 17.1354vw;
+  max-width: 20.2083vw;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -457,56 +479,60 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ACTON III — 330×246 frame at (29,103), object-cover */
 .product-card--acton .img-crop {
   position: absolute;
-  left: 29px; top: 103px;
-  width: 330px; height: 246px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 5.3646vw;
+  width: 17.1875vw; height: 12.8125vw;
   overflow: hidden;
-}
-.product-card--acton .img-crop img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  max-width: none;
 }
 
 /* STANMORE III — 332×208 frame at (28,114), overflow crop */
 .product-card--stanmore .img-crop {
   position: absolute;
-  left: 28px; top: 114px;
-  width: 332px; height: 208px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 4.5vw;
+  width: 17.2917vw; height: 12.0vw;
   overflow: hidden;
-}
-.product-card--stanmore .img-crop img {
-  position: absolute;
-  width: 134.97%; height: 219.32%;
-  left: -21.57%; top: -100.48%;
-  max-width: none; max-height: none;
 }
 
 /* HESTON SUB 200 — 365×294 frame at (11,27), overflow crop */
 .product-card--heston-sub .img-crop {
   position: absolute;
-  left: 11px; top: 27px;
-  width: 365px; height: 294px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1.4063vw;
+  width: 19.0104vw; height: 15.3125vw;
   overflow: hidden;
-}
-.product-card--heston-sub .img-crop img {
-  position: absolute;
-  width: 145.3%; height: 180.39%;
-  left: -22.72%; top: -54.29%;
-  max-width: none; max-height: none;
 }
 
 /* HESTON 120 soundbar — 384×56 frame at (-2,251) in card-image, overflow crop */
 .product-card--heston120 .img-crop {
   position: absolute;
-  left: -2px; top: 251px;
-  width: 384px; height: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 13.0729vw;
+  width: 20vw; height: 2.9167vw;
   overflow: hidden;
 }
+
+.product-card--acton .img-crop img,
+.product-card--stanmore .img-crop img,
+.product-card--heston-sub .img-crop img,
 .product-card--heston120 .img-crop img {
   position: absolute;
-  width: 141.38%; height: 969.49%;
-  left: -20.34%; top: -609.5%;
-  max-width: none; max-height: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  left: 0;
+  top: 0;
+  transform: none;
+  max-width: none;
+  max-height: none;
+}
+.product-card--heston120 .img-crop img {
+  object-position: center 68%;
 }
 
 /* ── Portable Speaker: per-card exact Figma image positions ── */
@@ -518,40 +544,44 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .product-card--willen .card-image img {
   position: absolute;
-  left: 125px;
-  top: 131px;
-  width: 137px;
-  height: 145px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 6.8229vw;
+  width: 7.1354vw;
+  height: 7.5521vw;
   max-width: none;
   max-height: none;
   object-fit: contain;
 }
 .product-card--stockwell .card-image img {
   position: absolute;
-  left: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 0;
-  width: 188px;
-  height: 270px;
+  width: 9.7917vw;
+  height: 14.0625vw;
   max-width: none;
   max-height: none;
   object-fit: contain;
 }
 .product-card--emberton .card-image img {
   position: absolute;
-  left: 54px;
-  top: 114px;
-  width: 280px;
-  height: 157px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 5.9375vw;
+  width: 14.5833vw;
+  height: 8.1771vw;
   max-width: none;
   max-height: none;
   object-fit: contain;
 }
 .product-card--kilburn .card-image img {
   position: absolute;
-  left: 56px;
-  top: 18px;
-  width: 276px;
-  height: 258px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0.9375vw;
+  width: 14.375vw;
+  height: 13.4375vw;
   max-width: none;
   max-height: none;
   object-fit: contain;
@@ -568,44 +598,44 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 13px;
+  gap: 0.4167vw;
+  margin-bottom: 0.6771vw;
 }
 
 .product-name {
-  font-size: 36px;
+  font-size: 1.6992vw;
   font-weight: 600;
   color: #000;
-  letter-spacing: -0.792px;
+  letter-spacing: -0.0413vw;
   line-height: 1.3;
 }
 
 .product-price {
-  font-size: 20px;
+  font-size: 0.9440vw;
   font-weight: 600;
   color: #cba672;
   white-space: nowrap;
-  letter-spacing: -0.44px;
+  letter-spacing: -0.0229vw;
 }
 
 .product-desc {
-  font-size: 17px;
+  font-size: 0.8024vw;
   font-weight: 500;
   color: #000;
   line-height: normal;
-  letter-spacing: -0.17px;
-  margin-bottom: 75px;
+  letter-spacing: -0.0089vw;
+  margin-bottom: 3.9063vw;
 }
 
 /* colour swatches */
 .product-swatches {
   display: flex;
-  gap: 8px;
-  margin-bottom: 28px;
+  gap: 0.4167vw;
+  margin-bottom: 1.4583vw;
 }
 .swatch {
-  width: 28px;
-  height: 28px;
+  width: 1.4583vw;
+  height: 1.4583vw;
   border-radius: 50%;
   border: 1px solid rgba(0,0,0,0.15);
   flex-shrink: 0;
@@ -621,35 +651,35 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 43px;
+  height: 2.2396vw;
   border-bottom: 1px solid var(--spec-border);
-  gap: 8px;
+  gap: 0.4167vw;
 }
 
 .spec-label {
-  font-size: 15px;
+  font-size: 0.7081vw;
   font-weight: 500;
   color: #000;
-  letter-spacing: -0.15px;
+  letter-spacing: -0.0078vw;
   flex-shrink: 0;
 }
 
 .spec-value {
-  font-size: 15px;
+  font-size: 0.7081vw;
   font-weight: 500;
   color: #000;
-  letter-spacing: -0.15px;
+  letter-spacing: -0.0078vw;
   text-align: right;
 }
 
 /* detail link */
 .detail-link {
   display: block;
-  margin-top: 24px;
-  font-size: 15px;
+  margin-top: 1.25vw;
+  font-size: 0.7081vw;
   font-weight: 500;
   color: #000;
-  letter-spacing: -0.15px;
+  letter-spacing: -0.0078vw;
   text-align: right;
   transition: opacity 0.2s;
 }
@@ -661,7 +691,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .site-footer {
   position: relative;
-  width: 1920px;
+  width: 100vw;
   background: var(--footer-bg);
   overflow: hidden;
 }
@@ -680,27 +710,29 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-inner {
   position: relative;
   z-index: 2;
+  width: 90.625vw;
+  margin: 0 auto;
   display: flex;
-  gap: 80px;
-  padding: 56px 80px 40px;
+  gap: 4.1667vw;
+  padding: 2.9167vw 0 2.0833vw;
 }
 
 /* brand column */
 .footer-brand {
   flex-shrink: 0;
-  width: 280px;
+  width: 14.5833vw;
 }
 
 .footer-logo {
   font-family: 'AmplifyPersonalUseOnly', cursive;
-  font-size: 44px;
+  font-size: 2.0768vw;
   color: var(--cream-light);
   line-height: 1;
-  margin-bottom: 20px;
+  margin-bottom: 1.0417vw;
 }
 
 .footer-tagline {
-  font-size: 14px;
+  font-size: 0.6608vw;
   font-weight: 300;
   color: rgba(255, 234, 198, 0.6);
   line-height: 1.85;
@@ -714,25 +746,25 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   justify-content: space-between;
 }
 
-.footer-col { min-width: 120px; }
+.footer-col { min-width: 6.25vw; }
 
 .footer-col-title {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 0.6136vw;
   font-weight: 700;
   letter-spacing: 0.18em;
   color: var(--cream-light);
-  margin-bottom: 22px;
+  margin-bottom: 1.1458vw;
 }
 
 .footer-col ul {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0.7292vw;
 }
 
 .footer-col ul li a {
-  font-size: 14px;
+  font-size: 0.6608vw;
   font-weight: 300;
   color: rgba(255, 234, 198, 0.55);
   letter-spacing: 0.02em;
@@ -749,12 +781,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 80px 28px;
+  padding: 1.0417vw 4.1667vw 1.4583vw;
   border-top: 1px solid rgba(217, 197, 169, 0.12);
 }
 
 .footer-copy {
-  font-size: 12px;
+  font-size: 0.5664vw;
   font-weight: 300;
   color: rgba(255, 234, 198, 0.3);
   letter-spacing: 0.03em;
@@ -763,11 +795,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-legal {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0.8333vw;
 }
 
 .footer-legal a {
-  font-size: 12px;
+  font-size: 0.5664vw;
   font-weight: 300;
   color: rgba(255, 234, 198, 0.4);
   letter-spacing: 0.03em;
@@ -776,6 +808,51 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-legal a:hover { color: var(--cream-light); }
 
 .footer-divider {
-  font-size: 12px;
+  font-size: 0.5664vw;
   color: rgba(255, 234, 198, 0.2);
+}
+
+/* ── Headphones: per-card exact image crops ── */
+.product-card--monitor .img-crop,
+.product-card--minor .img-crop,
+.product-card--mode .img-crop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.product-card--monitor .img-crop img {
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  left: 0;
+  top: 0;
+  max-width: none;
+  max-height: none;
+}
+.product-card--minor .img-crop img {
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  left: 0;
+  top: 0;
+  max-width: none;
+  max-height: none;
+}
+.product-card--mode .img-crop img {
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  right: 0;
+  top: 0;
+  max-width: none;
+  max-height: none;
 }
