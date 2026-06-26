@@ -112,6 +112,10 @@
     touch-action: pan-y;
 }
 
+.record-hero > .artist-grid {
+    z-index: 6;
+}
+
 .record-hero__panel {
     position: absolute;
     inset: 0;
