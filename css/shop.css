@@ -108,7 +108,6 @@ body {
     text-decoration: none;
 }
 
-.shop-category-drawer button:focus-visible,
 .shop-topbar__action:focus-visible,
 .shop-product__category-nav button:focus-visible,
 .shop-product__color:focus-visible,
@@ -116,56 +115,6 @@ body {
 .product-card:focus-visible {
     outline: 0.12vw solid #c8922a;
     outline-offset: 0.2vw;
-}
-
-.shop-category-drawer {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    width: 100%;
-    background: #1b1410;
-    border-top: 0.05vw solid rgba(255, 234, 198, 0.22);
-    border-bottom: 0.05vw solid rgba(255, 234, 198, 0.22);
-    transform: translate3d(0, -100%, 0);
-    opacity: 0;
-    pointer-events: none;
-    transition:
-        opacity 0.32s ease,
-        transform 0.42s cubic-bezier(0.7, 0.024, 0.199, 0.976);
-}
-
-.shop-category-drawer.is-open {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.shop-category-drawer button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 5.2vw;
-    padding: 0;
-    border: 0;
-    border-right: 0.05vw solid rgba(255, 234, 198, 0.22);
-    color: #ffeac6;
-    background: transparent;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.35vw;
-    letter-spacing: 0;
-    cursor: pointer;
-}
-
-.shop-category-drawer button:last-child {
-    border-right: 0;
-}
-
-.shop-category-drawer button:hover,
-.shop-category-drawer button.is-active {
-    color: #c8922a;
-    background: rgba(200, 146, 42, 0.08);
 }
 
 .shop-hero-stage {
@@ -239,17 +188,20 @@ body {
     position: absolute;
     inset: 0;
     z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6vh;
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
+    padding: 0 var(--shop-content-margin);
     pointer-events: none;
     transform: translate3d(0, var(--shop-content-y, 0%), 0);
     will-change: transform;
 }
 
 .shop-hero__headline {
-    position: absolute;
-    top: 50vh;
-    left: var(--shop-content-margin);
     margin: 0;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-size: 3.65vw;
@@ -268,9 +220,6 @@ body {
 }
 
 .shop-hero__copy {
-    position: absolute;
-    top: 64vh;
-    left: var(--shop-content-margin);
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: 0.9375vw;
     font-weight: 400;
@@ -319,6 +268,21 @@ body {
     font-weight: 400;
     line-height: normal;
     white-space: nowrap;
+}
+
+.shop-products__title {
+    position: relative;
+    z-index: 4;
+    align-self: center;
+    margin: 10vh auto;
+    color: #2b2118;
+    background: #d9c5a9;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-size: 7.81vw;
+    font-weight: 400;
+    line-height: normal;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .shop-best__grid {
@@ -491,8 +455,8 @@ body {
 }
 
 .shop-product {
-    --shop-product-sticky-offset: 26vh;
-    --shop-product-category-height: 23.89vh;
+    --shop-product-sticky-offset: 18vh;
+    --shop-product-category-height: 18vh;
     --shop-product-info-line: calc(var(--shop-product-sticky-offset) + var(--shop-product-category-height));
     position: relative;
     z-index: 1;
@@ -526,7 +490,7 @@ body {
     grid-column: 1;
     grid-row: 1;
     position: sticky;
-    top: var(--shop-product-sticky-offset);
+    top: var(--shop-product-info-line);
     display: flex;
     flex-direction: column;
     height: auto;
@@ -536,6 +500,9 @@ body {
 }
 
 .shop-product__category {
+    position: sticky;
+    top: var(--shop-product-sticky-offset);
+    z-index: 25;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -545,11 +512,11 @@ body {
 }
 
 .shop-product__category-inner {
-    display: grid;
-    grid-template-columns: 50vw 1fr;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100vw;
-    padding-right: var(--shop-content-margin);
+    padding: 0 90px;
     box-sizing: border-box;
 }
 
@@ -558,7 +525,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.74vh;
-    margin-left: var(--shop-content-margin);
     padding-left: 1.28vw;
     color: #ffeac6;
     font-family: "SUIT", "Pretendard Variable", Pretendard, sans-serif;
@@ -596,7 +562,6 @@ body {
 }
 
 .shop-product__category-title {
-    justify-self: end;
     margin: 0;
     color: #c8922a;
     font-family: Arial, Helvetica, sans-serif;
@@ -608,7 +573,8 @@ body {
 
 .shop-product__info {
     display: flex;
-    flex: 0 0 40vh;
+    flex: 0 0 calc(100vh - var(--shop-product-info-line));
+    min-height: calc(100vh - var(--shop-product-info-line));
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -770,7 +736,7 @@ body {
     min-height: 100vh;
     background: #1b1410;
     align-items: center;
-    padding: var(--shop-product-category-height) 0 0 0;
+    padding: 0;
 }
 
 .shop-product__image-card {
@@ -778,7 +744,7 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 48vh;
+    height: calc(100vh - var(--shop-product-info-line));
     margin: 0;
     background: #3c3c3c;
 }
@@ -831,6 +797,11 @@ body {
         top: auto;
     }
 
+    .shop-product__category {
+        position: relative;
+        top: auto;
+    }
+
     .shop-product.is-scroll-mask-active::before {
         display: none;
     }
@@ -844,7 +815,7 @@ body {
     .shop-product__category-inner {
         display: flex;
         justify-content: space-between;
-        padding-right: 0;
+        padding: 0;
     }
 
     .shop-product__scroll {
@@ -870,15 +841,6 @@ body {
     .shop-hero {
         height: calc(100vh - 70px);
         min-height: calc(100vh - 70px);
-    }
-
-    .shop-category-drawer {
-        top: 70px;
-    }
-
-    .shop-category-drawer button {
-        height: 64px;
-        font-size: 18px;
     }
 
     .shop-product__category-nav,
@@ -932,6 +894,10 @@ body {
         font-size: 10vw;
     }
 
+    .shop-products__title {
+        font-size: 10vw;
+    }
+
     .shop-best__grid {
         grid-template-columns: 100%;
     }
@@ -970,23 +936,13 @@ body {
         min-height: 22px;
     }
 
-    .shop-category-drawer {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .shop-category-drawer button {
-        font-size: 15px;
-    }
-
     .shop-hero__headline {
-        top: 13vh;
         font-size: 34px;
         letter-spacing: 0;
         white-space: normal;
     }
 
     .shop-hero__copy {
-        top: 34vh;
         width: 88vw;
         font-size: 15px;
         letter-spacing: 0;
