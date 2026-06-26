@@ -9,10 +9,12 @@ const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
 const productCardSwatches = document.querySelectorAll(".product-card__swatch");
 const shopProductSection = document.querySelector(".shop-product");
 const shopProductScroll = document.querySelector(".shop-product__scroll");
+const shopFooter = document.querySelector(".footer");
 let shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
 const shopProductName = document.querySelector(".shop-product__headline h3");
 const shopProductDescription = document.querySelector(".shop-product__description");
 const shopProductCategoryTitle = document.querySelector(".shop-product__category-title");
+const shopProductCategoryProgress = document.querySelector(".shop-product__category-progress");
 const shopProductColorList = document.querySelector(".shop-product__color-list");
 const shopProductSpecRows = Array.from(document.querySelectorAll(".shop-product__spec-row"));
 const shopPanelTimings = [
@@ -110,7 +112,7 @@ const shopProductCatalog = {
             colorClasses: ["shop-product__color--true-black"],
             weight: "22.9kg",
             output: "40W",
-            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageSrc: "./assets/images/products/amp-dsl40.webp",
             imageClass: "shop-product__image--dsl40-combo",
             imageSizeClass: "shop-product__image--large",
             imageAlt: "DSL40 Combo amplifier",
@@ -125,7 +127,7 @@ const shopProductCatalog = {
             colorClasses: ["shop-product__color--true-black"],
             weight: "22.5kg",
             output: "100W",
-            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageSrc: "./assets/images/products/amp-jvm410.webp",
             imageClass: "shop-product__image--jvm410h",
             imageSizeClass: "shop-product__image--large",
             imageAlt: "JVM410H amplifier",
@@ -140,7 +142,7 @@ const shopProductCatalog = {
             colorClasses: ["shop-product__color--true-black"],
             weight: "18.3kg",
             output: "50W",
-            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageSrc: "./assets/images/products/amp-origin50.webp",
             imageClass: "shop-product__image--origin50c",
             imageSizeClass: "shop-product__image--large",
             imageAlt: "Origin50C amplifier",
@@ -155,7 +157,7 @@ const shopProductCatalog = {
             colorClasses: ["shop-product__color--true-black"],
             weight: "19.4kg",
             output: "20W",
-            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageSrc: "./assets/images/products/amp-jtm-st20.webp",
             imageClass: "shop-product__image--jtm-st20c",
             imageSizeClass: "shop-product__image--large",
             imageAlt: "Studio JTM ST20C amplifier",
@@ -170,7 +172,7 @@ const shopProductCatalog = {
             colorClasses: ["shop-product__color--true-black"],
             weight: "10.8kg",
             output: "30W",
-            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageSrc: "./assets/images/products/amp-mg30gfx.webp",
             imageClass: "shop-product__image--mg30gfx",
             imageSizeClass: "shop-product__image--large",
             imageAlt: "MG30GFX amplifier",
@@ -185,7 +187,7 @@ const shopProductCatalog = {
             colorClasses: ["shop-product__color--true-black"],
             weight: "13.0kg",
             output: "50W",
-            imageSrc: "./assets/images/products/speaker-woburn-iii-black.png",
+            imageSrc: "./assets/images/products/amp-code50.webp",
             imageClass: "shop-product__image--code50",
             imageSizeClass: "shop-product__image--large",
             imageAlt: "CODE50 amplifier",
@@ -293,6 +295,7 @@ const shopProductCatalog = {
 };
 const shopProductCategoryOrder = ["amp", "speaker", "headphones", "analog"];
 const getAllShopProducts = () => shopProductCategoryOrder.flatMap((category) => shopProductCatalog[category] || []);
+const formatShopCount = (count) => String(count).padStart(2, "0");
 let shopProductDetails = getAllShopProducts();
 const shopBestProductDetails = {
     "major-v": {
@@ -469,6 +472,14 @@ function updateShopCategoryState(category) {
     });
 }
 
+function updateShopCategoryProgress(product) {
+    if (!shopProductCategoryProgress || !product) return;
+
+    const categoryProducts = shopProductCatalog[product.category] || [];
+    const productIndex = Math.max(categoryProducts.findIndex((item) => item.id === product.id), 0);
+    shopProductCategoryProgress.textContent = `${formatShopCount(productIndex + 1)} / ${formatShopCount(categoryProducts.length)}`;
+}
+
 function updateShopBestCardState(productId) {
     shopBestCards.forEach((card) => {
         const isSelected = card.dataset.shopProductCard === productId;
@@ -540,6 +551,7 @@ function renderShopProductDetails(productOrIndex) {
         shopProductName.textContent = product.name;
         shopProductDescription.textContent = product.description;
         if (shopProductCategoryTitle) shopProductCategoryTitle.textContent = product.categoryLabel || "SPEAKER";
+        updateShopCategoryProgress(product);
         renderShopProductColors(product);
         updateShopCategoryState(product.category);
         updateShopBestCardState(product.id);
@@ -730,8 +742,18 @@ function updateShopProductScrollMask() {
     const productRect = shopProductSection.getBoundingClientRect();
     const headerHeight = shopTopbarMain?.offsetHeight || 70;
     const infoLine = getShopProductInfoLine();
-    const isActive = productRect.top <= headerHeight && productRect.bottom > infoLine;
+    const footerRect = shopFooter?.getBoundingClientRect();
+    const isFooterInMaskArea = footerRect ? footerRect.top < infoLine : false;
+    const isActive = productRect.top <= headerHeight && productRect.bottom > infoLine && !isFooterInMaskArea;
     shopProductSection.classList.toggle("is-scroll-mask-active", isActive);
+}
+
+function updateShopProductCategoryRelease() {
+    if (!shopProductSection || !shopFooter) return;
+
+    const footerRect = shopFooter.getBoundingClientRect();
+    const footerOverlap = Math.max(0, window.innerHeight - footerRect.top);
+    shopProductSection.style.setProperty("--shop-footer-overlap", `${footerOverlap}px`);
 }
 
 function updateShopScrollEffects() {
@@ -744,6 +766,7 @@ function updateShopScrollEffects() {
     updateShopHeroTransition();
     updateShopProductDetails();
     updateShopProductScrollMask();
+    updateShopProductCategoryRelease();
 }
 
 renderShopHeroPanels(0);
