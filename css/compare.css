@@ -20,7 +20,6 @@
     height: 70px;
     padding: 0 2.4vw 0 2.35vw;
     background: #1b120d;
-    border: 1px solid rgba(255, 234, 198, 0.32);
 }
 
 .shop-topbar__nav {
@@ -144,7 +143,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ── Page wrapper: 100vw fixed ── */
 .page {
-  width: 100vw;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -219,7 +218,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .hero {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 48.9583vw;
   overflow: hidden;
   background: var(--hero-dark);
@@ -289,7 +288,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    COMPARE SECTION
 ═══════════════════════════════════════════════════════ */
 .compare-section {
-  width: 100vw;
+  width: 100%;
   height: 19.5833vw;
   background: var(--cream);
 }
@@ -338,7 +337,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .quiz-section {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 41.8229vw;
   background: var(--dark);
   overflow: hidden;
@@ -373,7 +372,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-family: 'AmplifyPersonalUseOnly', cursive;
   font-size: 9.4401vw;
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--gold);
+  -webkit-text-stroke: 1.5px #D9C5A9;
   line-height: 1;
   margin-bottom: 4.9479vw;
   letter-spacing: 0.02em;
@@ -434,17 +433,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 6.6146vw;
   height: 7.8125vw;
   flex-shrink: 0;
-  background: #fff;
+  background: transparent;
   border-radius: 0.5208vw;
   position: relative;
   display: block;
-  border: none;
+  border: 1px solid #D9C5A9;
   cursor: pointer;
   padding: 0;
   transition: background 0.2s, transform 0.15s;
 }
-.step-btn:hover {
-  background: #f5f0e8;
+.step-btn:hover,
+.step-btn.is-active {
+  background: rgba(217, 197, 169, 0.1);
   transform: translateY(-2px);
 }
 
@@ -462,6 +462,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 2.7083vw;
   height: 2.7083vw;
 }
+.step-icon svg [stroke="#1b1410"] {
+  stroke: #D9C5A9;
+}
+.step-icon svg [fill="#1b1410"] {
+  fill: #D9C5A9;
+}
 
 .step-label {
   position: absolute;
@@ -471,7 +477,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   padding: 0 0.5208vw;
   font-size: 0.9440vw;
   font-weight: 500;
-  color: var(--dark);
+  color: #D9C5A9;
   text-align: center;
   line-height: 1.5;
   white-space: nowrap;
@@ -804,7 +810,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .site-footer {
   position: relative;
-  width: 100vw;
+  width: 100%;
   background: var(--footer-bg);
   overflow: hidden;
 }

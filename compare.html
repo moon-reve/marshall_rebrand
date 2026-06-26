@@ -704,6 +704,18 @@
         }
       });
     });
+
+    // Quiz selection handling
+    document.querySelectorAll('.quiz-step').forEach(step => {
+      const buttons = step.querySelectorAll('.step-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          buttons.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+        });
+      });
+    });
   });
 </script>
 </body>
