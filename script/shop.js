@@ -4,7 +4,6 @@ const shopHeroPanels = document.querySelectorAll(".shop-hero__media-panel");
 const shopHeroContent = document.querySelector(".shop-hero__content");
 const shopTopbarMain = document.querySelector(".shop-topbar__main");
 const shopBestSection = document.querySelector(".shop-best");
-const shopCategoryDrawer = document.querySelector("[data-shop-category-drawer]");
 const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
 const productCardSwatches = document.querySelectorAll(".product-card__swatch");
@@ -464,21 +463,6 @@ function formatShopPrice(product) {
     if (!product.price) return "판매처 알아보기";
     return `<strong>₩</strong> ${product.price}`;
 }
-function setShopDrawerOpen(isOpen) {
-    if (!shopCategoryDrawer) return;
-
-    shopCategoryDrawer.hidden = false;
-    shopCategoryDrawer.classList.toggle("is-open", isOpen);
-
-    if (!isOpen) {
-        window.setTimeout(() => {
-            if (!shopCategoryDrawer.classList.contains("is-open")) {
-                shopCategoryDrawer.hidden = true;
-            }
-        }, 420);
-    }
-}
-
 function updateShopCategoryState(category) {
     shopCategoryButtons.forEach((button) => {
         button.classList.toggle("is-active", button.dataset.shopCategory === category);
@@ -643,7 +627,6 @@ function initializeShopInteractions() {
             if (hasCategoryProducts) {
                 scrollToShopProduct(productId);
             }
-            setShopDrawerOpen(false);
         });
     });
 
@@ -689,17 +672,6 @@ function initializeShopInteractions() {
         shopManualProductId = null;
     }, { passive: true });
 
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") setShopDrawerOpen(false);
-    });
-
-    document.addEventListener("click", (event) => {
-        if (!shopCategoryDrawer?.classList.contains("is-open")) return;
-        if (shopCategoryDrawer.contains(event.target)) return;
-        setShopDrawerOpen(false);
-    });
-
-    setShopDrawerOpen(false);
 }
 
 function renderShopHeroPanels(progress) {
