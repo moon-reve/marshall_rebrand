@@ -83,7 +83,7 @@
     flex: 0 0 auto;
     min-width: 7.1vw;
     font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
-    font-size: clamp(30px, 1.9vw, 39px);
+    font-size: 1.9vw;
     line-height: 1;
     color: #d7c4a8;
     text-decoration: none;
@@ -130,7 +130,7 @@
 .support-hero__title {
     margin: 0 0 0.95rem;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: clamp(6rem, 8vw, 9.5rem);
+    font-size: 8vw;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
     letter-spacing: 0.03em;
@@ -144,7 +144,7 @@
     width: min(35.2vw, 676px);
     margin: 0 0 3.33vw;
     color: #f2eee9;
-    font-size: clamp(18px, 1.25vw, 24px);
+    font-size: 1.25vw;
     font-weight: 400;
     line-height: 1.45;
     letter-spacing: 0;
@@ -172,7 +172,7 @@
     border: none;
     background: transparent;
     color: #fff;
-    font-size: clamp(14px, 0.83vw, 16px);
+    font-size: 0.83vw;
     line-height: 1.4;
     padding: 0;
 }
@@ -212,9 +212,9 @@
 
 .support-actions {
     position: relative;
-    min-height: clamp(284px, 26.04vw, 500px);
+    min-height: 26.04vw;
     overflow: hidden;
-    padding: clamp(43px, 4.45vw, 85px) 4.66vw clamp(50px, 4.7vw, 90px);
+    padding: 4.45vw 4.66vw 4.7vw;
     background-color: #171514;
     background-image: url("../assets/images/support-leather-texture.png");
     background-repeat: repeat;
@@ -236,10 +236,10 @@
 .support-actions__title {
     position: relative;
     z-index: 1;
-    margin: 0 0 clamp(48px, 4.45vw, 85px);
+    margin: 0 0 4.45vw;
     color: #fffaf5;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: clamp(50px, 3.85vw, 74px);
+    font-size: 3.85vw;
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0;
@@ -262,26 +262,26 @@
     align-items: center;
     justify-content: center;
     justify-self: center;
-    width: clamp(74px, 6.77vw, 130px);
+    width: 6.77vw;
     aspect-ratio: 1 / 1.15;
-    gap: clamp(5px, 0.47vw, 9px);
-    padding: clamp(15px, 1.35vw, 26px) clamp(8px, 0.94vw, 18px);
+    gap: 0.47vw;
+    padding: 1.35vw 0.94vw;
     color: #000;
     background: #fff;
-    border-radius: clamp(10px, 0.78vw, 15px);
+    border-radius: 0.78vw;
     text-decoration: none;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25), 0 14px 30px rgba(0, 0, 0, 0.2);
 }
 
 .support-card__icon {
-    width: clamp(24px, 2.08vw, 40px);
-    height: clamp(24px, 2.08vw, 40px);
+    width: 2.08vw;
+    height: 2.08vw;
     flex: 0 0 auto;
 }
 
 .support-card__label {
     color: #000;
-    font-size: clamp(9px, 0.73vw, 14px);
+    font-size: 0.73vw;
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: 0;
@@ -290,7 +290,7 @@
 }
 
 .support-info {
-    padding: clamp(72px, 5.1vw, 98px) 4.16vw clamp(88px, 6.25vw, 120px);
+    padding: 5.1vw 4.16vw 6.25vw;
     color: #000;
     background: #fff;
 }
@@ -298,7 +298,7 @@
 .support-info__grid {
     display: grid;
     grid-template-columns: minmax(0, 1.27fr) minmax(320px, 1fr);
-    gap: clamp(54px, 5.1vw, 98px) clamp(32px, 3.33vw, 64px);
+    gap: 5.1vw 3.33vw;
     max-width: 1740px;
     margin: 0 auto;
 }
@@ -306,7 +306,7 @@
 .support-info__title {
     margin: 0 0 32px;
     color: #000;
-    font-size: clamp(25px, 1.66vw, 32px);
+    font-size: 1.66vw;
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: 0;
@@ -326,8 +326,8 @@
 
 .support-panel--notice {
     flex: 1;
-    min-height: 632px;
-    padding: 39px 48px 33px;
+    min-height: 750px;
+    padding: 46px 48px;
 }
 
 .notice-list {
@@ -340,7 +340,7 @@
     display: grid;
     grid-template-columns: 58px minmax(0, 1fr) 86px;
     align-items: center;
-    min-height: 78px;
+    min-height: 96px;
     border-bottom: 1px solid #d8d1c8;
     color: #000;
 }
@@ -378,15 +378,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 13px;
+    gap: 12px;
     width: 100%;
-    height: 76px;
+    height: 88px;
     border: 0;
     color: #000;
     background: transparent;
     font: inherit;
     font-size: 15px;
+    line-height: 1;
     cursor: pointer;
+    transform: translateY(10px);
+}
+
+.notice-list__more span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.notice-list__more-icon {
+    width: 9px;
+    height: 9px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
 }
 
 .support-panel--service {
@@ -407,10 +424,9 @@
 }
 
 .service-block--chat {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 183px;
-    align-items: end;
-    gap: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .service-block--last {
@@ -420,16 +436,16 @@
 .service-block__title {
     margin: 0 0 18px;
     color: #000;
-    font-size: clamp(30px, 2.08vw, 40px);
-    font-weight: 800;
+    font-size: 20px;
+    font-weight: 400;
     line-height: 1.05;
 }
 
 .service-block__primary {
     margin: 0 0 50px;
     color: #1b130f;
-    font-size: clamp(19px, 1.25vw, 24px);
-    font-weight: 400;
+    font-size: 30px;
+    font-weight: 600;
     line-height: 1.2;
 }
 
@@ -437,13 +453,23 @@
 .service-block__meta {
     margin: 0;
     color: #1b130f;
-    font-size: clamp(15px, 0.94vw, 18px);
+    font-size: 0.94vw;
     font-weight: 400;
     line-height: 1.35;
 }
 
 .service-block__copy {
     margin-bottom: 47px;
+    white-space: nowrap;
+}
+
+.service-block__primary--chat {
+    margin-bottom: 47px;
+    white-space: nowrap;
+}
+
+.service-block--chat .service-block__meta {
+    margin-bottom: 24px;
 }
 
 .service-block__button {
@@ -456,7 +482,7 @@
     background: #1d120e;
     border-radius: 6px;
     font-size: 16px;
-    font-weight: 800;
+    font-weight: 600;
     text-decoration: none;
 }
 
@@ -478,7 +504,7 @@
     min-height: 81px;
     border-bottom: 1px solid #cfc7bd;
     color: #000;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
 }
 
@@ -488,7 +514,7 @@
 
 .faq-list__mark {
     font-size: 22px;
-    font-weight: 800;
+    font-weight: 600;
 }
 
 .faq-list__item button {
@@ -544,7 +570,7 @@
 
 .guide-item small {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 1.2;
 }
 
@@ -563,17 +589,6 @@
     background-repeat: repeat;
     background-size: 220px 118px;
     background-position: left top;
-}
-
-.support-footer__lines {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(90deg, transparent calc(28.95% - 0.5px), rgba(185, 67, 31, 0.85) calc(28.95% - 0.5px), rgba(185, 67, 31, 0.85) calc(28.95% + 0.5px), transparent calc(28.95% + 0.5px)),
-        linear-gradient(90deg, transparent calc(48.15% - 0.5px), rgba(185, 67, 31, 0.85) calc(48.15% - 0.5px), rgba(185, 67, 31, 0.85) calc(48.15% + 0.5px), transparent calc(48.15% + 0.5px)),
-        linear-gradient(90deg, transparent calc(56.85% - 0.5px), rgba(185, 67, 31, 0.85) calc(56.85% - 0.5px), rgba(185, 67, 31, 0.85) calc(56.85% + 0.5px), transparent calc(56.85% + 0.5px)),
-        linear-gradient(90deg, transparent calc(95.35% - 0.5px), rgba(185, 67, 31, 0.85) calc(95.35% - 0.5px), rgba(185, 67, 31, 0.85) calc(95.35% + 0.5px), transparent calc(95.35% + 0.5px));
-    pointer-events: none;
 }
 
 .support-footer__main {
@@ -595,7 +610,7 @@
     margin-bottom: 30px;
     color: #ffe4b9;
     font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
-    font-size: clamp(32px, 2.08vw, 40px);
+    font-size: 40px;
     line-height: 1;
     text-decoration: none;
 }
@@ -603,7 +618,7 @@
 .support-footer__brand p {
     margin: 0;
     color: #f5f1ed;
-    font-size: clamp(16px, 0.94vw, 18px);
+    font-size: 18px;
     font-weight: 400;
     line-height: 1.8;
     letter-spacing: 0;
@@ -618,7 +633,7 @@
 .support-footer__group h2 {
     margin: 0 0 28px;
     color: #f6f3ef;
-    font-size: clamp(16px, 0.94vw, 18px);
+    font-size: 18px;
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: 0;
@@ -628,7 +643,7 @@
     display: block;
     width: fit-content;
     color: rgba(246, 243, 239, 0.9);
-    font-size: clamp(15px, 0.88vw, 17px);
+    font-size: 17px;
     font-weight: 400;
     line-height: 1.2;
     text-decoration: none;
@@ -652,7 +667,7 @@
 
 .support-footer__bottom p {
     margin: 0;
-    font-size: clamp(13px, 0.78vw, 15px);
+    font-size: 15px;
     line-height: 1;
 }
 
@@ -664,7 +679,7 @@
 
 .support-footer__bottom a {
     color: rgba(245, 241, 237, 0.6);
-    font-size: clamp(14px, 0.78vw, 15px);
+    font-size: 15px;
     text-decoration: none;
 }
 
@@ -691,13 +706,13 @@
     }
 
     .support-hero__title {
-        font-size: clamp(3.5rem, 8vw, 5.5rem);
+        font-size: 8vw;
     }
 
     .support-hero__description {
         width: min(72vw, 34rem);
         margin-bottom: 2.75rem;
-        font-size: clamp(16px, 2.2vw, 20px);
+        font-size: 2.2vw;
     }
 
     .support-hero__search {
@@ -865,10 +880,6 @@
 
     .support-footer {
         background-size: cover;
-    }
-
-    .support-footer__lines {
-        display: none;
     }
 
     .support-footer__main {
