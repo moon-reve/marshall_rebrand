@@ -6,89 +6,6 @@
     color: #ffeac6;
 }
 
-.shop-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    width: 100%;
-}
-
-.shop-topbar__main {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 70px;
-    padding: 0 4.6875vw;
-    background: #1b120d;
-}
-
-.shop-topbar__brand {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    min-width: 7.1vw;
-    font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
-    font-size: clamp(30px, 1.9vw, 39px);
-    line-height: 1;
-    color: #d7c4a8;
-    text-decoration: none;
-}
-
-.shop-topbar__nav {
-    width: 25.9vw;
-    min-width: 530px;
-    margin-left: auto;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.8789vw;
-    font-weight: 400;
-    line-height: 1;
-    white-space: nowrap;
-}
-
-.shop-topbar__nav ul {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 2.3vw;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.shop-topbar__nav a {
-    color: #e5d4bb;
-    text-decoration: none;
-}
-
-.shop-topbar__nav a.is-active {
-    color: #c89218;
-}
-
-.shop-topbar__actions {
-    display: flex;
-    align-items: center;
-    gap: 1.25vw;
-    flex: 0 0 auto;
-    margin-left: 2.5vw;
-}
-
-.shop-topbar__action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.35vw;
-    height: 1.35vw;
-    min-width: 24px;
-    min-height: 24px;
-}
-
-.shop-topbar__action img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
 
 .artist-grid {
     --grid-half: 0.018vw;
@@ -161,7 +78,7 @@
     position: absolute;
     z-index: 3;
     top: 30.55vw;
-    left: 2.1vw;
+    left: 4.6875vw;
     color: #ffeac6;
 }
 
@@ -178,16 +95,18 @@
 .record-hero__copy h1 {
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
-    font-size: 6.55vw;
+    font-size: 3.65vw;
     font-weight: 400;
-    line-height: 0.95;
+    line-height: 1.13;
+    letter-spacing: -0.073vw;
 }
 
 .record-hero__copy p {
     margin: 2.45vw 0 0;
-    font-size: 0.83vw;
-    line-height: 1.5;
-    letter-spacing: -0.022em;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 0.9375vw;
+    line-height: 1.4;
+    letter-spacing: -0.038vw;
 }
 
 .record-hero__slide {
@@ -264,7 +183,7 @@
     position: absolute;
     z-index: 2;
     top: 30.55vw;
-    left: 2.1vw;
+    left: 4.6875vw;
 }
 
 .record-hero__slide-copy h2 {
@@ -272,18 +191,19 @@
     color: #ffffff;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
-    font-size: 6.55vw;
+    font-size: 3.65vw;
     font-weight: 400;
-    line-height: 0.95;
-    letter-spacing: -0.022em;
+    line-height: 1.13;
+    letter-spacing: -0.073vw;
 }
 
 .record-hero__slide-copy p {
     margin: 2.45vw 0 0;
     color: #ffffff;
-    font-size: 0.83vw;
-    line-height: 1.5;
-    letter-spacing: -0.022em;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 0.9375vw;
+    line-height: 1.4;
+    letter-spacing: -0.038vw;
 }
 
 .record-hero__arrows {
@@ -299,14 +219,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 32px;
+    height: 32px;
     padding: 0;
     border: 0;
     background: transparent;
     color: #ffeac6;
     cursor: pointer;
-    font-size: 2.2vw;
+    font-size: 1.35vw;
     font-weight: 300;
     line-height: 1;
     transform: translateY(-50%);
@@ -319,11 +239,11 @@
 }
 
 .record-hero__arrow--prev {
-    left: 90px;
+    left: calc(4.6875vw - 32px);
 }
 
 .record-hero__arrow--next {
-    right: 90px;
+    right: calc(4.6875vw - 32px);
 }
 
 .artist-catalog {
