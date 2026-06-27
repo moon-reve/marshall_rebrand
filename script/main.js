@@ -9,6 +9,7 @@ const speakersImages = document.querySelectorAll(".speakers-img");
 const fixedUi = document.querySelector("[data-fixed-ui]");
 const fixedNav = document.querySelector(".fixed-nav");
 const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
+const shopTopbar = document.querySelector(".shop-topbar");
 const fixedGauge = document.querySelector(".fixed-gauge");
 const fixedGaugeTicks = document.querySelectorAll(".fixed-gauge__tick");
 const designPanel = document.querySelector("[data-design-panel]");
@@ -92,6 +93,7 @@ let designPanelExitRenderedProgress = 0;
 let designPanelExitAnimationFrame = null;
 let heroLightsOn = false;
 let heroLightsAnimating = false;
+let speakersWheelUnlockAt = 0;
 let speakersEntryIsAutoAnimating = false;
 let speakersEntryAutoAnimationFrame = null;
 let speakersIsAutoAnimating = false;
@@ -308,6 +310,7 @@ function triggerHeroLightsOn() {
         setTimeout(() => {
             heroLightsOn = true;
             heroLightsAnimating = false;
+            speakersWheelUnlockAt = performance.now() + 650;
         }, 1050);
     }, 500);
 }
@@ -945,6 +948,7 @@ function animateSpeakersEntryToEnd() {
         speakersEntryAutoAnimationFrame = null;
         requestAnimationFrame(() => {
             speakersEntryIsAutoAnimating = false;
+            speakersWheelUnlockAt = performance.now() + 650;
             updateScrollEffects();
         });
     }
@@ -977,6 +981,11 @@ function handleSpeakersWheel(event) {
     }
 
     if (speakersIsAutoAnimating) {
+        event.preventDefault();
+        return;
+    }
+
+    if (performance.now() < speakersWheelUnlockAt) {
         event.preventDefault();
         return;
     }
@@ -1614,6 +1623,26 @@ function updateScrollEffects() {
     updateLegacySequence();
 }
 
+let previousTopbarScrollY = window.scrollY;
+
+function updateTopbarVisibility() {
+    if (!shopTopbar) return;
+
+    const currentScrollY = window.scrollY;
+    const scrollDelta = currentScrollY - previousTopbarScrollY;
+
+    if (currentScrollY <= 0) {
+        shopTopbar.classList.remove("is-hidden");
+        previousTopbarScrollY = currentScrollY;
+        return;
+    }
+
+    if (Math.abs(scrollDelta) < 4) return;
+
+    shopTopbar.classList.toggle("is-hidden", scrollDelta > 0);
+    previousTopbarScrollY = currentScrollY;
+}
+
 // Hero year slot machine animation
 (function () {
     var yearEl = document.querySelector(".hero__year");
@@ -1880,7 +1909,10 @@ function updateScrollEffects() {
     });
 })();
 
-window.addEventListener("scroll", updateScrollEffects, { passive: true });
+window.addEventListener("scroll", () => {
+    updateTopbarVisibility();
+    updateScrollEffects();
+}, { passive: true });
 window.addEventListener("wheel", handleSpeakersWheel, { passive: false });
 initializeSmoothWheelScroll();
 window.addEventListener("resize", updateScrollEffects);
@@ -1901,4 +1933,5 @@ soundSpeakerArt?.addEventListener("load", () => {
     updateSoundSpeakerArtReveal();
 });
 prepareBeginningText();
+updateTopbarVisibility();
 updateScrollEffects();

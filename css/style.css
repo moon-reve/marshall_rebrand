@@ -53,6 +53,102 @@ a {
     text-decoration: none;
 }
 
+.shop-topbar {
+    --shop-content-margin: 4.6875vw;
+    position: fixed;
+    top: 0;
+    z-index: 1100;
+    width: 100%;
+    transition: all 0.4s ease;
+    will-change: top;
+}
+
+.shop-topbar.is-hidden {
+    top: -70px;
+}
+
+.shop-topbar__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 70px;
+    padding: 0 var(--shop-content-margin);
+    background: transparent;
+}
+
+.shop-topbar__nav {
+    width: 25.9vw;
+    min-width: 530px;
+    margin-left: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8789vw;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.shop-topbar__nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2.3vw;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.shop-topbar__nav a {
+    color: #e5d4bb;
+    text-decoration: none;
+}
+
+.shop-topbar__nav a.is-active {
+    color: #c89218;
+}
+
+.shop-topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25vw;
+    flex: 0 0 auto;
+    margin-left: 2.5vw;
+}
+
+.shop-topbar__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35vw;
+    height: 1.35vw;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.shop-topbar__action img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.shop-topbar__brand {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 7.1vw;
+    font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
+    font-size: clamp(30px, 1.9vw, 39px);
+    line-height: 1;
+    color: #d7c4a8;
+    text-decoration: none;
+}
+
+.shop-topbar__action:focus-visible {
+    outline: 0.12vw solid #c8922a;
+    outline-offset: 0.2vw;
+}
+
 .site-main {
     width: 100%;
 }
@@ -159,7 +255,7 @@ a {
 }
 
 .fixed-nav.is-hero {
-    top: 3vw;
+    top: 41.85vh;
     color: #000;
     transform: translate3d(0, 0, 0);
     transition: all 0.3s ease;
@@ -202,11 +298,6 @@ a {
     background: currentColor;
     vertical-align: -0.1em;
     animation: finale-credit-caret-blink 0.7s step-end infinite;
-}
-
-.fixed-nav__shop {
-    margin-top: 1.5625vw;
-    font-size: 0.9375vw;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2428,6 +2519,49 @@ a {
     height: 100%;
     object-fit: cover;
     object-position: center 42%;
+}
+
+@media (max-width: 64em) {
+    .shop-topbar__nav {
+        width: 68%;
+    }
+
+    .shop-topbar__actions {
+        gap: 18px;
+        margin-left: 28px;
+    }
+}
+
+@media (max-width: 40em) {
+    .shop-topbar__main {
+        padding: 0 4.5vw;
+    }
+
+    .shop-topbar__nav {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+        font-size: 12px;
+    }
+
+    .shop-topbar__nav ul {
+        gap: 3vw;
+        overflow-x: auto;
+    }
+
+    .shop-topbar__brand {
+        display: none;
+    }
+
+    .shop-topbar__actions {
+        gap: 14px;
+        margin-left: 16px;
+    }
+
+    .shop-topbar__action {
+        min-width: 22px;
+        min-height: 22px;
+    }
 }
 
 @media (max-width: 768px) {
