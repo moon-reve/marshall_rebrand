@@ -204,6 +204,7 @@ body {
 .shop-hero__headline {
     margin: 0;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
     font-size: 3.65vw;
     font-weight: 400;
     line-height: 1.13;
@@ -264,6 +265,7 @@ body {
     margin: 19vh 0 0;
     color: #2b2118;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
     font-size: 7.81vw;
     font-weight: 400;
     line-height: normal;
@@ -278,6 +280,7 @@ body {
     color: #2b2118;
     background: #d9c5a9;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
     font-size: 7.81vw;
     font-weight: 400;
     line-height: normal;

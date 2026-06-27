@@ -239,6 +239,7 @@
     margin: 0 0 4.45vw;
     color: #fffaf5;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
     font-size: 3.85vw;
     font-weight: 400;
     line-height: 1;
