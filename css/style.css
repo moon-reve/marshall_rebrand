@@ -16,6 +16,10 @@
     font-display: swap;
 }
 
+:root {
+    --shop-topbar-height: 2.6042vw;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -64,7 +68,7 @@ a {
 }
 
 .shop-topbar.is-hidden {
-    top: -70px;
+    top: calc(var(--shop-topbar-height) * -1);
 }
 
 .shop-topbar__main {
@@ -72,9 +76,9 @@ a {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 70px;
+    height: var(--shop-topbar-height);
     padding: 0 var(--shop-content-margin);
-    background: transparent;
+    background: rgba(27, 18, 13, 0.5);
 }
 
 .shop-topbar__nav {

@@ -601,17 +601,6 @@
     background: rgba(245, 241, 237, 0.45);
 }
 
-@media (max-width: 75em) {
-    .shop-topbar__nav {
-        width: 68%;
-    }
-
-    .shop-topbar__actions {
-        gap: 18px;
-        margin-left: 28px;
-    }
-}
-
 @media (max-width: 60em) {
     .support-hero__content {
         padding: 0 5vw;
@@ -671,39 +660,9 @@
 }
 
 @media (max-width: 40em) {
-    .shop-topbar__main {
-        padding: 0 4.5vw;
-    }
-
-    .shop-topbar__nav {
-        flex: 1 1 auto;
-        width: auto;
-        min-width: 0;
-        font-size: 12px;
-    }
-
-    .shop-topbar__nav ul {
-        gap: 3vw;
-        overflow-x: auto;
-    }
-
-    .shop-topbar__brand {
-        display: none;
-    }
-
-    .shop-topbar__actions {
-        gap: 14px;
-        margin-left: 16px;
-    }
-
-    .shop-topbar__action {
-        min-width: 22px;
-        min-height: 22px;
-    }
-
     .support-hero {
-        height: calc(100vh - 70px);
-        min-height: calc(100vh - 70px);
+        height: calc(100vh - var(--shop-topbar-height));
+        min-height: calc(100vh - var(--shop-topbar-height));
         aspect-ratio: auto;
     }
 
