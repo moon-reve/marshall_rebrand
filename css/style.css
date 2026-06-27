@@ -1307,7 +1307,9 @@ a {
 
 .milestone__heading {
     padding: 2.78vh 4.6875vw;
-    background-color: #1b1410;
+    background-image: url("../assets/images/milestone__heading_bg.png");
+    background-position: center;
+    background-size: cover;
     color: #fff;
     font-family: Arial, sans-serif;
     line-height: 1.15;
