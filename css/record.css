@@ -1,4 +1,4 @@
-.artist-page {
+.record-page {
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
@@ -49,7 +49,7 @@
 .record-hero__panel--main {
     background:
         linear-gradient(90deg, rgba(3, 9, 8, 0.42), rgba(3, 9, 8, 0.08) 45%, rgba(3, 9, 8, 0.02)),
-        url("../assets/images/artist/record-hero-left-texture.png") left -0.2vw / 50% calc(100% + 0.2vw) no-repeat,
+        url("../assets/images/record/record-hero-left-texture.png") left -0.2vw / 50% calc(100% + 0.2vw) no-repeat,
         #07100d;
 }
 
