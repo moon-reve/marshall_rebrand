@@ -35,16 +35,25 @@
 
 
   <!-- ══════════════════════════════════════ HERO ══════════════════════════════════════ -->
-  <section class="hero">
-    <div class="hero-right-bg">
-      <img src="assets/images/hero-right.png" alt="Marshall Lifestyle">
-    </div>
-    <div class="hero-left">
-      <p class="hero-eyebrow">MAKE SPACE SOUND BETTER</p>
-      <h1 class="hero-title">Every Space<br>Has A Sound</h1>
-      <p class="hero-desc">좋아하는 공간, 좋아하는 음악<br>당신의 하루를 더 특별하게 만드는 사운드</p>
-    </div>
-  </section>
+  <div class="hero-stage" data-compare-hero-stage>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-panel hero-panel--01"></div>
+        <div class="hero-panel hero-panel--02"></div>
+        <div class="hero-panel hero-panel--03"></div>
+        <div class="hero-panel hero-panel--04"></div>
+      </div>
+      <div class="hero-vlines" aria-hidden="true">
+        <span class="hero-vline hero-vline--01"></span>
+        <span class="hero-vline hero-vline--02"></span>
+        <span class="hero-vline hero-vline--03"></span>
+      </div>
+      <div class="hero-content">
+        <h1 class="hero-title">Every Space<br>Has A Sound</h1>
+        <p class="hero-desc">좋아하는 공간, 좋아하는 음악<br>당신의 하루를 더 특별하게 만드는 사운드</p>
+      </div>
+    </section>
+  </div>
 
   <!-- ══════════════════════════════════════ COMPARE ══════════════════════════════════════ -->
   <section class="compare-section">
@@ -683,6 +692,48 @@
   </footer>
 
 </div><!-- /page -->
+<script>
+(function () {
+    const heroStage = document.querySelector('[data-compare-hero-stage]');
+    const hero = document.querySelector('.hero');
+    const heroPanels = document.querySelectorAll('.hero-panel');
+    const heroContent = document.querySelector('.hero-content');
+    const heroVlines = document.querySelectorAll('.hero-vline');
+    const panelTimings = [[0, 0.56],[0.08, 0.66],[0.24, 0.82],[0.40, 0.96]];
+    let targetProgress = 0, renderedProgress = 0, rafId = null;
+    function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+    function seq(p, s, e) { return clamp((p - s) / (e - s), 0, 1); }
+    function ease(t) { return t * t * (3 - 2 * t); }
+    function render(progress) {
+        heroPanels.forEach((panel, i) => {
+            const [s, e] = panelTimings[i];
+            const y = -ease(seq(progress, s, e)) * 100;
+            panel.style.setProperty('--hero-panel-y', `${y}%`);
+            if (heroVlines[i]) heroVlines[i].style.setProperty('--hero-vline-y', `${y}%`);
+        });
+        const [cs, ce] = panelTimings[0];
+        heroContent && heroContent.style.setProperty('--hero-content-y', `${-ease(seq(progress, cs, ce)) * 100}%`);
+    }
+    function update() {
+        if (!heroStage || !hero) return;
+        const rect = heroStage.getBoundingClientRect();
+        const dist = Math.max(heroStage.offsetHeight - hero.offsetHeight, window.innerHeight * 0.45, 1);
+        targetProgress = clamp(-rect.top / dist, 0, 1);
+        if (rafId) return;
+        function tick() {
+            const d = targetProgress - renderedProgress;
+            renderedProgress += d * 0.085;
+            if (Math.abs(d) < 0.0001) renderedProgress = targetProgress;
+            render(renderedProgress);
+            rafId = renderedProgress !== targetProgress ? requestAnimationFrame(tick) : null;
+        }
+        rafId = requestAnimationFrame(tick);
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    render(0);
+})();
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const activeSvg = `<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1b1410"/><polyline points="9,16 14,21 23,11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
