@@ -1,0 +1,547 @@
+.about-page {
+    --about-brown: #2a1d13;
+    --about-black: #120c05;
+    --about-cream: #f3efe7;
+    --about-tan: #ddc7a9;
+    --about-gold: #c89218;
+    min-height: 100vh;
+    overflow: hidden;
+    color: var(--about-brown);
+    background: var(--about-cream);
+}
+
+.about-topbar .shop-topbar__main {
+    background: rgba(18, 12, 5, 0.88);
+}
+
+.about-hero {
+    height: 115vh;
+    background: var(--about-tan);
+}
+
+.about-hero__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    background: transparent;
+}
+
+.about-hero__media-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 25vw);
+    width: 100vw;
+    height: 100%;
+    overflow: hidden;
+}
+
+.about-hero__panel {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    transform: translate3d(0, var(--about-panel-y, 0%), 0);
+    will-change: transform;
+}
+
+.about-hero__fill {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #061011;
+}
+
+.about-hero__fill--brown {
+    background: var(--about-brown);
+}
+
+.about-hero__line {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    width: 0.3px;
+    background: #745845;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.about-hero__panel-img {
+    position: absolute;
+    top: 0;
+    width: 50vw;
+    height: 100%;
+    object-fit: cover;
+    object-position: 54% 50%;
+    pointer-events: none;
+}
+
+.about-hero__panel--03 .about-hero__panel-img {
+    left: 0;
+}
+
+.about-hero__panel--04 .about-hero__panel-img {
+    left: -25vw;
+}
+
+.about-hero__copy {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50vw;
+    height: 100%;
+    padding: 6vw 4.55vw 3.5vw;
+    color: #f8efe2;
+    pointer-events: none;
+    transform: translate3d(0, var(--about-content-y, 0%), 0);
+    will-change: transform;
+}
+
+.about-hero__copy h1 {
+    margin: 0;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
+    font-size: clamp(42px, 4.95vw, 95px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: 0;
+}
+
+.about-hero__copy p {
+    margin: 11.5vw 0 0;
+    color: rgba(248, 239, 226, 0.88);
+    font-size: clamp(14px, 0.94vw, 18px);
+    font-weight: 400;
+    line-height: 1.8;
+}
+
+.about-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    min-height: 19.55vw;
+    padding: 0 4.65vw;
+    background: var(--about-tan);
+}
+
+.about-intro h2,
+.about-philosophy h2 {
+    margin: 0;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
+    font-size: clamp(58px, 8vw, 154px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.about-intro p {
+    justify-self: end;
+    max-width: 31.4vw;
+    margin: 0;
+    color: #342419;
+    font-size: clamp(14px, 0.94vw, 18px);
+    font-weight: 600;
+    line-height: 1.55;
+    text-align: left;
+}
+
+.about-story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    min-height: 40.2vw;
+    padding: 5.1vw 9vw 4.5vw 12.1vw;
+    background: var(--about-cream);
+}
+
+.about-story__badge {
+    width: 36.15vw;
+    max-width: 694px;
+    margin: 0;
+}
+
+.about-story__badge img,
+.about-history__image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.about-story__text {
+    max-width: 36vw;
+    margin-left: 5.8vw;
+}
+
+.about-eyebrow {
+    margin: 0 0 1.35vw;
+    color: var(--about-gold);
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.about-story__text h2 {
+    margin: 0 0 4.25vw;
+    color: #22170f;
+    font-size: clamp(28px, 2.45vw, 47px);
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: 0;
+}
+
+.about-story__text p:not(.about-eyebrow) {
+    max-width: 27.5vw;
+    margin: 0;
+    color: #241911;
+    font-size: clamp(13px, 0.84vw, 16px);
+    font-weight: 500;
+    line-height: 1.7;
+}
+
+.about-story__text p + p {
+    margin-top: 1.35vw;
+}
+
+.about-history {
+    position: relative;
+    display: grid;
+    grid-template-columns: 43.2vw 1fr;
+    align-items: center;
+    min-height: 65.6vw;
+    padding: 19.65vw 11.6vw 8vw;
+    background: var(--about-black);
+    color: #f6efe5;
+}
+
+.about-history__heading {
+    position: absolute;
+    top: 8.65vw;
+    left: 4.9vw;
+    margin: 0;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
+    font-size: clamp(38px, 4vw, 77px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.about-history__image {
+    width: 37.2vw;
+    max-width: 735px;
+    margin: 0;
+}
+
+.about-history__text {
+    max-width: 34vw;
+    margin-left: 4.65vw;
+}
+
+.about-history__year {
+    margin: 0 0 2.3vw;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
+    font-size: clamp(42px, 3.9vw, 75px);
+    font-weight: 400;
+    line-height: 1;
+}
+
+.about-history__text h2 {
+    margin: 0 0 2vw;
+    font-size: clamp(22px, 1.6vw, 31px);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.about-history__text p {
+    margin: 0;
+    color: rgba(246, 239, 229, 0.92);
+    font-size: clamp(14px, 0.95vw, 18px);
+    font-weight: 500;
+    line-height: 1.55;
+}
+
+.about-philosophy {
+    display: grid;
+    grid-template-columns: 22.55vw 1fr;
+    gap: 2.7vw;
+    align-items: start;
+    min-height: 31.25vw;
+    padding: 7.45vw 4.65vw 5vw;
+    background: var(--about-tan);
+}
+
+.about-philosophy h2 {
+    font-size: clamp(38px, 4.28vw, 82px);
+    line-height: 0.95;
+}
+
+.about-philosophy__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+}
+
+.about-stat {
+    position: relative;
+    min-width: 0;
+    padding-left: 2.35vw;
+}
+
+.about-stat + .about-stat {
+    border-left: 1px dotted rgba(120, 78, 42, 0.25);
+}
+
+.about-stat strong {
+    display: block;
+    margin-bottom: 1.15vw;
+    color: var(--about-gold);
+    font-family: "Bodoni Moda", Georgia, serif;
+    font-size: clamp(48px, 4.26vw, 82px);
+    font-weight: 400;
+    line-height: 0.95;
+}
+
+.about-stat strong span {
+    font-size: 0.62em;
+}
+
+.about-stat h3 {
+    min-height: 4.45vw;
+    margin: 0 0 3.45vw;
+    color: #24180f;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
+    font-size: clamp(21px, 1.65vw, 32px);
+    font-weight: 400;
+    line-height: 1.08;
+}
+
+.about-stat p {
+    max-width: 11.7vw;
+    margin: 0;
+    color: #22170f;
+    font-size: clamp(12px, 0.78vw, 15px);
+    font-weight: 500;
+    line-height: 1.62;
+}
+
+.about-footer {
+    position: relative;
+    overflow: hidden;
+    color: #f4f0ec;
+    background-color: #151515;
+    background-image: url("../assets/images/support-leather-texture.png");
+    background-repeat: repeat;
+    background-size: 220px 118px;
+    background-position: left top;
+}
+
+.about-footer__main {
+    display: grid;
+    grid-template-columns: 20.85vw 1fr;
+    gap: 7.7vw;
+    min-height: 320px;
+    padding: 80px 4.25vw 58px;
+}
+
+.about-footer__logo {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: #ffe4b9;
+    font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
+    font-size: clamp(32px, 2.08vw, 40px);
+    line-height: 1;
+}
+
+.about-footer__brand p {
+    margin: 0;
+    color: #f5f1ed;
+    font-size: clamp(16px, 0.94vw, 18px);
+    font-weight: 400;
+    line-height: 1.8;
+}
+
+.about-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(120px, 1fr));
+    gap: 3.8vw;
+}
+
+.about-footer__group h2 {
+    margin: 0 0 28px;
+    color: #f6f3ef;
+    font-size: clamp(16px, 0.94vw, 18px);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.about-footer__group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.about-footer__group li + li {
+    margin-top: 24px;
+}
+
+.about-footer__group a {
+    display: block;
+    width: fit-content;
+    color: rgba(246, 243, 239, 0.9);
+    font-size: clamp(15px, 0.88vw, 17px);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.about-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 78px;
+    padding: 0 4.5vw;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(245, 241, 237, 0.46);
+}
+
+.about-footer__bottom p {
+    margin: 0;
+    font-size: clamp(13px, 0.78vw, 15px);
+    line-height: 1;
+}
+
+.about-footer__bottom nav {
+    display: flex;
+    align-items: center;
+    gap: 43px;
+}
+
+.about-footer__bottom a {
+    color: rgba(245, 241, 237, 0.6);
+    font-size: clamp(14px, 0.78vw, 15px);
+}
+
+.about-footer__bottom span {
+    width: 1px;
+    height: 15px;
+    background: rgba(245, 241, 237, 0.45);
+}
+
+@media (max-width: 64em) {
+    .about-intro,
+    .about-story,
+    .about-history,
+    .about-philosophy {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero {
+        height: 115vh;
+    }
+
+    .about-hero__copy {
+        width: 50vw;
+        padding: 96px 4vw 52px;
+    }
+
+    .about-hero__copy p {
+        margin-top: 72px;
+    }
+
+    .about-hero__panel-img {
+        object-position: 52% 50%;
+    }
+
+    .about-intro,
+    .about-story,
+    .about-history,
+    .about-philosophy {
+        padding: 72px 6vw;
+    }
+
+    .about-intro p,
+    .about-story__text,
+    .about-story__text p:not(.about-eyebrow),
+    .about-history__text,
+    .about-stat p {
+        max-width: none;
+        margin-left: 0;
+    }
+
+    .about-intro p {
+        justify-self: start;
+        margin-top: 28px;
+    }
+
+    .about-story__badge,
+    .about-history__image {
+        width: min(100%, 620px);
+    }
+
+    .about-story__text,
+    .about-history__text {
+        margin-top: 42px;
+    }
+
+    .about-philosophy__list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 52px 8vw;
+    }
+
+    .about-footer__main {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .about-footer__nav {
+        grid-template-columns: repeat(3, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 40em) {
+    .about-hero__copy,
+    .about-intro,
+    .about-story,
+    .about-history,
+    .about-philosophy {
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+
+    .about-hero__copy h1 {
+        font-size: 34px;
+    }
+
+    .about-intro h2 {
+        font-size: 66px;
+    }
+
+    .about-philosophy__list,
+    .about-footer__nav {
+        grid-template-columns: 1fr;
+    }
+
+    .about-footer__main {
+        padding: 64px 24px 44px;
+    }
+
+    .about-footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+        padding: 28px 24px;
+    }
+
+    .about-footer__bottom nav {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}
