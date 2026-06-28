@@ -111,6 +111,7 @@ let headphoneArtTotalLength = 0;
 let soundSpeakerArtPaths = [];
 let soundSpeakerArtTotalLength = 0;
 const fixedNavSections = Array.from(fixedNavLinks)
+    .filter((link) => !link.hasAttribute("data-fixed-nav-action"))
     .map((link) => {
         const target = document.querySelector(link.getAttribute("href"));
         return target ? { link, target } : null;

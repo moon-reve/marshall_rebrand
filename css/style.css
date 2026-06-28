@@ -304,6 +304,11 @@ a {
     animation: finale-credit-caret-blink 0.7s step-end infinite;
 }
 
+.fixed-nav__top {
+    margin-top: 1.5625vw;
+    font-size: 0.9375vw;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .fixed-nav {
         transition: none;
