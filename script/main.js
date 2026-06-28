@@ -56,6 +56,7 @@ const legacyClosingPanels = document.querySelectorAll(".legacy-closing__steps sp
 const finale = document.querySelector("[data-finale]");
 const finaleTitle = document.querySelector(".finale__title");
 const finaleCreditItems = document.querySelectorAll(".finale__credits span");
+const finaleTopButton = document.querySelector("[data-scroll-top]");
 const speakersTransitionBg = document.createElement("div");
 const fixedGaugeTickAngles = [0, 30, 60, 90, 120, 150, 210, 240, 270, 300, 330];
 const fixedGaugeDotBaseAngle = 30;
@@ -1606,6 +1607,19 @@ function initializeFinaleTitleSlideDown() {
     observer.observe(finaleTitle);
 }
 
+function initializeFinaleTopButton() {
+    if (!finaleTopButton) return;
+
+    finaleTopButton.addEventListener("click", () => {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        window.scrollTo({
+            top: 0,
+            behavior: prefersReducedMotion ? "auto" : "smooth",
+        });
+    });
+}
+
 function updateScrollEffects() {
     updateHeroScroll();
     updateSpeakersTransition();
@@ -1924,6 +1938,7 @@ initializeSoundLightRays();
 initializeFinaleCreditTypewriter();
 initializeFixedNavTypewriter();
 initializeFinaleTitleSlideDown();
+initializeFinaleTopButton();
 headphoneStageArt?.addEventListener("load", () => {
     prepareHeadphoneArtPaths();
     updateHeadphoneArtReveal();

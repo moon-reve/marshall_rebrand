@@ -2437,8 +2437,7 @@ a {
 .finale__credits,
 .finale__warranty,
 .finale__brand,
-.finale__terms,
-.finale__privacy {
+.finale__top-button {
     position: absolute;
     z-index: 3;
     color: #949494;
@@ -2506,14 +2505,23 @@ a {
     font-style: italic;
 }
 
-.finale__terms {
+.finale__top-button {
     bottom: 2.9vh;
     left: 1.77vw;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-.finale__privacy {
-    bottom: 2.9vh;
-    left: 50vw;
+.finale__top-button:hover,
+.finale__top-button:focus-visible {
+    color: #c8c8c8;
 }
 
 .finale__art {
