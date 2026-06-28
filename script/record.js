@@ -190,6 +190,133 @@
 })();
 
 (() => {
+    const hero = document.querySelector(".record-hero");
+
+    if (!hero) {
+        return;
+    }
+
+    const columnTargets = [
+        { element: hero.querySelector(".record-hero__panel--main"), modifier: "main" },
+        { element: hero.querySelector(".record-hero__slide--market"), modifier: "market" },
+        { element: hero.querySelector(".record-hero__slide--studio"), modifier: "studio" },
+    ].filter(({ element }) => element);
+    const timings = [
+        [0, 0.56],
+        [0.08, 0.66],
+        [0.24, 0.82],
+        [0.4, 0.96],
+    ];
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let targetProgress = 0;
+    let renderedProgress = 0;
+    let animationFrame = 0;
+    const columnGrids = [];
+    const copyBlocks = columnTargets
+        .map(({ element }) => element.querySelector(".record-hero__copy, .record-hero__slide-copy"))
+        .filter(Boolean);
+
+    const createColumnGrid = (modifier) => {
+        const columnGrid = document.createElement("div");
+
+        columnGrid.className = `record-hero__column-grid record-hero__column-grid--${modifier}`;
+        columnGrid.setAttribute("aria-hidden", "true");
+
+        timings.forEach((_, index) => {
+            const column = document.createElement("div");
+            const scene = document.createElement("div");
+
+            column.className = `record-hero__scroll-column record-hero__scroll-column--0${index + 1}`;
+            scene.className = "record-hero__column-scene";
+            column.appendChild(scene);
+            columnGrid.appendChild(column);
+        });
+
+        return columnGrid;
+    };
+
+    columnTargets.forEach(({ element, modifier }) => {
+        const columnGrid = createColumnGrid(modifier);
+
+        element.prepend(columnGrid);
+        columnGrids.push(columnGrid);
+    });
+
+    hero.classList.add("is-column-scroll-ready");
+
+    const columns = columnGrids.flatMap((columnGrid) => Array.from(columnGrid.querySelectorAll(".record-hero__scroll-column")));
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+    const sequenceProgress = (progress, start, end) => clamp((progress - start) / (end - start), 0, 1);
+    const ease = (progress) => progress * progress * (3 - 2 * progress);
+
+    const renderColumns = (progress) => {
+        const gridProgress = ease(sequenceProgress(progress, 0, 0.45));
+        const copyProgress = ease(sequenceProgress(progress, 0, 0.62));
+        const copyOffset = copyProgress * 42;
+        const copyOpacity = 1 - copyProgress;
+
+        columnGrids.forEach((columnGrid) => {
+            columnGrid.style.setProperty("--record-hero-grid-opacity", `${1 - gridProgress}`);
+        });
+
+        copyBlocks.forEach((copyBlock) => {
+            copyBlock.style.setProperty("--record-hero-copy-y", `${-copyOffset}vh`);
+            copyBlock.style.setProperty("--record-hero-copy-opacity", `${copyOpacity}`);
+        });
+
+        columns.forEach((column, index) => {
+            const [start, end] = timings[index % timings.length];
+            const columnProgress = ease(sequenceProgress(progress, start, end));
+
+            const sceneOffset = columnProgress * 50;
+
+            column.style.setProperty("--record-hero-column-y", `${-sceneOffset}%`);
+        });
+    };
+
+    const renderFrame = () => {
+        const distance = targetProgress - renderedProgress;
+        renderedProgress += distance * 0.085;
+
+        if (Math.abs(distance) < 0.0001) {
+            renderedProgress = targetProgress;
+        }
+
+        renderColumns(renderedProgress);
+
+        if (renderedProgress !== targetProgress) {
+            animationFrame = requestAnimationFrame(renderFrame);
+        } else {
+            animationFrame = 0;
+        }
+    };
+
+    const updateColumns = () => {
+        const rect = hero.getBoundingClientRect();
+        const revealStart = Math.max(rect.height - window.innerHeight, 0);
+        const scrollDistance = Math.max(window.innerHeight * 0.72, rect.height * 0.5, 1);
+
+        targetProgress = clamp((-rect.top - revealStart) / scrollDistance, 0, 1);
+
+        if (prefersReducedMotion.matches) {
+            if (animationFrame) cancelAnimationFrame(animationFrame);
+            animationFrame = 0;
+            renderedProgress = targetProgress;
+            renderColumns(renderedProgress);
+            return;
+        }
+
+        if (!animationFrame) {
+            animationFrame = requestAnimationFrame(renderFrame);
+        }
+    };
+
+    window.addEventListener("scroll", updateColumns, { passive: true });
+    window.addEventListener("resize", updateColumns);
+    updateColumns();
+})();
+
+(() => {
     const list = document.querySelector(".artist-catalog__list");
 
     if (!list) {
@@ -198,14 +325,22 @@
 
     const visibleCount = 4;
     const cards = list.querySelectorAll(".artist-card");
+    const prevButton = document.querySelector(".artist-catalog__arrow--prev");
+    const nextButton = document.querySelector(".artist-catalog__arrow--next");
     let startX = 0;
     let isDragging = false;
     let slideIndex = 0;
     const maxIndex = Math.max(0, cards.length - visibleCount);
 
+    const updateArrowState = () => {
+        prevButton?.classList.toggle("is-hidden", slideIndex === 0);
+        nextButton?.classList.toggle("is-hidden", slideIndex >= maxIndex);
+    };
+
     const setSlide = (nextIndex) => {
         slideIndex = Math.max(0, Math.min(maxIndex, nextIndex));
         list.style.setProperty("--artist-slide-index", slideIndex);
+        updateArrowState();
     };
 
     list.addEventListener("pointerdown", (event) => {
@@ -225,7 +360,7 @@
         const deltaX = event.clientX - startX;
 
         if (Math.abs(deltaX) > 40) {
-            setSlide(slideIndex + (deltaX < 0 ? 1 : -1));
+            setSlide(slideIndex + (deltaX < 0 ? visibleCount : -visibleCount));
         }
     });
 
@@ -233,6 +368,16 @@
         isDragging = false;
         list.classList.remove("is-dragging");
     });
+
+    prevButton?.addEventListener("click", () => {
+        setSlide(slideIndex - visibleCount);
+    });
+
+    nextButton?.addEventListener("click", () => {
+        setSlide(slideIndex + visibleCount);
+    });
+
+    updateArrowState();
 })();
 
 (() => {
@@ -248,6 +393,8 @@
     const detailTitle = detail?.querySelector("h3");
     const detailDescription = detail?.querySelector("p");
     const detailValues = detail?.querySelectorAll("dd");
+    const prevButton = document.querySelector(".record-feature__cover-arrow--prev");
+    const nextButton = document.querySelector(".record-feature__cover-arrow--next");
     let startX = 0;
     let isDragging = false;
     let coverIndex = 0;
@@ -299,9 +446,21 @@
         },
     ];
 
+    coverDetailsSafe[0] = {
+        title: "앨범명",
+        description: "The Molotovs의 날카로운 에너지와 선명한 기타 사운드를 담은 Marshall Records 릴리즈입니다.",
+        values: ["Guitar Amplifier", "1962", "The Original Marshall Sound"],
+    };
+
+    const updateCoverArrowState = () => {
+        prevButton?.classList.toggle("is-hidden", coverIndex === 0);
+        nextButton?.classList.toggle("is-hidden", coverIndex >= maxIndex);
+    };
+
     const setCover = (nextIndex, withMotion = true) => {
         coverIndex = Math.max(0, Math.min(maxIndex, nextIndex));
         track.style.setProperty("--record-cover-index", coverIndex);
+        updateCoverArrowState();
 
         const currentDetail = coverDetailsSafe[coverIndex];
 
@@ -368,5 +527,13 @@
         cover.classList.remove("is-dragging");
     });
 
-    setCover(0, false);
+    prevButton?.addEventListener("click", () => {
+        setCover(coverIndex - 1);
+    });
+
+    nextButton?.addEventListener("click", () => {
+        setCover(coverIndex + 1);
+    });
+
+    updateCoverArrowState();
 })();
