@@ -123,9 +123,9 @@
 
 .support-actions {
     position: relative;
-    min-height: 26.04vw;
+    min-height: 9.9vw;
     overflow: hidden;
-    padding: 4.45vw 4.66vw 4.7vw;
+    padding: 0.82vw 3.22vw 0.94vw;
     background-color: #171514;
     background-image: url("../assets/images/support-leather-texture.png");
     background-repeat: repeat;
@@ -161,11 +161,9 @@
 .support-actions__grid {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(6, auto);
-    align-items: start;
-    justify-content: space-between;
-    gap: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.52vw;
 }
 
 .support-card {
@@ -174,28 +172,34 @@
     align-items: center;
     justify-content: center;
     justify-self: center;
-    width: 6.77vw;
-    aspect-ratio: 1 / 1.15;
-    gap: 0.47vw;
-    padding: 1.35vw 0.94vw;
-    color: #000;
-    background: #fff;
-    border-radius: 0.78vw;
+    width: 6.8vw;
+    aspect-ratio: 1 / 1.18;
+    gap: 0.78vw;
+    padding: 1.05vw 0.52vw 0.9vw;
+    color: #d8c1a2;
+    background: rgba(18, 14, 12, 0.36);
+    border: 1px solid rgba(216, 193, 162, 0.86);
+    border-radius: 0.42vw;
     text-decoration: none;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25), 0 14px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(255, 246, 230, 0.08);
+}
+
+.support-card:nth-child(5),
+.support-card:nth-child(9) {
+    margin-left: 2.9vw;
 }
 
 .support-card__icon {
-    width: 2.08vw;
-    height: 2.08vw;
+    width: 2.02vw;
+    height: 2.02vw;
     flex: 0 0 auto;
 }
 
 .support-card__label {
-    color: #000;
-    font-size: 0.73vw;
+    color: #d8c1a2;
+    font-size: 0.84vw;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: 0;
     text-align: center;
     white-space: nowrap;
@@ -475,8 +479,8 @@
 
 .guide-item strong {
     margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 18px;
+    font-weight: 700;
     line-height: 1.15;
 }
 
@@ -630,10 +634,32 @@
     }
 
     .support-actions__grid {
+        display: grid;
         grid-template-columns: repeat(3, minmax(90px, 1fr));
         gap: 24px;
         max-width: 520px;
         margin: 0 auto;
+    }
+
+    .support-card {
+        width: 100%;
+        gap: 12px;
+        padding: 18px 10px 16px;
+        border-radius: 10px;
+    }
+
+    .support-card:nth-child(5),
+    .support-card:nth-child(9) {
+        margin-left: 0;
+    }
+
+    .support-card__icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .support-card__label {
+        font-size: 14px;
     }
 
     .support-info__grid {
