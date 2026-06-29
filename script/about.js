@@ -81,6 +81,7 @@ window.addEventListener("resize", updateAboutHeroTransition);
 updateAboutHeroTransition();
 
 const aboutHistory = document.querySelector("[data-about-history]");
+const aboutHistorySticky = document.querySelector(".about-history__sticky");
 const aboutHistoryImage = document.querySelector("[data-about-history-image]");
 const aboutHistoryYear = document.querySelector("[data-about-history-year]");
 const aboutHistoryTitle = document.querySelector("[data-about-history-title]");
@@ -247,11 +248,12 @@ function updateAboutHistoryInteraction() {
     }
 
     const rect = aboutHistory.getBoundingClientRect();
-    const scrollDistance = Math.max(aboutHistory.offsetHeight - window.innerHeight, 1);
+    const pinHeight = aboutHistorySticky?.offsetHeight || window.innerHeight;
+    const scrollDistance = Math.max(aboutHistory.offsetHeight - pinHeight, 1);
     const progress = aboutClamp(-rect.top / scrollDistance, 0, 1);
     const nextIndex = Math.min(aboutHistorySlides.length - 1, Math.floor(progress * aboutHistorySlides.length));
-    const isPinned = rect.top <= 0 && rect.bottom >= window.innerHeight;
-    const isEnded = rect.bottom < window.innerHeight;
+    const isPinned = rect.top <= 0 && rect.bottom >= pinHeight;
+    const isEnded = rect.bottom < pinHeight;
 
     aboutHistory.classList.toggle("is-pinned", isPinned);
     aboutHistory.classList.toggle("is-ended", isEnded);
