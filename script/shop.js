@@ -9,7 +9,7 @@ const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
 const productCardSwatches = document.querySelectorAll(".product-card__swatch");
 const shopProductSection = document.querySelector(".shop-product");
 const shopProductScroll = document.querySelector(".shop-product__scroll");
-const shopFooter = document.querySelector(".footer");
+const shopFooter = document.querySelector(".site-footer, .footer");
 let shopProductCards = Array.from(document.querySelectorAll(".shop-product__image-card"));
 const shopProductName = document.querySelector(".shop-product__headline h3");
 const shopProductDescription = document.querySelector(".shop-product__description");
@@ -526,6 +526,12 @@ function updateShopProductImageState(index) {
     shopProductCards.forEach((card, cardIndex) => {
         card.classList.toggle("is-active", cardIndex === index);
     });
+
+    shopProductScroll?.querySelectorAll(".shop-product__pagination-dot").forEach((dot, dotIndex) => {
+        const isActive = dotIndex === index;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-current", isActive ? "true" : "false");
+    });
 }
 
 function setShopProductIndex(index) {
@@ -539,10 +545,23 @@ function setShopProductIndex(index) {
     renderShopProductDetails(nextIndex);
 }
 
+function renderShopProductPagination(products) {
+    if (!products.length) return "";
+
+    const dots = products.map((product, index) => {
+        const isActive = index === 0;
+        return `
+            <button class="shop-product__pagination-dot${isActive ? " is-active" : ""}" type="button" data-shop-product-page="${index}" aria-label="Show ${product.name}" aria-current="${isActive ? "true" : "false"}"></button>
+        `;
+    }).join("");
+
+    return `<div class="shop-product__pagination" aria-label="Product image pagination">${dots}</div>`;
+}
+
 function renderShopProductImages(products) {
     if (!shopProductScroll) return;
 
-    shopProductScroll.innerHTML = products.map((product) => {
+    const imageCards = products.map((product) => {
         const imageClasses = [
             "shop-product__image",
             product.imageSizeClass,
@@ -556,7 +575,15 @@ function renderShopProductImages(products) {
         `;
     }).join("");
 
+    shopProductScroll.innerHTML = imageCards + renderShopProductPagination(products);
+
     shopProductCards = Array.from(shopProductScroll.querySelectorAll(".shop-product__image-card"));
+    shopProductScroll.querySelectorAll(".shop-product__pagination-dot").forEach((dot) => {
+        dot.addEventListener("click", () => {
+            const index = Number(dot.dataset.shopProductPage);
+            if (!Number.isNaN(index)) setShopProductIndex(index);
+        });
+    });
     shopActiveProductIndex = -1;
     updateShopProductImageState(0);
 }
@@ -788,11 +815,10 @@ function updateShopProductScrollMask() {
     if (!shopProductSection) return;
 
     const productRect = shopProductSection.getBoundingClientRect();
-    const headerHeight = shopTopbarMain?.offsetHeight || 70;
     const infoLine = getShopProductInfoLine();
     const footerRect = shopFooter?.getBoundingClientRect();
     const isFooterInMaskArea = footerRect ? footerRect.top < infoLine : false;
-    const isActive = productRect.top <= headerHeight && productRect.bottom > infoLine && !isFooterInMaskArea;
+    const isActive = productRect.top <= 0 && productRect.bottom > infoLine && !isFooterInMaskArea;
     shopProductSection.classList.toggle("is-scroll-mask-active", isActive);
 }
 
