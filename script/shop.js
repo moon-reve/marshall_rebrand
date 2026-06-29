@@ -610,7 +610,7 @@ function scrollToShopBest() {
     if (!shopBestSection || !smoothScrollEl) return;
 
     const shopBestTop = shopBestSection.getBoundingClientRect().top + smoothCurrentY;
-    const targetTop = Math.max(shopBestTop + shopBestSection.offsetHeight - smoothScrollEl.clientHeight, 0);
+    const targetTop = Math.max(shopBestTop, 0);
     hasSkippedHeroOnScroll = true;
     smoothScrollTo(targetTop);
 }
@@ -789,4 +789,3 @@ smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: t
 window.addEventListener("resize", updateShopScrollEffects);
 updateShopScrollbarWidth();
 updateShopScrollEffects();
-
