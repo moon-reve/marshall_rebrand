@@ -87,7 +87,7 @@ a {
     min-width: 530px;
     margin-left: auto;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.8789vw;
+    font-size: 0.8333vw;
     font-weight: 400;
     line-height: 1;
     white-space: nowrap;
@@ -124,10 +124,10 @@ a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.35vw;
-    height: 1.35vw;
-    min-width: 24px;
-    min-height: 24px;
+    width: 0.8333vw;
+    height: 0.8333vw;
+    min-width: 16px;
+    min-height: 16px;
 }
 
 .shop-topbar__action img {
@@ -2453,7 +2453,7 @@ a {
 
 .finale__support {
     top: 62.6vh;
-    left: 1.77vw;
+    left: 75vw;
 }
 
 .finale__credits {
@@ -2504,7 +2504,7 @@ a {
 
 .finale__brand {
     top: 62.1vh;
-    left: 75vw;
+    left: 1.77vw;
     color: #7c7c7c;
     font-family: "Brush Script MT", cursive;
     font-size: 1.15vw;
@@ -2513,7 +2513,7 @@ a {
 
 .finale__top-button {
     bottom: 2.9vh;
-    left: 1.77vw;
+    left: 75vw;
     margin: 0;
     padding: 0;
     border: 0;
@@ -2533,10 +2533,10 @@ a {
 .finale__art {
     position: absolute;
     z-index: 2;
-    top: 66.1vh;
-    left: 75vw;
-    width: 23.23vw;
-    height: 31.1vh;
+    top: 75.43vh;
+    left: 1.77vw;
+    width: 16.261vw;
+    height: 21.77vh;
     overflow: hidden;
 }
 

@@ -151,12 +151,12 @@ body {
 }
 
 .shop-hero__copy {
-    font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 0.9375vw;
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: -0.038vw;
-    color: #ffeac6;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+    font-size: 0.8496vw;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    color: rgba(255, 234, 198, 0.75);
     margin: 0;
 }
 
@@ -1014,13 +1014,6 @@ body {
 
     .shop-hero__headline {
         font-size: 34px;
-        letter-spacing: 0;
-        white-space: normal;
-    }
-
-    .shop-hero__copy {
-        width: 88vw;
-        font-size: 15px;
         letter-spacing: 0;
         white-space: normal;
     }
