@@ -421,10 +421,10 @@
 }
 
 .service-block--chat {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 183px;
-    align-items: center;
-    gap: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
 }
 
 .service-block--last {
@@ -432,19 +432,21 @@
 }
 
 .service-block__title {
-    margin: 0 0 14px;
+    margin: 0 0 8px;
     color: #000;
     font-size: 20px;
     font-weight: 400;
     line-height: 1.05;
+    letter-spacing: 0;
 }
 
 .service-block__primary {
-    margin: 0 0 26px;
+    margin: 0 0 30px;
     color: #1b130f;
     font-size: 30px;
     font-weight: 600;
     line-height: 1.2;
+    letter-spacing: 1%;
 }
 
 .service-block__copy,
@@ -453,7 +455,8 @@
     color: #1b130f;
     font-size: 0.94vw;
     font-weight: 400;
-    line-height: 1.35;
+    line-height: 1.25;
+    letter-spacing: 0;
 }
 
 .service-block__copy {
@@ -462,7 +465,7 @@
 }
 
 .service-block__primary--chat {
-    margin-bottom: 26px;
+    margin-bottom: 30px;
     white-space: nowrap;
 }
 
@@ -481,6 +484,7 @@
     border-radius: 6px;
     font-size: 16px;
     font-weight: 600;
+    letter-spacing: 0;
     text-decoration: none;
 }
 
