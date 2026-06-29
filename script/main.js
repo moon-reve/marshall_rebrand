@@ -99,6 +99,7 @@ let speakersEntryIsAutoAnimating = false;
 let speakersEntryAutoAnimationFrame = null;
 let speakersIsAutoAnimating = false;
 let speakersAutoAnimationFrame = null;
+let evolutionTopSnapArmed = true;
 let beginningTextTargetProgress = 0;
 let beginningTextRenderedProgress = 0;
 let beginningTextAnimationFrame = null;
@@ -1076,6 +1077,28 @@ function initializeSmoothWheelScroll() {
         window.scrollTo(0, renderedY);
     }
 
+    function shouldSnapEvolutionToTop(deltaY) {
+        if (!evolutionStage) return false;
+
+        const evolutionTop = evolutionStage.offsetTop;
+        if (deltaY < 0 && window.scrollY <= evolutionTop + 2) {
+            evolutionTopSnapArmed = true;
+        }
+
+        if (deltaY <= 0) return false;
+        if (!evolutionTopSnapArmed) return false;
+        if (window.scrollY >= evolutionTop - 2) return false;
+        if (targetY + deltaY < evolutionTop) return false;
+
+        evolutionTopSnapArmed = false;
+        targetY = evolutionTop;
+        renderedY = window.scrollY;
+        if (!animationFrame) {
+            animationFrame = requestAnimationFrame(renderSmoothScroll);
+        }
+        return true;
+    }
+
     window.addEventListener("wheel", (event) => {
         if (
             event.defaultPrevented ||
@@ -1095,7 +1118,10 @@ function initializeSmoothWheelScroll() {
         }
 
         event.preventDefault();
-        targetY = clamp(targetY + getWheelDelta(event), 0, getMaxScrollY());
+        const wheelDelta = getWheelDelta(event);
+        if (!shouldSnapEvolutionToTop(wheelDelta)) {
+            targetY = clamp(targetY + wheelDelta, 0, getMaxScrollY());
+        }
 
         if (!animationFrame) {
             animationFrame = requestAnimationFrame(renderSmoothScroll);
@@ -1720,7 +1746,8 @@ function updateTopbarVisibility() {
                 if (Math.abs(diff) < 0.004) {
                     slot.progress = 0;
                 } else {
-                    slot.progress += diff * 0.055;
+                    var settleSpeed = Math.abs(diff) < 0.5 ? 0.14 : 0.055;
+                    slot.progress += diff * settleSpeed;
                     allDone = false;
                 }
             });
