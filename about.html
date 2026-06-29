@@ -99,15 +99,25 @@
         </div>
     </section>
 
-    <section class="about-history" aria-labelledby="about-history-title">
-        <h2 class="about-history__heading">History</h2>
-        <figure class="about-history__image">
-            <img src="./assets/images/about-history-1962.png" alt="Jim Marshall의 1962년 역사를 소개하는 잡지 페이지" />
-        </figure>
-        <div class="about-history__text">
-            <p class="about-history__year">1962</p>
-            <h2 id="about-history-title">마샬의 처음</h2>
-            <p>Jim Marshall, 런던 사우스올에 악기점 오픈 및 첫 앰프 제작.</p>
+    <section class="about-history" aria-labelledby="about-history-title" data-about-history>
+        <div class="about-history__sticky">
+            <h2 class="about-history__heading">History</h2>
+            <p class="about-history__summary">Marshall의 역사는 단순한 브랜드의 연혁이 아닌, 세대를 잇는 음악과 문화의 여정입니다.</p>
+            <ol class="about-history__nav" aria-label="Marshall history timeline">
+                <li class="is-active" aria-current="step"><span>1962</span></li>
+                <li><span>1965</span></li>
+                <li><span>1990</span></li>
+                <li><span>2010</span></li>
+                <li><span>현재</span></li>
+            </ol>
+            <figure class="about-history__image">
+                <img src="./assets/images/about-history-1962.png" alt="Jim Marshall의 1962년 역사를 소개하는 잡지 페이지" data-about-history-image />
+            </figure>
+            <div class="about-history__text">
+                <p class="about-history__year" data-about-history-year>1962</p>
+                <h2 id="about-history-title" data-about-history-title>마샬의 처음</h2>
+                <p data-about-history-description>Jim Marshall, 런던 사우스올에 악기점 오픈 및 첫 앰프 제작.</p>
+            </div>
         </div>
     </section>
 
