@@ -225,6 +225,7 @@ body {
 
 .product-card {
     --card-width: calc((100vw - (var(--shop-content-margin) * 2)) / 4);
+    --product-compact-width: calc(var(--card-width) * 0.6);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -253,9 +254,9 @@ body {
 .product-card__image-box {
     position: relative;
     flex-shrink: 0;
-    width: calc(var(--card-width) * 0.8604);
-    height: calc(var(--card-width) * 0.6208);
-    overflow: hidden;
+    width: var(--product-compact-width);
+    height: calc(var(--card-width) * 0.4329);
+    overflow: visible;
 }
 
 .product-card__image {
@@ -270,7 +271,7 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    width: calc(var(--card-width) * 0.8625);
+    width: var(--product-compact-width);
     height: calc(var(--card-width) * 0.1771);
 }
 
@@ -284,10 +285,12 @@ body {
 
 .product-card__summary {
     align-items: flex-start;
+    width: calc(var(--card-width) * 0.4375);
 }
 
 .product-card__meta {
     align-items: flex-end;
+    flex-shrink: 0;
 }
 
 .product-card__name,
@@ -300,7 +303,7 @@ body {
 .product-card__name {
     color: #000000;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 1.56vw;
+    font-size: 1.25vw;
     font-weight: 600;
     letter-spacing: -0.041vw;
 }
@@ -309,7 +312,7 @@ body {
     margin-top: 0.36vw;
     color: #cba672;
     font-family: "SUIT", "Pretendard Variable", Pretendard, sans-serif;
-    font-size: 1.04vw;
+    font-size: 0.9375vw;
     font-weight: 600;
     letter-spacing: -0.023vw;
 }
@@ -318,7 +321,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: calc(var(--card-width) * 0.4375);
+    width: 100%;
     margin-top: 10px;
 }
 
@@ -331,7 +334,7 @@ body {
     border-radius: calc(var(--card-width) * 0.0083);
     color: #888888;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
-    font-size: calc(var(--card-width) * 0.0333);
+    font-size: calc(var(--card-width) * 0.0299);
     font-weight: 300;
     line-height: 1.3;
     letter-spacing: -0.018vw;
