@@ -48,22 +48,22 @@
   width: 90.625vw;
   margin: 0 auto;
   display: flex;
-  gap: 4.1667vw;
-  padding: 2.9167vw 0 2.0833vw;
+  gap: 0;
+  padding: 3.125vw 0;
 }
 
 /* brand column */
 .footer-brand {
   flex-shrink: 0;
-  width: 14.5833vw;
+  width: 30%;
 }
 
 .footer-logo {
   font-family: 'AmplifyPersonalUseOnly', cursive;
-  font-size: 2.0768vw;
+  font-size: 4.1667vw;
   color: var(--cream-light);
   line-height: 1;
-  margin-bottom: 1.0417vw;
+  margin-bottom: 0;
 }
 
 .footer-tagline {
@@ -76,26 +76,29 @@
 
 /* nav columns */
 .footer-nav {
-  flex: 1;
+  width: 70%;
+  padding: 0 1.5625vw;
   display: flex;
   justify-content: space-between;
 }
 
-.footer-col { min-width: 6.25vw; }
+.footer-col {
+  flex: 1 1 0;
+}
 
-.footer-col-title {
+.site-footer .footer-col-title {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 0.6136vw;
   font-weight: 700;
   letter-spacing: 0.18em;
   color: var(--cream-light);
-  margin-bottom: 1.1458vw;
+  margin-bottom: 2.0833vw;
 }
 
 .footer-col ul {
   display: flex;
   flex-direction: column;
-  gap: 0.7292vw;
+  gap: 0.5208vw;
 }
 
 .footer-col ul li a {
