@@ -434,7 +434,7 @@
     align-items: start;
     min-height: 31.25vw;
     padding: 7.45vw 4.65vw 5vw;
-    background: var(--about-tan);
+    background: var(--about-cream);
 }
 
 .about-philosophy h2 {
@@ -462,7 +462,8 @@
     display: block;
     margin-bottom: 1.15vw;
     color: var(--about-gold);
-    font-family: "Bodoni Moda", Georgia, serif;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
     font-size: clamp(48px, 4.26vw, 82px);
     font-weight: 400;
     line-height: 0.95;
