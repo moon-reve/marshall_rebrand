@@ -59,175 +59,210 @@
   </div>
 
   <!-- ══════════════════════════════════════ COMPARE ══════════════════════════════════════ -->
-  <section class="compare-section">
-    <div class="compare-inner">
-      <div class="compare-left">
-        <h2 class="compare-title">Compare</h2>
-      </div>
-      <div class="compare-right">
-        <p class="compare-desc">같은 마샬이라도 어떤 소리를 원하느냐에 따라 선택이 달라집니다.<br>두 제품을 나란히 놓고 비교하며 나만의 마샬을 찾아보세요.</p>
-      </div>
-    </div>
-  </section>
 
   <!-- ══════════════════════════════════════ QUIZ ══════════════════════════════════════ -->
   <section class="quiz-section">
-    <div class="quiz-texture"></div>
+
     <div class="quiz-inner">
-      <div class="quiz-logo" data-text="Marshall">Marshall</div>
-      <div class="quiz-steps">
+
+      <!-- 왼쪽: Compare 타이틀 + 설명 -->
+      <div class="quiz-left">
+        <h2 class="quiz-compare-title">Compare</h2>
+        <p class="quiz-compare-desc">같은 마샬이라도 어떤 소리를 원하느냐에 따라 선택이 달라집니다.<br>두 제품을 나란히 놓고 비교하며 나만의 마샬을 찾아보세요.</p>
+      </div>
+
+      <!-- 세로 구분선 -->
+      <div class="quiz-divider" aria-hidden="true"></div>
+
+      <!-- 오른쪽: 스텝 (한 번에 하나씩) -->
+      <div class="quiz-right">
 
         <!-- STEP 1 -->
-        <div class="quiz-step">
-          <p class="step-num">STEP 1</p>
-          <p class="step-question">어디에서 사용하시나요?</p>
+        <div class="quiz-step is-active" data-step="1">
+          <div class="step-header">
+            <p class="step-num">STEP 1</p>
+            <p class="step-question">어디에서 사용하시나요?</p>
+          </div>
+          <div class="step-nav">
+            <button class="step-nav-btn step-nav-btn--prev" aria-label="이전 단계">&#8249;</button>
+            <span class="step-nav-text">NEXT</span>
+            <button class="step-nav-btn step-nav-btn--next" aria-label="다음 단계">&#8250;</button>
+          </div>
           <div class="step-options">
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="18" width="36" height="22" rx="2" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M6 28h36" stroke="#1b1410" stroke-width="2.5"/>
-                  <rect x="14" y="22" width="8" height="6" rx="1" stroke="#1b1410" stroke-width="2"/>
-                  <path d="M6 40v4M42 40v4" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
+            <button class="step-card" data-value="room">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="15" y="45" width="90" height="52" rx="5" stroke="currentColor" stroke-width="5.5"/>
+                  <path d="M15 68h90" stroke="currentColor" stroke-width="5.5"/>
+                  <rect x="34" y="54" width="20" height="14" rx="2" stroke="currentColor" stroke-width="4.5"/>
+                  <path d="M22 97v8M98 97v8" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="step-label">나만의 방</span>
+              <span class="step-card-num">01</span>
+              <span class="step-card-label">나만의 방</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 34h40v4H4z" stroke="#1b1410" stroke-width="2.5" stroke-linejoin="round"/>
-                  <path d="M8 34V22c0-2 1.5-4 4-4h24c2.5 0 4 2 4 4v12" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M4 38v4M44 38v4" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
-                  <rect x="18" y="26" width="12" height="8" rx="1" stroke="#1b1410" stroke-width="2"/>
+            <button class="step-card" data-value="living">
+              <span class="step-card-svg" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 85h100v10H10z" stroke="currentColor" stroke-width="5.5" stroke-linejoin="round"/>
+                  <path d="M20 85V55c0-5 4-10 10-10h60c6 0 10 5 10 10v30" stroke="currentColor" stroke-width="5.5"/>
+                  <path d="M10 95v10M110 95v10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+                  <rect x="42" y="63" width="36" height="22" rx="2" stroke="currentColor" stroke-width="4.5"/>
                 </svg>
               </span>
-              <span class="step-label">거실</span>
+              <span class="step-card-num">02</span>
+              <span class="step-card-label">거실</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="8" y="8" width="32" height="24" rx="2" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M16 32v6M32 32v6M10 38h28" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
-                  <rect x="14" y="14" width="20" height="12" rx="1" stroke="#1b1410" stroke-width="2"/>
+            <button class="step-card" data-value="office">
+              <span class="step-card-svg" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="16" y="30" width="88" height="56" rx="5" stroke="currentColor" stroke-width="5.5"/>
+                  <path d="M44 86v14M76 86v14M30 100h60" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="step-label">서재 / 작업실</span>
+              <span class="step-card-num">03</span>
+              <span class="step-card-label">서재 / 작업실</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M24 8c0 0-12 10-12 20a12 12 0 0 0 24 0C36 18 24 8 24 8z" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M24 40V28M18 34l6-6 6 6" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <button class="step-card" data-value="outdoor">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M60 12 L28 58 H42 L18 94 H102 L78 58 H92 Z" stroke="currentColor" stroke-width="5.5" stroke-linejoin="round"/>
+                  <path d="M52 94V106M68 94V106M38 106H82" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="step-label">아웃도어</span>
+              <span class="step-card-num">04</span>
+              <span class="step-card-label">아웃도어</span>
             </button>
           </div>
         </div>
 
         <!-- STEP 2 -->
-        <div class="quiz-step">
-          <p class="step-num">STEP 2</p>
-          <p class="step-question">어떤 용도로 사용하시나요?</p>
+        <div class="quiz-step" data-step="2">
+          <div class="step-header">
+            <p class="step-num">STEP 2</p>
+            <p class="step-question">어떤 용도로 사용하시나요?</p>
+          </div>
+          <div class="step-nav">
+            <button class="step-nav-btn step-nav-btn--prev" aria-label="이전 단계">&#8249;</button>
+            <span class="step-nav-text">NEXT</span>
+            <button class="step-nav-btn step-nav-btn--next" aria-label="다음 단계">&#8250;</button>
+          </div>
           <div class="step-options">
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="8" y="8" width="26" height="26" rx="2" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M20 22a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M28 38c4-2 8-2 12-2V14" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
-                  <circle cx="36" cy="18" r="3" stroke="#1b1410" stroke-width="2"/>
+            <button class="step-card" data-value="music">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="35" cy="84" r="18" stroke="currentColor" stroke-width="5"/>
+                  <circle cx="87" cy="72" r="18" stroke="currentColor" stroke-width="5"/>
+                  <path d="M53 84V30l52-12v54" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
-              <span class="step-label">음악감상</span>
+              <span class="step-card-num">01</span>
+              <span class="step-card-label">음악감상</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="10" width="36" height="26" rx="3" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M16 36v4M32 36v4M10 40h28" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M18 16l14 7-14 7V16z" fill="#1b1410"/>
+            <button class="step-card" data-value="movie">
+              <span class="step-card-svg" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="12" y="22" width="96" height="62" rx="6" stroke="currentColor" stroke-width="5"/>
+                  <path d="M38 84v10M82 84v10M22 94h76" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+                  <path d="M54 38l26 15-26 15V38z" fill="currentColor"/>
                 </svg>
               </span>
-              <span class="step-label">영화 / TV</span>
+              <span class="step-card-num">02</span>
+              <span class="step-card-label">영화 / TV</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 10h32v28H8z" stroke="#1b1410" stroke-width="2.5" stroke-linejoin="round"/>
-                  <path d="M16 10V8c0-1 .5-2 2-2h12c1.5 0 2 1 2 2v2" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M14 20h20M14 26h20M14 32h12" stroke="#1b1410" stroke-width="2" stroke-linecap="round"/>
+            <button class="step-card" data-value="work">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="20" y="25" width="80" height="70" rx="4" stroke="currentColor" stroke-width="5"/>
+                  <path d="M40 25v-5c0-2.5 1.5-5 5-5h30c3.5 0 5 2.5 5 5v5" stroke="currentColor" stroke-width="5"/>
+                  <path d="M35 52h50M35 67h50M35 82h30" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="step-label">작업 / 공부</span>
+              <span class="step-card-num">03</span>
+              <span class="step-card-label">작업 / 공부</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="16" cy="18" r="6" stroke="#1b1410" stroke-width="2.5"/>
-                  <circle cx="32" cy="18" r="6" stroke="#1b1410" stroke-width="2.5"/>
-                  <circle cx="24" cy="32" r="6" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M16 24c0 4 8 8 8 8M32 24c0 4-8 8-8 8" stroke="#1b1410" stroke-width="2" stroke-linecap="round"/>
+            <button class="step-card" data-value="party">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="40" cy="45" r="15" stroke="currentColor" stroke-width="5"/>
+                  <circle cx="80" cy="45" r="15" stroke="currentColor" stroke-width="5"/>
+                  <circle cx="60" cy="82" r="15" stroke="currentColor" stroke-width="5"/>
+                  <path d="M40 60c0 10 20 22 20 22" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                  <path d="M80 60c0 10-20 22-20 22" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="step-label">파티 / 모임</span>
+              <span class="step-card-num">04</span>
+              <span class="step-card-label">파티 / 모임</span>
             </button>
           </div>
         </div>
 
         <!-- STEP 3 -->
-        <div class="quiz-step">
-          <p class="step-num">STEP 3</p>
-          <p class="step-question">어떤 사운드를 선호하시나요?</p>
+        <div class="quiz-step" data-step="3">
+          <div class="step-header">
+            <p class="step-num">STEP 3</p>
+            <p class="step-question">어떤 사운드를 선호하시나요?</p>
+          </div>
+          <div class="step-nav">
+            <button class="step-nav-btn step-nav-btn--prev" aria-label="이전 단계">&#8249;</button>
+            <span class="step-nav-text">NEXT</span>
+            <button class="step-nav-btn step-nav-btn--next" aria-label="다음 단계">&#8250;</button>
+          </div>
           <div class="step-options">
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="30" width="6" height="12" rx="1" fill="#1b1410"/>
-                  <rect x="15" y="22" width="6" height="20" rx="1" fill="#1b1410"/>
-                  <rect x="24" y="10" width="6" height="32" rx="1" fill="#1b1410"/>
-                  <rect x="33" y="18" width="6" height="24" rx="1" fill="#1b1410"/>
+            <button class="step-card" data-value="bass">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="14" y="75" width="18" height="30" rx="3" fill="currentColor"/>
+                  <rect x="38" y="55" width="18" height="50" rx="3" fill="currentColor"/>
+                  <rect x="62" y="25" width="18" height="80" rx="3" fill="currentColor"/>
+                  <rect x="86" y="45" width="18" height="60" rx="3" fill="currentColor"/>
                 </svg>
               </span>
-              <span class="step-label">강한베이스</span>
+              <span class="step-card-num">01</span>
+              <span class="step-card-label">강한 베이스</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 24c3-6 5-8 8-8s5 8 8 8 5-8 8-8 5 8 8 8" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M6 34c3-4 5-6 8-6s5 6 8 6 5-6 8-6 5 6 8 6" stroke="#1b1410" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-                  <path d="M6 14c3-4 5-6 8-6s5 6 8 6 5-6 8-6 5 6 8 6" stroke="#1b1410" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+            <button class="step-card" data-value="balanced">
+              <span class="step-card-svg" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 36 C22 20 48 20 60 36 C72 52 98 52 112 36" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+                  <path d="M8 60 C22 44 48 44 60 60 C72 76 98 76 112 60" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                  <path d="M8 84 C22 68 48 68 60 84 C72 100 98 100 112 84" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
                 </svg>
               </span>
-              <span class="step-label">균형잡힌음</span>
+              <span class="step-card-num">02</span>
+              <span class="step-card-label">균형잡힌 음</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="18" y="8" width="12" height="20" rx="6" stroke="#1b1410" stroke-width="2.5"/>
-                  <path d="M10 26c0 7.7 6.3 14 14 14s14-6.3 14-14" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M24 40v4M18 44h12" stroke="#1b1410" stroke-width="2.5" stroke-linecap="round"/>
+            <button class="step-card" data-value="clear">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="44" y="14" width="32" height="54" rx="16" stroke="currentColor" stroke-width="5"/>
+                  <path d="M22 62c0 21 17 38 38 38s38-17 38-38" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+                  <path d="M60 100v8M48 108h24" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="step-label">선명한음색</span>
+              <span class="step-card-num">03</span>
+              <span class="step-card-label">선명한 음색</span>
             </button>
-            <button class="step-btn">
-              <span class="step-icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="24" cy="24" r="4" fill="#1b1410"/>
-                  <circle cx="24" cy="24" r="10" stroke="#1b1410" stroke-width="2.5"/>
-                  <circle cx="24" cy="24" r="17" stroke="#1b1410" stroke-width="2" opacity="0.5"/>
+            <button class="step-card" data-value="wide">
+              <span class="step-card-svg" style="left:75%" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="60" cy="60" r="10" fill="currentColor"/>
+                  <circle cx="60" cy="60" r="25" stroke="currentColor" stroke-width="5"/>
+                  <circle cx="60" cy="60" r="43" stroke="currentColor" stroke-width="4" opacity="0.45"/>
                 </svg>
               </span>
-              <span class="step-label">넓은공간감</span>
+              <span class="step-card-num">04</span>
+              <span class="step-card-label">넓은 공간감</span>
             </button>
           </div>
         </div>
 
-      </div><!-- /quiz-steps -->
+      </div><!-- /quiz-right -->
     </div><!-- /quiz-inner -->
   </section>
+
+  <!-- ══════════════════════════════════════ PRODUCT RESULT ══════════════════════════════════════ -->
+  <div class="product-result" id="product-result">
 
   <!-- ══════════════════════════════════════ PRODUCT GRID 1: 홈 스피커 ══════════════════════════════════════ -->
   <section class="product-grid">
@@ -267,11 +302,11 @@
     </article>
 
     <!-- STANMORE III – BEST SELLER / selected -->
-    <article class="product-card product-card--stanmore product-card--selected product-card--bestseller">
+    <article class="product-card product-card--stanmore product-card--bestseller">
       <div class="card-top">
         <span class="badge-bestseller">BEST SELLER</span>
-        <button class="btn-wishlist btn-wishlist--active" aria-label="위시리스트에서 제거">
-          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1b1410"/><polyline points="9,16 14,21 23,11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="btn-wishlist" aria-label="위시리스트에 추가">
+          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#1b1410" stroke-width="0.5"/></svg>
         </button>
       </div>
       <div class="card-image">
@@ -429,11 +464,11 @@
     </article>
 
     <!-- EMBERTON III – BEST SELLER / selected -->
-    <article class="product-card product-card--emberton product-card--selected product-card--bestseller">
+    <article class="product-card product-card--emberton product-card--bestseller">
       <div class="card-top">
         <span class="badge-bestseller">BEST SELLER</span>
-        <button class="btn-wishlist btn-wishlist--active" aria-label="위시리스트에서 제거">
-          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1b1410"/><polyline points="9,16 14,21 23,11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="btn-wishlist" aria-label="위시리스트에 추가">
+          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#1b1410" stroke-width="0.5"/></svg>
         </button>
       </div>
       <div class="card-image">
@@ -499,10 +534,10 @@
   <section class="product-grid">
 
     <!-- MONITOR A.N.C – selected -->
-    <article class="product-card product-card--selected product-card--monitor">
+    <article class="product-card product-card--monitor">
       <div class="card-top">
-        <button class="btn-wishlist btn-wishlist--active" aria-label="위시리스트에서 제거">
-          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1b1410"/><polyline points="9,16 14,21 23,11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="btn-wishlist" aria-label="위시리스트에 추가">
+          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#1b1410" stroke-width="0.5"/></svg>
         </button>
       </div>
       <div class="card-image">
@@ -626,6 +661,8 @@
 
   </section><!-- /product-grid 3 -->
 
+  </div><!-- /product-result -->
+
   <!-- ══════════════════════════════════════ FOOTER ══════════════════════════════════════ -->
   <footer class="site-footer">
     <div class="footer-texture"></div>
@@ -739,7 +776,7 @@
 </script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const activeSvg = `<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1b1410"/><polyline points="9,16 14,21 23,11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const activeSvg = `<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#1b1410" stroke-width="0.5"/></svg>`;
     const inactiveSvg = `<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#1b1410" stroke-width="0.5"/></svg>`;
 
     document.querySelectorAll('.btn-wishlist').forEach(btn => {
@@ -760,17 +797,71 @@
       });
     });
 
-    // Quiz selection handling
-    document.querySelectorAll('.quiz-step').forEach(step => {
-      const buttons = step.querySelectorAll('.step-btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          buttons.forEach(b => b.classList.remove('is-active'));
-          btn.classList.add('is-active');
+    // Quiz: 카드 선택 → 다음 스텝 자동 전환 → 3번 완료 시 추천상품 표시
+    (function () {
+      const quizSteps = document.querySelectorAll('.quiz-step');
+      const productResult = document.getElementById('product-result');
+      const answers = {};
+
+      quizSteps.forEach(step => {
+        const stepNum = parseInt(step.dataset.step);
+        const cards = step.querySelectorAll('.step-card');
+
+        // 카드 클릭
+        cards.forEach(card => {
+          card.addEventListener('click', () => {
+            cards.forEach(c => c.classList.remove('is-active'));
+            card.classList.add('is-active');
+            answers[stepNum] = card.dataset.value;
+
+            setTimeout(() => {
+              const nextStep = document.querySelector(`.quiz-step[data-step="${stepNum + 1}"]`);
+              if (nextStep) {
+                step.classList.remove('is-active');
+                nextStep.classList.remove('from-prev');
+                nextStep.classList.add('is-active');
+              } else {
+                // STEP 3 완료 → 추천상품 reveal
+                if (productResult) {
+                  productResult.classList.add('is-visible');
+                  setTimeout(() => {
+                    productResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 150);
+                }
+              }
+            }, 550);
+          });
         });
+
+        // 스텝 전환 헬퍼 (방향에 따라 from-prev 클래스 제어)
+        function goToStep(targetStep, fromPrev) {
+          step.classList.remove('is-active');
+          targetStep.classList.remove('from-prev');
+          if (fromPrev) targetStep.classList.add('from-prev');
+          targetStep.classList.add('is-active');
+        }
+
+        // 이전 스텝 버튼
+        const prevBtn = step.querySelector('.step-nav-btn--prev');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            if (stepNum <= 1) return;
+            const prevStep = document.querySelector(`.quiz-step[data-step="${stepNum - 1}"]`);
+            if (prevStep) goToStep(prevStep, true);
+          });
+        }
+
+        // 다음 스텝 버튼 (이미 선택한 경우에만)
+        const nextBtn = step.querySelector('.step-nav-btn--next');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (!answers[stepNum]) return;
+            const nextStep = document.querySelector(`.quiz-step[data-step="${stepNum + 1}"]`);
+            if (nextStep) goToStep(nextStep, false);
+          });
+        }
       });
-    });
+    })();
   });
 </script>
 </body>

@@ -217,53 +217,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 
 
-/* ═══════════════════════════════════════════════════════
-   COMPARE SECTION
-═══════════════════════════════════════════════════════ */
-.compare-section {
-  width: 100%;
-  height: 19.5833vw;
-  background: var(--cream);
-}
-.compare-inner {
-  width: 90.625vw;
-  height: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.compare-left {
-  flex-shrink: 0;
-}
-
-.compare-title {
-  font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
-  font-variation-settings: "opsz" 18;
-  font-size: 4.1536vw;
-  font-weight: 400;
-  line-height: 0.9;
-  color: var(--dark);
-  letter-spacing: -0.01em;
-}
-
-.compare-right {
-  flex: 1;
-  margin-left: auto;
-}
-
-.compare-desc {
-  font-family: 'Pretendard Variable', sans-serif;
-  font-size: 1.1328vw;
-  font-weight: 400;
-  line-height: 1.8229vw;
-  color: #000;
-  letter-spacing: -0.025vw;
-  text-align: right;
-  white-space: nowrap;
-}
-
 
 /* ═══════════════════════════════════════════════════════
    QUIZ SECTION
@@ -276,16 +229,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
 }
 
-/* leather texture overlay */
-.quiz-texture {
-  position: absolute;
-  inset: 0;
-  background: url('../assets/images/quiz-raw-01.png') center/cover no-repeat;
-  mix-blend-mode: exclusion;
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 1;
-}
 
 .quiz-inner {
   position: relative;
@@ -294,126 +237,248 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   height: 100%;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   padding: 5.625vw 0 5.4688vw;
 }
 
-/* Marshall script watermark */
-.quiz-logo {
-  position: relative;
-  font-family: 'AmplifyPersonalUseOnly', cursive;
-  font-size: 9.4401vw;
-  color: transparent;
-  -webkit-text-stroke: 1.5px #D9C5A9;
-  line-height: 1;
-  margin-bottom: 4.9479vw;
-  letter-spacing: 0.02em;
-}
-
-.quiz-logo::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--dark);
-  -webkit-text-stroke: 0;
-  z-index: 1;
-}
-
-/* 3 step columns */
-.quiz-steps {
-  display: flex;
-  gap: 3.2813vw;
-}
-
-.quiz-step {
-  width: 28.0208vw;
+/* ── 왼쪽: Compare 타이틀 + 설명 ── */
+.quiz-left {
+  width: 24vw;
   flex-shrink: 0;
+  padding-top: 10.4167vw;
+}
+
+.quiz-compare-title {
+  font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
+  font-variation-settings: "opsz" 18;
+  font-size: 3.3333vw;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.0667vw;
+  margin-bottom: 1.4583vw;
+}
+
+.quiz-compare-desc {
+  font-size: 0.9375vw;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.5;
+  letter-spacing: -0.01875vw;
+}
+
+/* ── 구분선 ── */
+.quiz-divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255, 234, 198, 0.2);
+  flex-shrink: 0;
+  margin: 0 2.0833vw;
+}
+
+/* ── 오른쪽: 스텝 영역 ── */
+.quiz-right {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding-left: 4.6875vw;
 }
 
+/* ── 스텝 컨테이너 ── */
+.quiz-step {
+  display: none;
+  flex-direction: column;
+}
+
+.quiz-step.is-active {
+  display: flex;
+  animation: quizStepInForward 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.quiz-step.is-active.from-prev {
+  animation-name: quizStepInBackward;
+}
+
+/* forward: 오른쪽에서 진입 / backward: 왼쪽에서 진입 */
+@keyframes quizStepInForward {
+  from { opacity: 0; transform: translateX(3vw); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes quizStepInBackward {
+  from { opacity: 0; transform: translateX(-3vw); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── 스텝 헤더 ── */
+.step-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4688vw;
+  margin-bottom: 2.5vw;
+}
+
+/* STEP N — Pretendard Bold 24px, #fff, tracking -0.528px */
 .step-num {
-  font-size: 1.1328vw;
-  font-weight: 500;
-  letter-spacing: -0.022em;
+  font-size: 1.25vw;
+  font-weight: 700;
   color: #fff;
-  margin-bottom: 0.4688vw;
   line-height: 1.5;
+  letter-spacing: -0.0275vw;
 }
 
+/* 질문 — Pretendard Medium 30px, #ffeac6, tracking -0.66px */
 .step-question {
-  font-size: 1.4160vw;
+  font-size: 1.5625vw;
   font-weight: 500;
-  color: #ffeac6;
-  letter-spacing: -0.022em;
-  margin-bottom: 2.8646vw;
+  color: var(--cream-light);
   line-height: 1.5;
+  letter-spacing: -0.0344vw;
   white-space: nowrap;
 }
 
+/* ── 내비게이션 (< NEXT >) ── */
+.step-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.6667vw;
+  margin-bottom: 1.6667vw;
+}
+
+/* 화살표 버튼 — Pretendard Medium 16px, #fff */
+.step-nav-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1.25vw;
+  color: #fff;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  font-family: inherit;
+  width: 1.5625vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.step-nav-btn:hover { opacity: 1; }
+
+/* 스텝 1: 이전 화살표 비활성 / 스텝 3: 다음 화살표 비활성 */
+.quiz-step[data-step="1"] .step-nav-btn--prev,
+.quiz-step[data-step="3"] .step-nav-btn--next {
+  opacity: 0.2;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* NEXT 텍스트 — 16px, letter-spacing 4.8px */
+.step-nav-text {
+  font-size: 0.8333vw;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.25vw;
+  line-height: 1.5;
+}
+
+/* ── 옵션: 카드 4개 ── */
 .step-options {
   display: flex;
-  gap: 0.5208vw;
-  flex-wrap: nowrap;
+  gap: 1.0417vw;
 }
 
-.step-btn {
-  width: 6.6146vw;
-  height: 7.8125vw;
-  flex-shrink: 0;
-  background: transparent;
-  border-radius: 0.5208vw;
+/* ── 카드 — 259×365px 기준 ── */
+.step-card {
   position: relative;
-  display: block;
-  border: 1px solid #D9C5A9;
+  width: 13.4896vw;
+  height: 19.0104vw;
+  flex-shrink: 0;
+  background: rgba(255, 234, 198, 0.05);
+  border-radius: 0.5208vw;
+  border: 0.5px solid transparent;
   cursor: pointer;
+  overflow: hidden;
   padding: 0;
-  transition: background 0.2s, transform 0.15s;
-}
-.step-btn:hover,
-.step-btn.is-active {
-  background: rgba(217, 197, 169, 0.1);
-  transform: translateY(-2px);
+  /* currentColor 상속: SVG 아이콘, 넘버, 라벨 색상 제어 */
+  color: #cba672;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
 }
 
-.step-icon {
+.step-card:hover {
+  background: rgba(255, 234, 198, 0.1);
+}
+
+.step-card.is-active {
+  background: rgba(255, 234, 198, 0.25);
+  border-color: #ffeac6;
+  color: #ffeac6;
+}
+
+/* ── 카드: SVG 아이콘 (모든 스텝) — 오른쪽 오프셋, 우측 클리핑 ── */
+.step-card-svg {
   position: absolute;
-  width: 2.7083vw;
-  height: 2.7083vw;
-  left: 1.9531vw;
-  top: 1.7708vw;
+  top: 52%;
+  left: 68%;
+  transform: translate(-50%, -50%);
+  width: 88%;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.step-icon svg {
-  width: 2.7083vw;
-  height: 2.7083vw;
-}
-.step-icon svg [stroke="#1b1410"] {
-  stroke: #D9C5A9;
-}
-.step-icon svg [fill="#1b1410"] {
-  fill: #D9C5A9;
+.step-card-svg svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
 }
 
-.step-label {
+/* ── 카드: 번호 — Bodoni Moda Regular 56px, tracking -1.232px ── */
+.step-card-num {
   position: absolute;
-  top: 5.2083vw;
-  left: 0;
-  right: 0;
-  padding: 0 0.5208vw;
-  font-size: 0.9440vw;
-  font-weight: 500;
-  color: #D9C5A9;
-  text-align: center;
+  top: 0.885vw;
+  left: 1.4583vw;
+  font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
+  font-variation-settings: "opsz" 18;
+  font-size: 2.9167vw;
+  font-weight: 400;
   line-height: 1.5;
+  letter-spacing: -0.0642vw;
+  color: inherit;
+  z-index: 1;
+}
+
+/* ── 카드: 라벨 — Pretendard Medium 24px, tracking -0.528px ── */
+.step-card-label {
+  position: absolute;
+  bottom: 1.5104vw;
+  left: 1.4583vw;
+  font-size: 1.25vw;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.0275vw;
+  color: inherit;
   white-space: nowrap;
+  z-index: 1;
+  transition: font-weight 0.2s;
+}
+.step-card.is-active .step-card-label {
+  font-weight: 700;
+}
+
+/* ── 추천 상품 결과 영역 ── */
+.product-result {
+  display: none;
+  background: #ffffff;
+}
+.product-result.is-visible {
+  display: block;
+  animation: productReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes productReveal {
+  from { opacity: 0; transform: translateY(2vw); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 
@@ -422,21 +487,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ═══════════════════════════════════════════════════════ */
 .product-grid {
   width: 90.625vw;
-  height: 56.25vw;
   margin: 0 auto;
   display: flex;
+  align-items: stretch;
 }
 
 .product-card {
   flex: 1;
   width: 22.65625vw;
   min-width: 22.65625vw;
-  height: 56.25vw;
   background: var(--white);
   display: flex;
   flex-direction: column;
-  padding: 0.5729vw 2.3958vw 2.3958vw;
+  padding: 2.3958vw 2.3958vw 4.1667vw;
   border-right: 1px solid #ede8e0;
+  border-bottom: 1px solid #ede8e0;
   position: relative;
   transition: background 0.2s;
 }
@@ -454,7 +519,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: 2.6042vw;
+  height: 1.5625vw;
   margin-bottom: 0;
   position: relative;
 }
