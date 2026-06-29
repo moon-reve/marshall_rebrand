@@ -279,7 +279,7 @@ const shopProductCatalog = {
         {
             id: "dsl-overdrive",
             category: "analog",
-            categoryLabel: "ANALOG",
+            categoryLabel: "PEDAL",
             name: "DSL OVERDRIVE PEDAL",
             price: null,
             description: "앰프의 질감을 발끝에서 제어하는 오버드라이브 페달",
@@ -295,8 +295,10 @@ const shopProductCatalog = {
 };
 const shopProductCategoryOrder = ["amp", "speaker", "headphones", "analog"];
 const getAllShopProducts = () => shopProductCategoryOrder.flatMap((category) => shopProductCatalog[category] || []);
+const getShopCategoryProducts = (category) => shopProductCatalog[category] || [];
 const formatShopCount = (count) => String(count).padStart(2, "0");
-let shopProductDetails = getAllShopProducts();
+let shopActiveCategory = "speaker";
+let shopProductDetails = getShopCategoryProducts(shopActiveCategory);
 const shopBestProductDetails = {
     "major-v": {
         category: "headphones",
@@ -320,7 +322,7 @@ const shopBestProductDetails = {
     },
     "dsl-overdrive": {
         category: "analog",
-        categoryLabel: "ANALOG",
+        categoryLabel: "PEDAL",
         name: "DSL OVERDRIVE PEDAL",
         price: null,
         description: "앰프의 질감을 발끝에서 제어하는 오버드라이브 페달",
@@ -392,45 +394,55 @@ function getShopProductSnapTarget(index) {
 
 function getShopProductSnapIndex() {
     if (!shopProductCards.length) return 0;
-
-    const productTop = getShopProductTop();
-    const cardHeight = shopProductCards[0]?.offsetHeight || 1;
-    return clamp(Math.round((smoothTargetY - productTop) / cardHeight), 0, shopProductCards.length - 1);
+    return clamp(shopActiveProductIndex >= 0 ? shopActiveProductIndex : 0, 0, shopProductCards.length - 1);
 }
 
 function snapToShopProductCard(index) {
-    const targetTop = getShopProductSnapTarget(index);
-    if (targetTop === null) return;
-    smoothScrollTo(targetTop);
+    setShopProductIndex(index);
 }
 
-function isWheelInsideShopProduct(event) {
-    if (!shopProductSection || !event) return false;
+function isWheelInsideShopProductImageArea(event) {
+    if (!shopProductScroll || !event) return false;
 
-    const target = event.target;
-    if (target instanceof Element && target.closest(".shop-product")) return true;
-
-    const productRect = shopProductSection.getBoundingClientRect();
-    return event.clientX >= productRect.left &&
-        event.clientX <= productRect.right &&
-        event.clientY >= productRect.top &&
-        event.clientY <= productRect.bottom;
+    const imageAreaRect = shopProductScroll.getBoundingClientRect();
+    return event.clientX >= imageAreaRect.left &&
+        event.clientX <= imageAreaRect.right &&
+        event.clientY >= imageAreaRect.top &&
+        event.clientY <= imageAreaRect.bottom;
 }
 
 function handleShopProductWheel(deltaY, event) {
     if (!shopProductSection || !shopProductCards.length) return false;
-    if (!isWheelInsideShopProduct(event)) return false;
+    if (!isWheelInsideShopProductImageArea(event)) {
+        shopProductWheelDelta = 0;
+        shopProductAutoSyncEnabled = false;
+        return false;
+    }
 
     const productRect = shopProductSection.getBoundingClientRect();
     const headerHeight = shopTopbarMain?.offsetHeight || 70;
     const isInProductArea = productRect.top <= getShopProductInfoLine() && productRect.bottom > headerHeight;
-    if (!isInProductArea) return false;
+    if (!isInProductArea) {
+        shopProductWheelDelta = 0;
+        shopProductAutoSyncEnabled = false;
+        return false;
+    }
+
+    shopProductAutoSyncEnabled = true;
+
+    const now = performance.now();
+    if (now < shopProductWheelLockedUntil) return true;
+
+    shopProductWheelDelta += deltaY;
+    if (Math.abs(shopProductWheelDelta) < shopProductWheelThreshold) return true;
 
     const currentIndex = getShopProductSnapIndex();
-    const nextIndex = clamp(currentIndex + (deltaY > 0 ? 1 : -1), 0, shopProductCards.length - 1);
+    const nextIndex = clamp(currentIndex + (shopProductWheelDelta > 0 ? 1 : -1), 0, shopProductCards.length - 1);
+    shopProductWheelDelta = 0;
     if (nextIndex === currentIndex) return false;
 
     shopManualProductId = null;
+    shopProductWheelLockedUntil = now + shopProductWheelDelay;
     snapToShopProductCard(nextIndex);
     return true;
 }
@@ -438,6 +450,9 @@ function handleShopProductWheel(deltaY, event) {
 smoothScrollEl?.addEventListener("wheel", (event) => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     event.preventDefault();
+    if (!isWheelInsideShopProductImageArea(event)) {
+        shopProductAutoSyncEnabled = false;
+    }
     if (event.deltaY > 0 && !hasSkippedHeroOnScroll) {
         skipHeroOnFirstScroll(event, event.deltaY);
         if (hasSkippedHeroOnScroll) return;
@@ -457,6 +472,11 @@ let hasSkippedHeroOnScroll = false;
 let shopHeroTouchStartY = 0;
 let heroSkipScrollAmount = 0;
 const heroSkipThreshold = 120;
+let shopProductWheelDelta = 0;
+let shopProductWheelLockedUntil = 0;
+let shopProductAutoSyncEnabled = false;
+const shopProductWheelThreshold = 90;
+const shopProductWheelDelay = 420;
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -502,6 +522,23 @@ function updateShopBestCardState(productId) {
     });
 }
 
+function updateShopProductImageState(index) {
+    shopProductCards.forEach((card, cardIndex) => {
+        card.classList.toggle("is-active", cardIndex === index);
+    });
+}
+
+function setShopProductIndex(index) {
+    if (!shopProductCards.length) return;
+
+    const nextIndex = clamp(index, 0, shopProductCards.length - 1);
+    if (nextIndex === shopActiveProductIndex) return;
+
+    shopActiveProductIndex = nextIndex;
+    updateShopProductImageState(nextIndex);
+    renderShopProductDetails(nextIndex);
+}
+
 function renderShopProductImages(products) {
     if (!shopProductScroll) return;
 
@@ -521,13 +558,17 @@ function renderShopProductImages(products) {
 
     shopProductCards = Array.from(shopProductScroll.querySelectorAll(".shop-product__image-card"));
     shopActiveProductIndex = -1;
+    updateShopProductImageState(0);
 }
 
 function setShopProductCategory(category) {
-    const products = shopProductCatalog[category];
-    if (!products) return false;
+    const products = getShopCategoryProducts(category);
+    if (!products.length) return false;
 
-    shopProductDetails = getAllShopProducts();
+    shopActiveCategory = category;
+    shopProductDetails = products;
+    shopProductWheelDelta = 0;
+    renderShopProductImages(shopProductDetails);
     return true;
 }
 
@@ -592,22 +633,11 @@ function renderShopProductDetails(productOrIndex) {
 
 function updateShopProductDetails() {
     if (!shopProductCards.length || !shopProductName || !shopProductDescription) return;
-
-    const switchLine = getShopProductInfoLine();
-    const activeIndex = shopProductCards.reduce((currentIndex, card, index) => {
-        return card.getBoundingClientRect().top <= switchLine + 1 ? index : currentIndex;
-    }, 0);
-
-    if (activeIndex === shopActiveProductIndex && !shopManualProductId) return;
-
-    shopActiveProductIndex = activeIndex;
+    if (!shopProductAutoSyncEnabled && !shopManualProductId) return;
 
     if (shopManualProductId) {
         renderShopProductDetails(getProductById(shopManualProductId));
-        return;
     }
-
-    renderShopProductDetails(activeIndex);
 }
 
 function scrollToShopProduct(productId) {
@@ -646,12 +676,12 @@ function initializeShopInteractions() {
             const category = button.dataset.shopCategory;
             const productId = shopCategoryDefaultProduct[category] || "acton-iii";
             const hasCategoryProducts = setShopProductCategory(category);
-            const product = getProductById(productId);
+            const product = shopProductDetails.find((item) => item.id === productId) || shopProductDetails[0];
+            if (!product) return;
 
-            shopManualProductId = hasCategoryProducts ? null : productId;
-            renderShopProductDetails(product);
+            shopManualProductId = null;
             if (hasCategoryProducts) {
-                scrollToShopProduct(productId);
+                scrollToShopProduct(product.id);
             }
         });
     });
@@ -660,16 +690,20 @@ function initializeShopInteractions() {
         const productId = card.dataset.shopProductCard;
 
         card.addEventListener("click", () => {
-            shopManualProductId = productId;
-            renderShopProductDetails(getProductById(productId));
+            const product = getProductById(productId);
+            if (product?.category) setShopProductCategory(product.category);
+            shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
             scrollToShopProduct(productId);
+            if (shopManualProductId) renderShopProductDetails(product);
         });
         card.addEventListener("keydown", (event) => {
             if (event.key !== "Enter" && event.key !== " ") return;
             event.preventDefault();
-            shopManualProductId = productId;
-            renderShopProductDetails(getProductById(productId));
+            const product = getProductById(productId);
+            if (product?.category) setShopProductCategory(product.category);
+            shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
             scrollToShopProduct(productId);
+            if (shopManualProductId) renderShopProductDetails(product);
         });
     });
 
