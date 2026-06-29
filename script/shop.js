@@ -761,6 +761,46 @@ function initializeShopInteractions() {
 
 }
 
+function initShopBestCarousel() {
+    const carousel = document.querySelector(".shop-best__carousel");
+    const track = carousel?.querySelector(".shop-best__grid");
+    if (!carousel || !track) return;
+
+    const prevButton = carousel.querySelector(".shop-best__arrow--prev");
+    const nextButton = carousel.querySelector(".shop-best__arrow--next");
+    const totalCards = track.querySelectorAll(".product-card").length;
+    if (!totalCards) return;
+
+    carousel.style.setProperty("--shop-best-total", String(totalCards));
+
+    let index = 0;
+
+    const getVisibleCount = () => {
+        const value = parseInt(getComputedStyle(carousel).getPropertyValue("--shop-best-visible"), 10);
+        return Number.isFinite(value) && value > 0 ? value : 1;
+    };
+
+    const update = () => {
+        const maxIndex = Math.max(0, totalCards - getVisibleCount());
+        index = Math.min(Math.max(index, 0), maxIndex);
+        carousel.style.setProperty("--shop-best-index", String(index));
+        if (prevButton) prevButton.disabled = index <= 0;
+        if (nextButton) nextButton.disabled = index >= maxIndex;
+    };
+
+    prevButton?.addEventListener("click", () => {
+        index -= 1;
+        update();
+    });
+    nextButton?.addEventListener("click", () => {
+        index += 1;
+        update();
+    });
+    window.addEventListener("resize", update);
+
+    update();
+}
+
 function renderShopHeroPanels(progress) {
     shopHeroPanels.forEach((panel, index) => {
         const [start, end] = shopPanelTimings[index];
@@ -847,6 +887,7 @@ renderShopHeroPanels(0);
 renderShopProductImages(shopProductDetails);
 renderShopProductDetails(0);
 initializeShopInteractions();
+initShopBestCarousel();
 smoothScrollEl?.addEventListener("touchstart", (event) => {
     shopHeroTouchStartY = event.touches[0]?.clientY || 0;
 }, { passive: true });

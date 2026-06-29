@@ -234,17 +234,105 @@ body {
     text-align: center;
 }
 
-.shop-best__grid {
+.shop-best__carousel {
     --shop-best-grid-padding: 4.6875vw;
+    --shop-best-visible: 4;
+    --shop-best-total: 6;
+    --shop-best-index: 0;
     position: relative;
     z-index: 2;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    width: 100%;
     margin: 4.6875vw 0;
     padding: 0 var(--shop-best-grid-padding);
     box-sizing: border-box;
     background: #ffffff;
+}
+
+.shop-best__viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* 좌우 클립 가장자리에 닿는 구분선을 카드색으로 가려, 옆 제품이 보일 때만 구분선이 나타나게 함 */
+.shop-best__viewport::before,
+.shop-best__viewport::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    z-index: 5;
+    background: #ffffff;
+    pointer-events: none;
+}
+
+.shop-best__viewport::before {
+    left: 0;
+}
+
+.shop-best__viewport::after {
+    right: 0;
+}
+
+.shop-best__grid {
+    display: flex;
+    width: calc(var(--shop-best-total) / var(--shop-best-visible) * 100%);
+    transform: translateX(calc(var(--shop-best-index) * -100% / var(--shop-best-total)));
+    transition: transform 0.6s cubic-bezier(0.7, 0.024, 0.199, 0.976);
+}
+
+.shop-best__arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.9vw;
+    height: 2.9vw;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 0;
+    transform: translateY(-50%);
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #1b1410;
+    cursor: pointer;
+    transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.shop-best__arrow svg {
+    width: 42%;
+    height: 42%;
+}
+
+.shop-best__arrow--prev {
+    left: 1vw;
+}
+
+.shop-best__arrow--next {
+    right: 1vw;
+}
+
+.shop-best__arrow:hover {
+    color: #c8922a;
+}
+
+.shop-best__arrow:focus-visible {
+    outline: 0.12vw solid #c8922a;
+    outline-offset: 0.2vw;
+}
+
+.shop-best__arrow[disabled] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shop-best__grid {
+        transition: none;
+    }
 }
 
 .product-card {
@@ -254,15 +342,19 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: var(--card-width);
+    flex: 0 0 calc(100% / var(--shop-best-total));
     height: calc(var(--card-width) * 1.41875);
     background: #ffffff;
     cursor: pointer;
     transition: transform 0.28s ease;
 }
 
-.shop-best__grid .product-card:not(:first-child) {
-    border-left: 1px solid rgba(27, 20, 16, 0.12);
+.shop-best__grid .product-card {
+    border-right: 1px solid #d9c5a9;
+}
+
+.shop-best__grid .product-card:last-child {
+    border-right: none;
 }
 
 .product-card:hover .product-card__image,
@@ -932,8 +1024,8 @@ body {
         min-height: 170vh;
     }
 
-    .shop-best__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .shop-best__carousel {
+        --shop-best-visible: 2;
     }
 
     .product-card {
@@ -1080,8 +1172,8 @@ body {
         font-size: 3.2vw;
     }
 
-    .shop-best__grid {
-        grid-template-columns: 100%;
+    .shop-best__carousel {
+        --shop-best-visible: 1;
     }
 
     .product-card {
