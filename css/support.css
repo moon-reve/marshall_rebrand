@@ -41,7 +41,7 @@
 .support-hero__title {
     margin: 0 0 0.95rem;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 150px;
+    font-size: 4.1536vw;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
     letter-spacing: -0.073vw;
@@ -55,7 +55,7 @@
     margin: 0 0 3.33vw;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     color: #ffeac6;
-    font-size: 18px;
+    font-size: 0.9375vw;
     font-weight: 400;
     line-height: 1.4;
     letter-spacing: -0.038vw;
@@ -199,7 +199,7 @@
     z-index: 1;
     color: #d8ae70;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 56px;
+    font-size: 2.9167vw;
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0;
@@ -275,10 +275,10 @@
     position: relative;
     z-index: 1;
     color: #d8c1a2;
-    font-size: 20px;
+    font-size: 1.25vw;
     font-weight: 500;
     line-height: 1.2;
-    letter-spacing: 0;
+    letter-spacing: -0.0275vw;
     text-align: center;
     white-space: nowrap;
 }
@@ -624,22 +624,22 @@
 .support-section-kicker {
     margin: 0 0 18px;
     color: #b97918;
-    font-size: 10px;
-    font-weight: 800;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.625vw;
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: 0;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
 }
 
 .support-editorial__title {
     margin: 0;
     color: #170f0c;
-    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 29pt;
-    font-weight: 600;
-    font-variation-settings: "opsz" 18;
-    line-height: 0.92;
-    letter-spacing: 0;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 3.3333vw;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.0667vw;
 }
 
 .support-faq--editorial .support-editorial__title {
@@ -663,16 +663,19 @@
 .faq-list--editorial .faq-list__button {
     grid-template-columns: 42px minmax(0, 1fr) 24px;
     min-height: 58px;
-    color: #f7f2ea;
-    font-size: 15px;
+    padding-right: 1.25vw;
+    padding-left: 1.25vw;
+    color: #17100d;
+    font-size: 0.9375vw;
     font-weight: 500;
 }
 
 .faq-list__number {
-    color: #c6962c;
-    font-size: 11px;
-    font-weight: 800;
+    color: #b65b25;
+    font-size: 0.5729vw;
+    font-weight: 700;
     line-height: 1;
+    letter-spacing: 0.1em;
 }
 
 .faq-list--editorial .faq-list__plus {
@@ -707,13 +710,14 @@
 }
 
 .service-row .service-block__title {
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 0.7292vw;
+    font-weight: 700;
     line-height: 1.2;
+    letter-spacing: 0.05em;
 }
 
 .service-row .service-block__primary {
-    font-size: 13px;
+    font-size: 0.7081vw;
     font-weight: 500;
     line-height: 1.35;
 }
@@ -775,10 +779,10 @@
     width: 100%;
     margin: 0;
     color: #f7f2ea;
-    font-size: 20px;
-    font-weight: 800;
-    line-height: 1.25;
-    text-align: center;
+    font-size: 1.4583vw;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.0413vw;
 }
 
 .guide-flow__item small {
@@ -787,7 +791,7 @@
     width: 100%;
     margin-top: 14px;
     color: rgba(247, 242, 234, 0.68);
-    font-size: 13px;
+    font-size: 0.8024vw;
     font-weight: 400;
     line-height: 1.45;
     text-align: center;
@@ -808,19 +812,20 @@
     margin: 0 0 16px;
     color: #17100d;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 29pt;
-    font-weight: 600;
+    font-size: 3.3333vw;
+    font-weight: 400;
     font-variation-settings: "opsz" 18;
-    line-height: 1;
-    letter-spacing: 0;
+    line-height: 1.04;
+    letter-spacing: -0.0667vw;
 }
 
 .support-help-cta p {
     margin: 0;
     color: rgba(23, 16, 13, 0.82);
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.45;
+    font-size: 0.8496vw;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
 }
 
 .support-help-cta__button {
@@ -832,9 +837,11 @@
     color: #17100d;
     border: 1px solid rgba(23, 16, 13, 0.72);
     text-decoration: none;
-    font-size: 13px;
-    font-weight: 800;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8333vw;
+    font-weight: 700;
     line-height: 1;
+    letter-spacing: 0.25vw;
 }
 
 .support-footer {
@@ -1113,12 +1120,12 @@
     }
 
     .support-editorial__title {
-        font-size: 29pt;
+        font-size: 8vw;
     }
 
     .faq-list--editorial .faq-list__button {
         grid-template-columns: 34px minmax(0, 1fr) 20px;
-        font-size: 13px;
+        font-size: 3.5vw;
     }
 
     .service-row {
@@ -1149,7 +1156,7 @@
     }
 
     .support-help-cta h2 {
-        font-size: 29pt;
+        font-size: 8vw;
     }
 
     .support-help-cta__button {
