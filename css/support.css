@@ -41,7 +41,7 @@
 .support-hero__title {
     margin: 0 0 0.95rem;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 3.65vw;
+    font-size: 150px;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
     letter-spacing: -0.073vw;
@@ -55,7 +55,7 @@
     margin: 0 0 3.33vw;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     color: #ffeac6;
-    font-size: 0.9375vw;
+    font-size: 18px;
     font-weight: 400;
     line-height: 1.4;
     letter-spacing: -0.038vw;
@@ -66,11 +66,11 @@
     display: flex;
     align-items: center;
     gap: 0.58vw;
-    width: min(31.25vw, 600px);
-    min-width: 420px;
-    height: 3.33vw;
-    min-height: 54px;
-    max-height: 64px;
+    width: min(26.8vw, 514px);
+    min-width: 360px;
+    height: 3.02vw;
+    min-height: 48px;
+    max-height: 58px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 8px;
@@ -123,15 +123,15 @@
 
 .support-actions {
     position: relative;
-    min-height: 9.9vw;
+    min-height: 19.3vw;
     overflow: hidden;
-    padding: 0.82vw 3.22vw 0.94vw;
+    padding: 1vw 1.9vw 1.25vw;
     background-color: #171514;
     background-image: url("../assets/images/support-leather-texture.png");
     background-repeat: repeat;
     background-size: 220px 118px;
     background-position: left top;
-    border-top: 1px solid rgba(174, 80, 30, 0.75);
+    border-top: 0;
 }
 
 .support-actions::before {
@@ -161,44 +161,122 @@
 .support-actions__grid {
     position: relative;
     z-index: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(6, 12.65vw);
     align-items: center;
-    gap: 0.52vw;
+    justify-content: center;
+    gap: 20px;
+    counter-reset: support-card;
 }
 
 .support-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-end;
     justify-self: center;
-    width: 6.8vw;
-    aspect-ratio: 1 / 1.18;
-    gap: 0.78vw;
-    padding: 1.05vw 0.52vw 0.9vw;
+    width: 12.65vw;
+    height: 17.72vw;
+    gap: 0;
+    padding: 1.65vw 1.4vw 1.65vw;
     color: #d8c1a2;
-    background: rgba(18, 14, 12, 0.36);
-    border: 1px solid rgba(216, 193, 162, 0.86);
-    border-radius: 0.42vw;
+    background: rgba(33, 25, 20, 0.9);
+    border: 1px solid rgba(216, 193, 162, 0.06);
+    border-radius: 0.38vw;
     text-decoration: none;
-    box-shadow: inset 0 0 0 1px rgba(255, 246, 230, 0.08);
+    box-shadow: none;
+    overflow: hidden;
+    counter-increment: support-card;
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.support-card::before {
+    content: counter(support-card, decimal-leading-zero);
+    position: absolute;
+    top: 1.52vw;
+    left: 1.4vw;
+    z-index: 1;
+    color: #d8ae70;
+    font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.support-card:hover,
+.support-card:focus-visible {
+    color: #ffe5b8;
+    background: rgba(88, 80, 68, 0.88);
+    border-color: rgba(255, 229, 184, 0.9);
+    outline: 0;
 }
 
 .support-card:nth-child(5),
 .support-card:nth-child(9) {
-    margin-left: 2.9vw;
+    margin-left: 0;
 }
 
 .support-card__icon {
-    width: 2.02vw;
-    height: 2.02vw;
+    position: absolute;
+    right: var(--support-card-icon-right, -1.2vw);
+    bottom: var(--support-card-icon-bottom, 4.55vw);
+    width: var(--support-card-icon-size, 9.4vw);
+    height: var(--support-card-icon-size, 9.4vw);
     flex: 0 0 auto;
+    color: currentColor;
+    opacity: 0.3;
+    transition: opacity 180ms ease, color 180ms ease;
+}
+
+.support-card--register {
+    --support-card-icon-size: 10.7vw;
+    --support-card-icon-right: -1.35vw;
+    --support-card-icon-bottom: 4.32vw;
+}
+
+.support-card--delivery {
+    --support-card-icon-size: 10.9vw;
+    --support-card-icon-right: -2.35vw;
+    --support-card-icon-bottom: 4.08vw;
+}
+
+.support-card--warranty {
+    --support-card-icon-size: 11.4vw;
+    --support-card-icon-right: -2.25vw;
+    --support-card-icon-bottom: 3.98vw;
+}
+
+.support-card--return {
+    --support-card-icon-size: 11.4vw;
+    --support-card-icon-right: -2.85vw;
+    --support-card-icon-bottom: 3.92vw;
+}
+
+.support-card--manual {
+    --support-card-icon-size: 11.15vw;
+    --support-card-icon-right: -2.2vw;
+    --support-card-icon-bottom: 4.02vw;
+}
+
+.support-card--firmware {
+    --support-card-icon-size: 11.15vw;
+    --support-card-icon-right: -1.95vw;
+    --support-card-icon-bottom: 3.95vw;
+}
+
+.support-card:hover .support-card__icon,
+.support-card:focus-visible .support-card__icon {
+    opacity: 1;
 }
 
 .support-card__label {
+    position: relative;
+    z-index: 1;
     color: #d8c1a2;
-    font-size: 0.84vw;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 500;
     line-height: 1.2;
     letter-spacing: 0;
     text-align: center;
@@ -323,26 +401,30 @@
 }
 
 .support-panel--service {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
     flex: 1;
     min-height: 632px;
-    padding: 45px 48px 28px;
+    padding: 46px 48px;
 }
 
 .service-block {
-    padding-bottom: 31px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
     border-bottom: 1px solid #d8d1c8;
 }
 
 .service-block + .service-block {
-    padding-top: 41px;
+    padding-top: 0;
 }
 
 .service-block--chat {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 183px;
+    align-items: center;
+    gap: 24px;
 }
 
 .service-block--last {
@@ -350,7 +432,7 @@
 }
 
 .service-block__title {
-    margin: 0 0 18px;
+    margin: 0 0 14px;
     color: #000;
     font-size: 20px;
     font-weight: 400;
@@ -358,7 +440,7 @@
 }
 
 .service-block__primary {
-    margin: 0 0 50px;
+    margin: 0 0 26px;
     color: #1b130f;
     font-size: 30px;
     font-weight: 600;
@@ -375,17 +457,17 @@
 }
 
 .service-block__copy {
-    margin-bottom: 47px;
+    margin-bottom: 26px;
     white-space: nowrap;
 }
 
 .service-block__primary--chat {
-    margin-bottom: 47px;
+    margin-bottom: 26px;
     white-space: nowrap;
 }
 
 .service-block--chat .service-block__meta {
-    margin-bottom: 24px;
+    margin-bottom: 0;
 }
 
 .service-block__button {
@@ -404,7 +486,7 @@
 
 .support-panel--faq {
     min-height: 435px;
-    padding: 14px 48px;
+    padding: 46px 48px;
 }
 
 .faq-list {
@@ -447,7 +529,7 @@
 
 .support-panel--guide {
     min-height: 435px;
-    padding: 32px 48px;
+    padding: 46px 48px;
 }
 
 .guide-item {
