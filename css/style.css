@@ -61,8 +61,9 @@ a {
     --shop-content-margin: 4.6875vw;
     position: fixed;
     top: 0;
+    left: 0;
     z-index: 1100;
-    width: 100%;
+    width: calc(100% - var(--shop-scrollbar-width, 0px));
     transition: all 0.4s ease;
     will-change: top;
 }

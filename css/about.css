@@ -10,10 +10,6 @@
     background: var(--about-cream);
 }
 
-.about-topbar .shop-topbar__main {
-    background: rgba(18, 12, 5, 0.88);
-}
-
 .about-hero {
     height: 115vh;
     background: var(--about-tan);
