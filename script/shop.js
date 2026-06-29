@@ -496,6 +496,14 @@ function getProductById(productId) {
         .find((product) => product.id === productId) || shopBestProductDetails[productId];
 }
 
+function openShopBestProduct(productId) {
+    const product = getProductById(productId);
+    if (product?.category) setShopProductCategory(product.category);
+    shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
+    scrollToShopProduct(productId);
+    if (shopManualProductId) renderShopProductDetails(product);
+}
+
 function formatShopPrice(product) {
     if (!product.price) return "판매처 알아보기";
     return `<strong>₩</strong> ${product.price}`;
@@ -717,20 +725,12 @@ function initializeShopInteractions() {
         const productId = card.dataset.shopProductCard;
 
         card.addEventListener("click", () => {
-            const product = getProductById(productId);
-            if (product?.category) setShopProductCategory(product.category);
-            shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
-            scrollToShopProduct(productId);
-            if (shopManualProductId) renderShopProductDetails(product);
+            openShopBestProduct(productId);
         });
         card.addEventListener("keydown", (event) => {
             if (event.key !== "Enter" && event.key !== " ") return;
             event.preventDefault();
-            const product = getProductById(productId);
-            if (product?.category) setShopProductCategory(product.category);
-            shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
-            scrollToShopProduct(productId);
-            if (shopManualProductId) renderShopProductDetails(product);
+            openShopBestProduct(productId);
         });
     });
 
@@ -769,36 +769,83 @@ function initShopBestCarousel() {
     const prevButton = carousel.querySelector(".shop-best__arrow--prev");
     const nextButton = carousel.querySelector(".shop-best__arrow--next");
     const totalCards = track.querySelectorAll(".product-card").length;
-    if (!totalCards) return;
+    if (totalCards <= 1) return;
 
-    carousel.style.setProperty("--shop-best-total", String(totalCards));
+    let isMoving = false;
 
-    let index = 0;
+    const shouldReduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const getVisibleCount = () => {
-        const value = parseInt(getComputedStyle(carousel).getPropertyValue("--shop-best-visible"), 10);
-        return Number.isFinite(value) && value > 0 ? value : 1;
+    const getCardStep = () => {
+        const firstCard = track.querySelector(".product-card");
+        return firstCard?.getBoundingClientRect().width || 0;
     };
 
-    const update = () => {
-        const maxIndex = Math.max(0, totalCards - getVisibleCount());
-        index = Math.min(Math.max(index, 0), maxIndex);
-        carousel.style.setProperty("--shop-best-index", String(index));
-        if (prevButton) prevButton.disabled = index <= 0;
-        if (nextButton) nextButton.disabled = index >= maxIndex;
+    const resetTrackPosition = () => {
+        track.classList.add("is-jump-reset");
+        track.style.transform = "translate3d(0, 0, 0)";
+        track.offsetHeight;
+        requestAnimationFrame(() => {
+            track.classList.remove("is-jump-reset");
+            isMoving = false;
+        });
+    };
+
+    const moveNext = () => {
+        if (isMoving) return;
+
+        const firstCard = track.querySelector(".product-card");
+        const step = getCardStep();
+        if (!firstCard || !step) return;
+
+        if (shouldReduceMotion()) {
+            track.appendChild(firstCard);
+            return;
+        }
+
+        isMoving = true;
+        track.style.transform = `translate3d(${-step}px, 0, 0)`;
+
+        track.addEventListener("transitionend", (event) => {
+            if (event.propertyName !== "transform") return;
+            track.appendChild(firstCard);
+            resetTrackPosition();
+        }, { once: true });
+    };
+
+    const movePrev = () => {
+        if (isMoving) return;
+
+        const firstCard = track.querySelector(".product-card");
+        const lastCard = track.querySelector(".product-card:last-child");
+        const step = getCardStep();
+        if (!firstCard || !lastCard || !step) return;
+
+        track.insertBefore(lastCard, firstCard);
+
+        if (shouldReduceMotion()) return;
+
+        isMoving = true;
+        track.classList.add("is-jump-reset");
+        track.style.transform = `translate3d(${-step}px, 0, 0)`;
+        track.offsetHeight;
+
+        requestAnimationFrame(() => {
+            track.classList.remove("is-jump-reset");
+            track.style.transform = "translate3d(0, 0, 0)";
+        });
+
+        track.addEventListener("transitionend", (event) => {
+            if (event.propertyName !== "transform") return;
+            resetTrackPosition();
+        }, { once: true });
     };
 
     prevButton?.addEventListener("click", () => {
-        index -= 1;
-        update();
+        movePrev();
     });
     nextButton?.addEventListener("click", () => {
-        index += 1;
-        update();
+        moveNext();
     });
-    window.addEventListener("resize", update);
-
-    update();
 }
 
 function renderShopHeroPanels(progress) {

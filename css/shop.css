@@ -322,9 +322,13 @@ body {
 
 .shop-best__grid {
     display: flex;
-    width: calc(var(--shop-best-total) / var(--shop-best-visible) * 100%);
-    transform: translateX(calc(var(--shop-best-index) * -100% / var(--shop-best-total)));
+    width: max-content;
+    transform: translate3d(0, 0, 0);
     transition: transform 0.6s cubic-bezier(0.7, 0.024, 0.199, 0.976);
+}
+
+.shop-best__grid.is-jump-reset {
+    transition: none;
 }
 
 .shop-best__arrow {
@@ -388,7 +392,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 0 0 calc(100% / var(--shop-best-total));
+    flex: 0 0 var(--card-width);
     height: calc(var(--card-width) * 1.41875);
     background: #ffffff;
     cursor: pointer;
