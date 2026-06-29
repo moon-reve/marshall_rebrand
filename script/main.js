@@ -100,6 +100,7 @@ let speakersEntryAutoAnimationFrame = null;
 let speakersIsAutoAnimating = false;
 let speakersAutoAnimationFrame = null;
 let evolutionTopSnapArmed = true;
+let evolutionTopSnapLocked = false;
 let beginningTextTargetProgress = 0;
 let beginningTextRenderedProgress = 0;
 let beginningTextAnimationFrame = null;
@@ -188,6 +189,14 @@ function renderDesignPanelExit(progress) {
 
 function updateDesignPanelExitProgress(progress) {
     designPanelExitTargetProgress = progress;
+
+    if (designPanelExitTargetProgress >= 0.96) {
+        if (designPanelExitAnimationFrame) cancelAnimationFrame(designPanelExitAnimationFrame);
+        designPanelExitAnimationFrame = null;
+        designPanelExitRenderedProgress = 1;
+        renderDesignPanelExit(1);
+        return;
+    }
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         if (designPanelExitAnimationFrame) cancelAnimationFrame(designPanelExitAnimationFrame);
@@ -1070,11 +1079,19 @@ function initializeSmoothWheelScroll() {
         if (Math.abs(distance) < 0.5) {
             renderedY = targetY;
             animationFrame = null;
+            if (evolutionTopSnapLocked) {
+                evolutionTopSnapLocked = false;
+            }
         } else {
             animationFrame = requestAnimationFrame(renderSmoothScroll);
         }
 
         window.scrollTo(0, renderedY);
+    }
+
+    function holdEvolutionTopSnap(evolutionTop) {
+        evolutionTopSnapLocked = true;
+        targetY = evolutionTop;
     }
 
     function shouldSnapEvolutionToTop(deltaY) {
@@ -1083,6 +1100,15 @@ function initializeSmoothWheelScroll() {
         const evolutionTop = evolutionStage.offsetTop;
         if (deltaY < 0 && window.scrollY <= evolutionTop + 2) {
             evolutionTopSnapArmed = true;
+            evolutionTopSnapLocked = false;
+        }
+
+        if (evolutionTopSnapLocked) {
+            holdEvolutionTopSnap(evolutionTop);
+            if (!animationFrame) {
+                animationFrame = requestAnimationFrame(renderSmoothScroll);
+            }
+            return true;
         }
 
         if (deltaY <= 0) return false;
@@ -1093,6 +1119,7 @@ function initializeSmoothWheelScroll() {
         evolutionTopSnapArmed = false;
         targetY = evolutionTop;
         renderedY = window.scrollY;
+        holdEvolutionTopSnap(evolutionTop);
         if (!animationFrame) {
             animationFrame = requestAnimationFrame(renderSmoothScroll);
         }
