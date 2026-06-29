@@ -199,13 +199,17 @@ body {
     white-space: nowrap;
 }
 
+.shop-products__heading {
+    padding: 10vh 0;
+    background: #d9c5a9;
+}
+
 .shop-products__title {
     position: relative;
     z-index: 4;
     align-self: center;
-    margin: 10vh auto;
+    margin: 0 auto;
     color: #2b2118;
-    background: #d9c5a9;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
     font-size: 7.81vw;
@@ -696,7 +700,8 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: calc(100vh - var(--shop-product-info-line));
+    height: 80vh;
+    min-height: calc(100vh - var(--shop-product-info-line));
     margin: 0;
     overflow: hidden;
     background: #3c3c3c;

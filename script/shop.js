@@ -404,8 +404,22 @@ function snapToShopProductCard(index) {
     smoothScrollTo(targetTop);
 }
 
-function handleShopProductWheel(deltaY) {
+function isWheelInsideShopProduct(event) {
+    if (!shopProductSection || !event) return false;
+
+    const target = event.target;
+    if (target instanceof Element && target.closest(".shop-product")) return true;
+
+    const productRect = shopProductSection.getBoundingClientRect();
+    return event.clientX >= productRect.left &&
+        event.clientX <= productRect.right &&
+        event.clientY >= productRect.top &&
+        event.clientY <= productRect.bottom;
+}
+
+function handleShopProductWheel(deltaY, event) {
     if (!shopProductSection || !shopProductCards.length) return false;
+    if (!isWheelInsideShopProduct(event)) return false;
 
     const productRect = shopProductSection.getBoundingClientRect();
     const headerHeight = shopTopbarMain?.offsetHeight || 70;
@@ -428,7 +442,7 @@ smoothScrollEl?.addEventListener("wheel", (event) => {
         skipHeroOnFirstScroll(event, event.deltaY);
         if (hasSkippedHeroOnScroll) return;
     }
-    if (handleShopProductWheel(event.deltaY)) return;
+    if (handleShopProductWheel(event.deltaY, event)) return;
     const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
     smoothTargetY = Math.max(0, Math.min(smoothTargetY + event.deltaY, maxY));
     if (!smoothRafId) smoothRafId = requestAnimationFrame(smoothScrollTick);
