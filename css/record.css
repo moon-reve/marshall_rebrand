@@ -617,7 +617,7 @@
 .record-feature__content {
     position: absolute;
     z-index: 2;
-    left: 8.8542vw;
+    left: 11.8542vw;
     top: 19.0104vw;
     display: grid;
     grid-template-columns: 36.875vw 41.6667vw;
@@ -680,7 +680,8 @@
 .record-feature__cover-track {
     display: flex;
     width: max-content;
-    transform: translateX(calc(var(--record-cover-index, 0) * -36.875vw));
+    margin-inline: 1.5625vw;
+    transform: translateX(calc((var(--record-cover-index, 0) * -36.875vw) - 1.5625vw));
     transition: transform 0.6s cubic-bezier(0.7, 0.024, 0.199, 0.976);
 }
 
@@ -697,7 +698,7 @@
 }
 
 .record-detail {
-    width: 41.6667vw;
+    width: 32.8333vw;
     padding-top: 3.125vw;
 }
 
