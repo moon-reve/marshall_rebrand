@@ -601,8 +601,8 @@
 
 .support-info--editorial {
     padding: 0;
-    color: #17100d;
-    background: #f7f2ea;
+    color: #f3ede4;
+    background: #17100d;
 }
 
 .support-editorial__top {
@@ -613,7 +613,7 @@
 
 .support-faq--editorial {
     padding: 78px 3.95vw 74px;
-    background: #f7f2ea;
+    background: #17100d;
 }
 
 .support-service--editorial {
@@ -642,14 +642,22 @@
     letter-spacing: -0.0667vw;
 }
 
+.support-faq--editorial .support-editorial__title {
+    color: #f7f2ea;
+}
+
+.support-faq--editorial .support-section-kicker {
+    color: #c6962c;
+}
+
 .faq-list--editorial {
     margin-top: 36px;
-    border-top: 1px solid rgba(29, 18, 14, 0.16);
+    border-top: 1px solid rgba(247, 242, 234, 0.16);
 }
 
 .faq-list--editorial .faq-list__item {
     min-height: 58px;
-    border-bottom: 1px solid rgba(29, 18, 14, 0.16);
+    border-bottom: 1px solid rgba(247, 242, 234, 0.16);
 }
 
 .faq-list--editorial .faq-list__button {
@@ -671,7 +679,7 @@
 }
 
 .faq-list--editorial .faq-list__plus {
-    color: #17100d;
+    color: #f7f2ea;
     font-size: 14px;
 }
 
@@ -740,9 +748,11 @@
 }
 
 .guide-flow__item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-rows: 64px 58px 48px;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
     min-width: 0;
     color: #f3ede4;
     border-right: 1px solid rgba(247, 242, 234, 0.1);
@@ -754,14 +764,20 @@
 }
 
 .guide-flow__icon {
+    display: block;
+    align-self: center;
+    justify-self: center;
     width: 44px;
     height: 44px;
-    margin-bottom: 34px;
+    margin: 0;
     color: #f7f2ea;
 }
 
 .guide-flow__item strong {
-    margin: 0 0 16px;
+    align-self: end;
+    justify-self: center;
+    width: 100%;
+    margin: 0;
     color: #f7f2ea;
     font-size: 1.4583vw;
     font-weight: 600;
@@ -770,10 +786,15 @@
 }
 
 .guide-flow__item small {
+    align-self: start;
+    justify-self: center;
+    width: 100%;
+    margin-top: 14px;
     color: rgba(247, 242, 234, 0.68);
     font-size: 0.8024vw;
     font-weight: 400;
     line-height: 1.45;
+    text-align: center;
 }
 
 .support-help-cta {
@@ -784,7 +805,7 @@
     min-height: 160px;
     padding: 0 4.15vw;
     color: #17100d;
-    background: #dfc699;
+    background: #f5f0e8;
 }
 
 .support-help-cta h2 {

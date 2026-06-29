@@ -208,7 +208,6 @@
 .about-history {
     position: relative;
     height: 420vh;
-    min-height: 65.625vw;
     background: #1a1208;
     color: #f6efe5;
 }
@@ -217,11 +216,34 @@
     position: absolute;
     top: 0;
     left: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+        "heading"
+        "summary"
+        "content";
+    column-gap: 0;
+    row-gap: 1.875vw;
+    align-items: start;
+    box-sizing: border-box;
     width: 100%;
-    min-height: 65.625vw;
     height: 100vh;
+    padding: 7.2vw 4.9vw 5.2vw;
     overflow: hidden;
     background: #1a1208;
+}
+
+.about-history__content {
+    grid-area: content;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 7.8125vw 31.25vw 4.6875vw 1fr;
+    grid-template-areas: "nav image . text";
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 4.6875vw;
 }
 
 .about-history.is-pinned .about-history__sticky {
@@ -238,9 +260,7 @@
 }
 
 .about-history__heading {
-    position: absolute;
-    top: 7.2vw;
-    left: 4.9vw;
+    grid-area: heading;
     margin: 0;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
@@ -251,10 +271,8 @@
 }
 
 .about-history__summary {
-    position: absolute;
-    top: 13.28vw;
-    left: 4.9vw;
-    width: 41.95vw;
+    grid-area: summary;
+    width: 100%;
     margin: 0;
     color: rgba(246, 239, 229, 0.96);
     font-size: clamp(14px, 0.94vw, 18px);
@@ -263,16 +281,16 @@
 }
 
 .about-history__nav {
-    position: absolute;
-    top: calc(23.7vw + min(13.92vw, 267px));
-    left: 7.29vw;
+    grid-area: nav;
+    align-self: center;
+    justify-self: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: clamp(12px, 1.302vw, 25px);
     margin: 0;
     padding: 0;
     list-style: none;
-    transform: translateY(-50%);
 }
 
 .about-history__nav li {
@@ -297,21 +315,19 @@
 }
 
 .about-history__image {
-    position: absolute;
-    top: 23.7vw;
-    left: 12.65vw;
-    width: 38.3vw;
-    max-width: 735px;
-    height: min(27.82vw, 534px);
+    grid-area: image;
+    align-self: center;
+    justify-self: start;
+    width: 31.25vw;
+    height: 22.6953vw;
     margin: 0;
     overflow: hidden;
 }
 
 .about-history__text {
-    position: absolute;
-    top: 31.51vw;
-    left: 58.75vw;
-    max-width: 34vw;
+    grid-area: text;
+    align-self: center;
+    width: 100%;
     margin: 0;
 }
 
@@ -493,108 +509,6 @@
     line-height: 1.62;
 }
 
-.about-footer {
-    position: relative;
-    overflow: hidden;
-    color: #f4f0ec;
-    background-color: #151515;
-    background-image: url("../assets/images/support-leather-texture.png");
-    background-repeat: repeat;
-    background-size: 220px 118px;
-    background-position: left top;
-}
-
-.about-footer__main {
-    display: grid;
-    grid-template-columns: 20.85vw 1fr;
-    gap: 7.7vw;
-    min-height: 320px;
-    padding: 80px 4.25vw 58px;
-}
-
-.about-footer__logo {
-    display: inline-block;
-    margin-bottom: 30px;
-    color: #ffe4b9;
-    font-family: "Amplify Personal Use Only", "Brush Script MT", cursive;
-    font-size: clamp(32px, 2.08vw, 40px);
-    line-height: 1;
-}
-
-.about-footer__brand p {
-    margin: 0;
-    color: #f5f1ed;
-    font-size: clamp(16px, 0.94vw, 18px);
-    font-weight: 400;
-    line-height: 1.8;
-}
-
-.about-footer__nav {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(120px, 1fr));
-    gap: 3.8vw;
-}
-
-.about-footer__group h2 {
-    margin: 0 0 28px;
-    color: #f6f3ef;
-    font-size: clamp(16px, 0.94vw, 18px);
-    font-weight: 800;
-    line-height: 1.2;
-}
-
-.about-footer__group ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.about-footer__group li + li {
-    margin-top: 24px;
-}
-
-.about-footer__group a {
-    display: block;
-    width: fit-content;
-    color: rgba(246, 243, 239, 0.9);
-    font-size: clamp(15px, 0.88vw, 17px);
-    font-weight: 400;
-    line-height: 1.2;
-}
-
-.about-footer__bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 78px;
-    padding: 0 4.5vw;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(245, 241, 237, 0.46);
-}
-
-.about-footer__bottom p {
-    margin: 0;
-    font-size: clamp(13px, 0.78vw, 15px);
-    line-height: 1;
-}
-
-.about-footer__bottom nav {
-    display: flex;
-    align-items: center;
-    gap: 43px;
-}
-
-.about-footer__bottom a {
-    color: rgba(245, 241, 237, 0.6);
-    font-size: clamp(14px, 0.78vw, 15px);
-}
-
-.about-footer__bottom span {
-    width: 1px;
-    height: 15px;
-    background: rgba(245, 241, 237, 0.45);
-}
-
 @media (max-width: 64em) {
     .about-intro,
     .about-story,
@@ -654,13 +568,19 @@
 
     .about-history__sticky {
         position: relative;
+        display: block;
         height: auto;
         min-height: 0;
         overflow: visible;
     }
 
+    .about-history__content {
+        display: block;
+    }
+
     .about-history__heading,
     .about-history__summary,
+    .about-history__content,
     .about-history__nav,
     .about-history__image,
     .about-history__text {
@@ -695,14 +615,6 @@
         gap: 52px 8vw;
     }
 
-    .about-footer__main {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .about-footer__nav {
-        grid-template-columns: repeat(3, minmax(120px, 1fr));
-    }
 }
 
 @media (max-width: 40em) {
@@ -723,24 +635,7 @@
         font-size: 66px;
     }
 
-    .about-philosophy__list,
-    .about-footer__nav {
+    .about-philosophy__list {
         grid-template-columns: 1fr;
-    }
-
-    .about-footer__main {
-        padding: 64px 24px 44px;
-    }
-
-    .about-footer__bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 24px;
-        padding: 28px 24px;
-    }
-
-    .about-footer__bottom nav {
-        flex-wrap: wrap;
-        gap: 16px;
     }
 }

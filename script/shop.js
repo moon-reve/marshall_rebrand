@@ -496,6 +496,14 @@ function getProductById(productId) {
         .find((product) => product.id === productId) || shopBestProductDetails[productId];
 }
 
+function openShopBestProduct(productId) {
+    const product = getProductById(productId);
+    if (product?.category) setShopProductCategory(product.category);
+    shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
+    scrollToShopProduct(productId);
+    if (shopManualProductId) renderShopProductDetails(product);
+}
+
 function formatShopPrice(product) {
     if (!product.price) return "판매처 알아보기";
     return `<strong>₩</strong> ${product.price}`;
@@ -717,20 +725,12 @@ function initializeShopInteractions() {
         const productId = card.dataset.shopProductCard;
 
         card.addEventListener("click", () => {
-            const product = getProductById(productId);
-            if (product?.category) setShopProductCategory(product.category);
-            shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
-            scrollToShopProduct(productId);
-            if (shopManualProductId) renderShopProductDetails(product);
+            openShopBestProduct(productId);
         });
         card.addEventListener("keydown", (event) => {
             if (event.key !== "Enter" && event.key !== " ") return;
             event.preventDefault();
-            const product = getProductById(productId);
-            if (product?.category) setShopProductCategory(product.category);
-            shopManualProductId = shopProductDetails.some((item) => item.id === productId) ? null : productId;
-            scrollToShopProduct(productId);
-            if (shopManualProductId) renderShopProductDetails(product);
+            openShopBestProduct(productId);
         });
     });
 
@@ -759,6 +759,93 @@ function initializeShopInteractions() {
         shopManualProductId = null;
     }, { passive: true });
 
+}
+
+function initShopBestCarousel() {
+    const carousel = document.querySelector(".shop-best__carousel");
+    const track = carousel?.querySelector(".shop-best__grid");
+    if (!carousel || !track) return;
+
+    const prevButton = carousel.querySelector(".shop-best__arrow--prev");
+    const nextButton = carousel.querySelector(".shop-best__arrow--next");
+    const totalCards = track.querySelectorAll(".product-card").length;
+    if (totalCards <= 1) return;
+
+    let isMoving = false;
+
+    const shouldReduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const getCardStep = () => {
+        const firstCard = track.querySelector(".product-card");
+        return firstCard?.getBoundingClientRect().width || 0;
+    };
+
+    const resetTrackPosition = () => {
+        track.classList.add("is-jump-reset");
+        track.style.transform = "translate3d(0, 0, 0)";
+        track.offsetHeight;
+        requestAnimationFrame(() => {
+            track.classList.remove("is-jump-reset");
+            isMoving = false;
+        });
+    };
+
+    const moveNext = () => {
+        if (isMoving) return;
+
+        const firstCard = track.querySelector(".product-card");
+        const step = getCardStep();
+        if (!firstCard || !step) return;
+
+        if (shouldReduceMotion()) {
+            track.appendChild(firstCard);
+            return;
+        }
+
+        isMoving = true;
+        track.style.transform = `translate3d(${-step}px, 0, 0)`;
+
+        track.addEventListener("transitionend", (event) => {
+            if (event.propertyName !== "transform") return;
+            track.appendChild(firstCard);
+            resetTrackPosition();
+        }, { once: true });
+    };
+
+    const movePrev = () => {
+        if (isMoving) return;
+
+        const firstCard = track.querySelector(".product-card");
+        const lastCard = track.querySelector(".product-card:last-child");
+        const step = getCardStep();
+        if (!firstCard || !lastCard || !step) return;
+
+        track.insertBefore(lastCard, firstCard);
+
+        if (shouldReduceMotion()) return;
+
+        isMoving = true;
+        track.classList.add("is-jump-reset");
+        track.style.transform = `translate3d(${-step}px, 0, 0)`;
+        track.offsetHeight;
+
+        requestAnimationFrame(() => {
+            track.classList.remove("is-jump-reset");
+            track.style.transform = "translate3d(0, 0, 0)";
+        });
+
+        track.addEventListener("transitionend", (event) => {
+            if (event.propertyName !== "transform") return;
+            resetTrackPosition();
+        }, { once: true });
+    };
+
+    prevButton?.addEventListener("click", () => {
+        movePrev();
+    });
+    nextButton?.addEventListener("click", () => {
+        moveNext();
+    });
 }
 
 function renderShopHeroPanels(progress) {
@@ -847,6 +934,7 @@ renderShopHeroPanels(0);
 renderShopProductImages(shopProductDetails);
 renderShopProductDetails(0);
 initializeShopInteractions();
+initShopBestCarousel();
 smoothScrollEl?.addEventListener("touchstart", (event) => {
     shopHeroTouchStartY = event.touches[0]?.clientY || 0;
 }, { passive: true });
