@@ -331,16 +331,88 @@
     let isDragging = false;
     let slideIndex = 0;
     const maxIndex = Math.max(0, cards.length - visibleCount);
+    const cloneCount = maxIndex > 0 ? Math.min(visibleCount, cards.length) : 0;
 
-    const updateArrowState = () => {
-        prevButton?.classList.toggle("is-hidden", slideIndex === 0);
-        nextButton?.classList.toggle("is-hidden", slideIndex >= maxIndex);
+    if (cloneCount > 0) {
+        const leadingClones = document.createDocumentFragment();
+        const trailingClones = document.createDocumentFragment();
+        Array.from(cards)
+            .slice(-cloneCount)
+            .forEach((card) => {
+                const clone = card.cloneNode(true);
+                clone.setAttribute("aria-hidden", "true");
+                leadingClones.appendChild(clone);
+            });
+        Array.from(cards)
+            .slice(0, cloneCount)
+            .forEach((card) => {
+                const clone = card.cloneNode(true);
+                clone.setAttribute("aria-hidden", "true");
+                trailingClones.appendChild(clone);
+            });
+        list.insertBefore(leadingClones, list.firstChild);
+        list.appendChild(trailingClones);
+    }
+
+    const updateArrowState = () => {};
+
+    const setTrackPosition = (nextIndex) => {
+        list.style.setProperty("--artist-slide-index", nextIndex);
     };
 
     const setSlide = (nextIndex) => {
         slideIndex = Math.max(0, Math.min(maxIndex, nextIndex));
-        list.style.setProperty("--artist-slide-index", slideIndex);
+        setTrackPosition(slideIndex + cloneCount);
         updateArrowState();
+    };
+
+    const jumpToSlide = (nextIndex) => {
+        list.style.transition = "none";
+        setSlide(nextIndex);
+        list.getBoundingClientRect();
+        requestAnimationFrame(() => {
+            list.style.transition = "";
+        });
+    };
+
+    const movePrev = () => {
+        if (slideIndex !== 0 || cloneCount === 0) {
+            setSlide(slideIndex - visibleCount);
+            return;
+        }
+
+        setTrackPosition(0);
+        slideIndex = maxIndex;
+
+        list.addEventListener(
+            "transitionend",
+            (event) => {
+                if (event.target === list && event.propertyName === "transform") {
+                    jumpToSlide(slideIndex);
+                }
+            },
+            { once: true }
+        );
+    };
+
+    const moveNext = () => {
+        if (slideIndex !== maxIndex || cloneCount === 0) {
+            setSlide(slideIndex + visibleCount);
+            return;
+        }
+
+        setTrackPosition(cloneCount + cards.length);
+        slideIndex = 0;
+
+        list.addEventListener(
+            "transitionend",
+            (event) => {
+                if (event.target === list && event.propertyName === "transform") {
+                    jumpToSlide(slideIndex);
+                }
+            },
+            { once: true }
+        );
     };
 
     list.addEventListener("pointerdown", (event) => {
@@ -370,14 +442,14 @@
     });
 
     prevButton?.addEventListener("click", () => {
-        setSlide(slideIndex - visibleCount);
+        movePrev();
     });
 
     nextButton?.addEventListener("click", () => {
-        setSlide(slideIndex + visibleCount);
+        moveNext();
     });
 
-    updateArrowState();
+    jumpToSlide(0);
 })();
 
 (() => {
@@ -400,6 +472,7 @@
     let coverIndex = 0;
     let detailTimer = 0;
     const maxIndex = Math.max(0, items.length - 1);
+    const cloneCount = maxIndex > 0 ? 1 : 0;
     const coverDetails = [
         {
             title: "Wasted On Youth",
@@ -447,21 +520,27 @@
     ];
 
     coverDetailsSafe[0] = {
-        title: "앨범명",
+        title: "Wasted On Youth",
         description: "The Molotovs의 날카로운 에너지와 선명한 기타 사운드를 담은 Marshall Records 릴리즈입니다.",
         values: ["Guitar Amplifier", "1962", "The Original Marshall Sound"],
     };
 
-    const updateCoverArrowState = () => {
-        prevButton?.classList.toggle("is-hidden", coverIndex === 0);
-        nextButton?.classList.toggle("is-hidden", coverIndex >= maxIndex);
+    if (cloneCount > 0) {
+        const firstClone = items[0].cloneNode(true);
+        const lastClone = items[items.length - 1].cloneNode(true);
+        firstClone.setAttribute("aria-hidden", "true");
+        lastClone.setAttribute("aria-hidden", "true");
+        track.insertBefore(lastClone, track.firstChild);
+        track.appendChild(firstClone);
+    }
+
+    const updateCoverArrowState = () => {};
+
+    const setTrackPosition = (nextIndex) => {
+        track.style.setProperty("--record-cover-index", nextIndex);
     };
 
-    const setCover = (nextIndex, withMotion = true) => {
-        coverIndex = Math.max(0, Math.min(maxIndex, nextIndex));
-        track.style.setProperty("--record-cover-index", coverIndex);
-        updateCoverArrowState();
-
+    const updateCoverDetail = (withMotion = true) => {
         const currentDetail = coverDetailsSafe[coverIndex];
 
         if (!currentDetail || !detailTitle || !detailDescription || !detailValues) {
@@ -498,6 +577,66 @@
         }, 300);
     };
 
+    const setCover = (nextIndex, withMotion = true) => {
+        coverIndex = Math.max(0, Math.min(maxIndex, nextIndex));
+        setTrackPosition(coverIndex + cloneCount);
+        updateCoverArrowState();
+        updateCoverDetail(withMotion);
+    };
+
+    const jumpToCover = (nextIndex) => {
+        track.style.transition = "none";
+        setCover(nextIndex, false);
+        track.getBoundingClientRect();
+        requestAnimationFrame(() => {
+            track.style.transition = "";
+        });
+    };
+
+    const movePrev = () => {
+        if (coverIndex !== 0 || cloneCount === 0) {
+            setCover(coverIndex - 1);
+            return;
+        }
+
+        setTrackPosition(0);
+        coverIndex = maxIndex;
+        updateCoverArrowState();
+        updateCoverDetail();
+
+        track.addEventListener(
+            "transitionend",
+            (event) => {
+                if (event.target === track && event.propertyName === "transform") {
+                    jumpToCover(coverIndex);
+                }
+            },
+            { once: true }
+        );
+    };
+
+    const moveNext = () => {
+        if (coverIndex !== maxIndex || cloneCount === 0) {
+            setCover(coverIndex + 1);
+            return;
+        }
+
+        setTrackPosition(cloneCount + items.length);
+        coverIndex = 0;
+        updateCoverArrowState();
+        updateCoverDetail();
+
+        track.addEventListener(
+            "transitionend",
+            (event) => {
+                if (event.target === track && event.propertyName === "transform") {
+                    jumpToCover(coverIndex);
+                }
+            },
+            { once: true }
+        );
+    };
+
     cover.addEventListener("pointerdown", (event) => {
         if (event.button !== 0) return;
         isDragging = true;
@@ -528,12 +667,12 @@
     });
 
     prevButton?.addEventListener("click", () => {
-        setCover(coverIndex - 1);
+        movePrev();
     });
 
     nextButton?.addEventListener("click", () => {
-        setCover(coverIndex + 1);
+        moveNext();
     });
 
-    updateCoverArrowState();
+    jumpToCover(0);
 })();

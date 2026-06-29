@@ -101,28 +101,45 @@
 
 .record-hero__column-grid--market .record-hero__column-scene {
     background-image:
-        url("../assets/images/record/record-hero-slide-02.png"),
         linear-gradient(to bottom, #07100d 0 50%, #d9c5a9 50% 100%);
     background-position:
-        0.0521vw -1.0417vw,
         left top;
     background-size:
-        113.8542vw 64.1146vw,
         100% 100%;
     background-repeat: no-repeat;
 }
 
 .record-hero__column-grid--studio .record-hero__column-scene {
     background-image:
-        url("../assets/images/record/record-hero-slide-03.png"),
         linear-gradient(to bottom, #07100d 0 50%, #d9c5a9 50% 100%);
     background-position:
-        left top,
         left top;
     background-size:
-        100vw 56.3021vw,
         100% 100%;
     background-repeat: no-repeat;
+}
+
+.record-hero__column-grid--market .record-hero__column-scene::before,
+.record-hero__column-grid--studio .record-hero__column-scene::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 50%;
+    pointer-events: none;
+}
+
+.record-hero__column-grid--market .record-hero__column-scene::before {
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.2) 78%, rgba(0, 0, 0, 0.48) 100%) left top / 100% 100% no-repeat,
+        url("../assets/images/record/record-hero-slide-02.png") 0.0521vw -1.0417vw / 113.8542vw 64.1146vw no-repeat;
+}
+
+.record-hero__column-grid--studio .record-hero__column-scene::before {
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.2) 78%, rgba(0, 0, 0, 0.48) 100%) left top / 100% 100% no-repeat,
+        url("../assets/images/record/record-hero-slide-03.png") left top / 100vw 56.3021vw no-repeat;
 }
 
 .record-hero__scroll-column--01 .record-hero__column-scene {
