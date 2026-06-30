@@ -1,4 +1,9 @@
 (function () {
+    document.addEventListener("click", (event) => {
+        const placeholderLink = event.target.closest('a[href="#"]');
+        if (placeholderLink) event.preventDefault();
+    });
+
     const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const coarsePointerQuery = window.matchMedia("(hover: none), (pointer: coarse)");
     let targetY = window.scrollY;

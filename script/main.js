@@ -1,3 +1,8 @@
+document.addEventListener("click", (event) => {
+    const placeholderLink = event.target.closest('a[href="#"]');
+    if (placeholderLink) event.preventDefault();
+});
+
 const heroStage = document.querySelector("[data-hero-stage]");
 const heroMediaGrid = document.querySelector(".hero__media-grid");
 const heroContent = document.querySelector(".hero__content");

@@ -1,3 +1,8 @@
+document.addEventListener("click", (event) => {
+    const placeholderLink = event.target.closest('a[href="#"]');
+    if (placeholderLink) event.preventDefault();
+});
+
 const shopHeroStage = document.querySelector("[data-shop-hero-stage]");
 const shopHero = document.querySelector(".shop-hero");
 const shopHeroPanels = document.querySelectorAll(".shop-hero__media-panel");
