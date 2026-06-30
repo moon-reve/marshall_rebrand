@@ -94,6 +94,18 @@ body {
     background: transparent;
 }
 
+.shop-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 42% 36% at 68% 66%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.04) 44%, rgba(0, 0, 0, 0.28) 100%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.2) 36%, rgba(0, 0, 0, 0.08) 68%, rgba(0, 0, 0, 0.24) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.3) 100%);
+}
+
 .shop-hero__media-grid {
     position: relative;
     z-index: 1;
@@ -134,19 +146,27 @@ body {
 .shop-hero__panel-img {
     position: absolute;
     top: 0;
-    width: 50vw;
+    width: 100vw;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center;
     pointer-events: none;
 }
 
-.shop-hero__media-panel--03 .shop-hero__panel-img {
+.shop-hero__media-panel--01 .shop-hero__panel-img {
     left: 0;
 }
 
-.shop-hero__media-panel--04 .shop-hero__panel-img {
+.shop-hero__media-panel--02 .shop-hero__panel-img {
     left: -25vw;
+}
+
+.shop-hero__media-panel--03 .shop-hero__panel-img {
+    left: -50vw;
+}
+
+.shop-hero__media-panel--04 .shop-hero__panel-img {
+    left: -75vw;
 }
 
 .shop-hero__media-mask {
@@ -201,12 +221,15 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    gap: 8vh;
+    justify-content: flex-start;
+    gap: 0;
     height: 100vh;
+    min-height: 100vh;
+    margin-bottom: 0;
     color: #1b1410;
     overflow: hidden;
     z-index: 2;
+    background: #ffffff;
 }
 
 .shop-best::before {
@@ -223,7 +246,20 @@ body {
     z-index: 4;
     align-self: center;
     width: 100%;
-    margin: 19vh 0 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    padding: 4vh 4.6875vw 4vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    background-image:
+        linear-gradient(180deg, rgba(217, 197, 169, 0.62) 0%, rgba(217, 197, 169, 0.46) 100%),
+        url("../assets/images/shop-best-banner.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     text-align: center;
 }
 
@@ -241,7 +277,14 @@ body {
 .shop-products__heading {
     position: relative;
     overflow: hidden;
-    padding: 30vh 0;
+    height: 100vh;
+    min-height: 100vh;
+    padding: 0 4.6875vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
     background: #d9c5a9;
     text-align: center;
 }
@@ -251,10 +294,10 @@ body {
     position: absolute;
     z-index: 0;
     inset: 0;
-    background-image: url("../assets/images/shop_collection_bg.avif");
+    background-image: url("../assets/images/shop-products-heading.png");
     background-repeat: no-repeat;
-    background-position: center bottom;
-    background-size: 100% auto;
+    background-position: center;
+    background-size: cover;
     pointer-events: none;
 }
 
@@ -313,6 +356,8 @@ body {
     --shop-best-index: 0;
     position: relative;
     z-index: 2;
+    flex: 0 0 auto;
+    min-height: 0;
     margin: 0;
     padding: 0 var(--shop-best-grid-padding);
     box-sizing: border-box;
