@@ -668,7 +668,7 @@
     <div class="footer-texture"></div>
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="footer-logo">Marshall</div>
+        <a class="footer-logo" href="./index.html" aria-label="Marshall home">Marshall</a>
         <p class="footer-tagline">Marshall은 사운드를 만들고, 아티스트를 키우며,<br>음악커뮤니티를 연결하는 브랜드입니다.</p>
       </div>
       <div class="footer-nav">
@@ -737,14 +737,50 @@
 (function () {
     const heroStage = document.querySelector('[data-compare-hero-stage]');
     const hero = document.querySelector('.hero');
+    const quizSection = document.querySelector('.quiz-section');
     const heroPanels = document.querySelectorAll('.hero-panel');
     const heroContent = document.querySelector('.hero-content');
     const heroVlines = document.querySelectorAll('.hero-vline');
     const panelTimings = [[0, 0.56],[0.08, 0.66],[0.24, 0.82],[0.40, 1]];
     let targetProgress = 0, renderedProgress = 0, rafId = null;
+    let isSkippingToQuiz = false;
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
     function seq(p, s, e) { return clamp((p - s) / (e - s), 0, 1); }
     function ease(t) { return t * t * (3 - 2 * t); }
+    function getQuizTop() {
+        if (!quizSection) return 0;
+        return window.scrollY + quizSection.getBoundingClientRect().top;
+    }
+    function isBeforeQuiz() {
+        return quizSection && window.scrollY < getQuizTop() - 2;
+    }
+    function completeSkipWhenSettled() {
+        const quizTop = getQuizTop();
+        if (Math.abs(window.scrollY - quizTop) < 2) {
+            isSkippingToQuiz = false;
+            return;
+        }
+        requestAnimationFrame(completeSkipWhenSettled);
+    }
+    function skipToQuiz() {
+        if (!quizSection || isSkippingToQuiz) return;
+        isSkippingToQuiz = true;
+        window.scrollTo({
+            top: getQuizTop(),
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+        });
+        requestAnimationFrame(completeSkipWhenSettled);
+    }
+    function shouldSkipFromHero() {
+        if (!heroStage || !quizSection || !isBeforeQuiz()) return false;
+        const rect = heroStage.getBoundingClientRect();
+        return rect.top <= 1 && rect.bottom > 1;
+    }
+    function getWheelDelta(event) {
+        if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
+        if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
+        return event.deltaY;
+    }
     function render(progress) {
         heroPanels.forEach((panel, i) => {
             const [s, e] = panelTimings[i];
@@ -772,6 +808,37 @@
     }
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    window.addEventListener('wheel', (event) => {
+        if (event.ctrlKey || event.metaKey) return;
+        if (isSkippingToQuiz) {
+            event.preventDefault();
+            return;
+        }
+        if (getWheelDelta(event) > 0 && shouldSkipFromHero()) {
+            event.preventDefault();
+            skipToQuiz();
+        }
+    }, { passive: false, capture: true });
+    window.addEventListener('keydown', (event) => {
+        const scrollKeys = [' ', 'PageDown', 'ArrowDown'];
+        if (event.defaultPrevented || !scrollKeys.includes(event.key)) return;
+        if (!shouldSkipFromHero()) return;
+        event.preventDefault();
+        skipToQuiz();
+    }, { capture: true });
+    window.addEventListener('touchstart', (event) => {
+        if (!shouldSkipFromHero() || !event.touches.length) return;
+        heroStage.dataset.touchStartY = String(event.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('touchmove', (event) => {
+        const startY = Number(heroStage?.dataset.touchStartY || 0);
+        if (!startY || !event.touches.length) return;
+        const isSwipingUp = startY - event.touches[0].clientY > 10;
+        if (isSkippingToQuiz || (isSwipingUp && shouldSkipFromHero())) {
+            event.preventDefault();
+            if (!isSkippingToQuiz) skipToQuiz();
+        }
+    }, { passive: false, capture: true });
     render(0);
 })();
 </script>
@@ -802,7 +869,47 @@
     (function () {
       const quizSteps = document.querySelectorAll('.quiz-step');
       const productResult = document.getElementById('product-result');
+      const productGrids = productResult ? Array.from(productResult.querySelectorAll('.product-grid')) : [];
+      const recommendationGrid = productGrids[0];
+      const productCards = productResult ? Array.from(productResult.querySelectorAll('.product-card')) : [];
       const answers = {};
+      let currentRecommendationCards = [];
+
+      function shuffleCards(cards) {
+        return [...cards].sort(() => Math.random() - 0.5);
+      }
+
+      function pickRecommendations() {
+        if (productCards.length <= 4) return productCards;
+
+        const previousCards = new Set(currentRecommendationCards);
+        const nextPool = productCards.filter(card => !previousCards.has(card));
+        const pool = nextPool.length >= 4 ? nextPool : productCards;
+        const picked = shuffleCards(pool).slice(0, 4);
+
+        currentRecommendationCards = picked;
+        return picked;
+      }
+
+      function renderRecommendations(shouldScroll) {
+        if (!productResult || !recommendationGrid || productCards.length === 0) return;
+        if (!answers[1] || !answers[2] || !answers[3]) return;
+
+        const pickedCards = pickRecommendations();
+
+        productGrids.forEach((grid, index) => {
+          grid.style.display = index === 0 ? 'flex' : 'none';
+        });
+
+        recommendationGrid.replaceChildren(...pickedCards);
+        productResult.classList.add('is-visible');
+
+        if (shouldScroll) {
+          setTimeout(() => {
+            productResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 150);
+        }
+      }
 
       quizSteps.forEach(step => {
         const stepNum = parseInt(step.dataset.step);
@@ -815,6 +922,13 @@
             card.classList.add('is-active');
             answers[stepNum] = card.dataset.value;
 
+            const hasAllAnswers = answers[1] && answers[2] && answers[3];
+            const shouldRenderImmediately = hasAllAnswers && (stepNum < 3 || productResult?.classList.contains('is-visible'));
+
+            if (shouldRenderImmediately) {
+              renderRecommendations(stepNum === 3);
+            }
+
             setTimeout(() => {
               const nextStep = document.querySelector(`.quiz-step[data-step="${stepNum + 1}"]`);
               if (nextStep) {
@@ -823,12 +937,7 @@
                 nextStep.classList.add('is-active');
               } else {
                 // STEP 3 완료 → 추천상품 reveal
-                if (productResult) {
-                  productResult.classList.add('is-visible');
-                  setTimeout(() => {
-                    productResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }, 150);
-                }
+                if (!shouldRenderImmediately) renderRecommendations(true);
               }
             }, 550);
           });

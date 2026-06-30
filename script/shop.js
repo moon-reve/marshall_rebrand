@@ -353,6 +353,7 @@ const smoothScrollEl = document.getElementById("smooth-scroll-container");
 let smoothTargetY = 0;
 let smoothCurrentY = 0;
 let smoothRafId = null;
+let smoothScrollCompleteCallback = null;
 
 function updateShopScrollbarWidth() {
     if (!smoothScrollEl) return;
@@ -361,10 +362,11 @@ function updateShopScrollbarWidth() {
     document.documentElement.style.setProperty("--shop-scrollbar-width", `${scrollbarWidth}px`);
 }
 
-function smoothScrollTo(y) {
+function smoothScrollTo(y, onComplete) {
     if (!smoothScrollEl) return;
     const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
     smoothTargetY = Math.max(0, Math.min(y, maxY));
+    smoothScrollCompleteCallback = typeof onComplete === "function" ? onComplete : null;
     if (!smoothRafId) smoothRafId = requestAnimationFrame(smoothScrollTick);
 }
 
@@ -373,6 +375,9 @@ function smoothScrollTick() {
     if (Math.abs(dist) < 0.1) {
         smoothCurrentY = smoothTargetY;
         smoothRafId = null;
+        const onComplete = smoothScrollCompleteCallback;
+        smoothScrollCompleteCallback = null;
+        onComplete?.();
     } else {
         smoothCurrentY += dist * 0.12;
         smoothRafId = requestAnimationFrame(smoothScrollTick);
@@ -455,6 +460,7 @@ function handleShopProductWheel(deltaY, event) {
 smoothScrollEl?.addEventListener("wheel", (event) => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     event.preventDefault();
+    if (isSkippingHeroToBest) return;
     if (!isWheelInsideShopProductImageArea(event)) {
         shopProductAutoSyncEnabled = false;
     }
@@ -474,9 +480,8 @@ let shopAnimationFrame = null;
 let shopActiveProductIndex = -1;
 let shopManualProductId = null;
 let hasSkippedHeroOnScroll = false;
+let isSkippingHeroToBest = false;
 let shopHeroTouchStartY = 0;
-let heroSkipScrollAmount = 0;
-const heroSkipThreshold = 120;
 let shopProductWheelDelta = 0;
 let shopProductWheelLockedUntil = 0;
 let shopProductAutoSyncEnabled = false;
@@ -696,16 +701,22 @@ function scrollToShopBest() {
     const shopBestTop = shopBestSection.getBoundingClientRect().top + smoothCurrentY;
     const targetTop = Math.max(shopBestTop, 0);
     hasSkippedHeroOnScroll = true;
-    smoothScrollTo(targetTop);
+    isSkippingHeroToBest = true;
+    smoothScrollTo(targetTop, () => {
+        isSkippingHeroToBest = false;
+    });
 }
 
-function skipHeroOnFirstScroll(event, scrollAmount = heroSkipThreshold) {
+function skipHeroOnFirstScroll(event, scrollAmount = 1) {
+    if (isSkippingHeroToBest) {
+        event?.preventDefault?.();
+        return;
+    }
     if (hasSkippedHeroOnScroll || !shopHeroStage || !shopBestSection) return;
     if (smoothCurrentY > 2) return;
 
     event?.preventDefault?.();
-    heroSkipScrollAmount += Math.abs(scrollAmount);
-    if (heroSkipScrollAmount < heroSkipThreshold) return;
+    if (scrollAmount <= 0) return;
 
     scrollToShopBest();
 }
@@ -870,7 +881,7 @@ function updateShopHeroTransition() {
     if (!shopHeroStage || !shopHero || !shopHeroPanels.length) return;
 
     const stageRect = shopHeroStage.getBoundingClientRect();
-    const scrollDistance = Math.max(shopHeroStage.offsetHeight - shopHero.offsetHeight, window.innerHeight * 0.45, 1);
+    const scrollDistance = Math.max(window.innerHeight * 0.45, 1);
     shopTargetProgress = clamp(-stageRect.top / scrollDistance, 0, 1);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -925,7 +936,6 @@ function updateShopProductCategoryRelease() {
 function updateShopScrollEffects() {
     if (smoothCurrentY <= 2) {
         hasSkippedHeroOnScroll = false;
-        heroSkipScrollAmount = 0;
     }
 
     updateShopScrollbarWidth();
@@ -944,13 +954,22 @@ smoothScrollEl?.addEventListener("touchstart", (event) => {
     shopHeroTouchStartY = event.touches[0]?.clientY || 0;
 }, { passive: true });
 smoothScrollEl?.addEventListener("touchmove", (event) => {
+    if (isSkippingHeroToBest) {
+        event.preventDefault();
+        return;
+    }
     const touchY = event.touches[0]?.clientY || 0;
     const touchDelta = shopHeroTouchStartY - touchY;
     if (touchDelta > 8) skipHeroOnFirstScroll(event, touchDelta);
 }, { passive: false });
 window.addEventListener("keydown", (event) => {
     const scrollDownKeys = [" ", "PageDown", "ArrowDown"];
-    if (scrollDownKeys.includes(event.key)) skipHeroOnFirstScroll(event);
+    if (!scrollDownKeys.includes(event.key)) return;
+    if (isSkippingHeroToBest) {
+        event.preventDefault();
+        return;
+    }
+    skipHeroOnFirstScroll(event);
 });
 smoothScrollEl?.addEventListener("scroll", updateShopScrollEffects, { passive: true });
 window.addEventListener("resize", updateShopScrollEffects);

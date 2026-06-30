@@ -1,5 +1,6 @@
 (() => {
     const hero = document.querySelector(".record-hero");
+    const artistCatalog = document.querySelector(".artist-catalog");
 
     if (!hero) {
         return;
@@ -211,6 +212,8 @@
     let targetProgress = 0;
     let renderedProgress = 0;
     let animationFrame = 0;
+    let isSkippingToArtist = false;
+    const arrowLayer = hero.querySelector(".record-hero__arrows");
     const columnGrids = [];
     const copyBlocks = columnTargets
         .map(({ element }) => element.querySelector(".record-hero__copy, .record-hero__slide-copy"))
@@ -248,12 +251,52 @@
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
     const sequenceProgress = (progress, start, end) => clamp((progress - start) / (end - start), 0, 1);
     const ease = (progress) => progress * progress * (3 - 2 * progress);
+    const getWheelDelta = (event) => {
+        if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
+        if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
+        return event.deltaY;
+    };
+    const getArtistTop = () => {
+        if (!artistCatalog) return 0;
+        return window.scrollY + artistCatalog.getBoundingClientRect().top;
+    };
+    const isBeforeArtist = () => artistCatalog && window.scrollY < getArtistTop() - 2;
+    const shouldSkipToArtist = () => {
+        if (!artistCatalog || !isBeforeArtist()) return false;
+        const rect = hero.getBoundingClientRect();
+        return rect.top <= 1 && rect.bottom > 1;
+    };
+    const completeSkipWhenSettled = () => {
+        const artistTop = getArtistTop();
+
+        if (Math.abs(window.scrollY - artistTop) < 2) {
+            isSkippingToArtist = false;
+            return;
+        }
+
+        requestAnimationFrame(completeSkipWhenSettled);
+    };
+    const skipToArtist = () => {
+        if (!artistCatalog || isSkippingToArtist) return;
+
+        isSkippingToArtist = true;
+        targetProgress = 1;
+        updateColumns();
+        window.scrollTo({
+            top: getArtistTop(),
+            behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+        });
+        requestAnimationFrame(completeSkipWhenSettled);
+    };
 
     const renderColumns = (progress) => {
         const gridProgress = ease(sequenceProgress(progress, 0, 0.45));
         const copyProgress = ease(sequenceProgress(progress, 0, 0.62));
         const copyOffset = copyProgress * 42;
         const copyOpacity = 1 - copyProgress;
+        const arrowProgress = ease(sequenceProgress(progress, 0, 0.62));
+        const arrowOffset = arrowProgress * 42;
+        const arrowOpacity = 1 - arrowProgress;
 
         columnGrids.forEach((columnGrid) => {
             columnGrid.style.setProperty("--record-hero-grid-opacity", `${1 - gridProgress}`);
@@ -264,21 +307,26 @@
             copyBlock.style.setProperty("--record-hero-copy-opacity", `${copyOpacity}`);
         });
 
+        arrowLayer?.style.setProperty("--record-hero-arrows-y", `${-arrowOffset}vh`);
+        arrowLayer?.style.setProperty("--record-hero-arrows-opacity", `${arrowOpacity}`);
+
         columns.forEach((column, index) => {
             const [start, end] = timings[index % timings.length];
             const columnProgress = ease(sequenceProgress(progress, start, end));
 
-            const sceneOffset = columnProgress * 50;
+            const sceneOffset = columnProgress * 100;
 
             column.style.setProperty("--record-hero-column-y", `${-sceneOffset}%`);
         });
+
+        hero.classList.toggle("is-column-scroll-complete", targetProgress === 1);
     };
 
     const renderFrame = () => {
         const distance = targetProgress - renderedProgress;
-        renderedProgress += distance * 0.085;
+        renderedProgress += distance * 0.025;
 
-        if (Math.abs(distance) < 0.0001) {
+        if (Math.abs(distance) < 0.00001) {
             renderedProgress = targetProgress;
         }
 
@@ -292,12 +340,6 @@
     };
 
     const updateColumns = () => {
-        const rect = hero.getBoundingClientRect();
-        const revealStart = Math.max(rect.height - window.innerHeight, 0);
-        const scrollDistance = Math.max(window.innerHeight * 0.72, rect.height * 0.5, 1);
-
-        targetProgress = clamp((-rect.top - revealStart) / scrollDistance, 0, 1);
-
         if (prefersReducedMotion.matches) {
             if (animationFrame) cancelAnimationFrame(animationFrame);
             animationFrame = 0;
@@ -311,9 +353,91 @@
         }
     };
 
-    window.addEventListener("scroll", updateColumns, { passive: true });
-    window.addEventListener("resize", updateColumns);
-    updateColumns();
+    const syncColumnsWithPage = () => {
+        const rect = hero.getBoundingClientRect();
+
+        if (rect.top > 1) {
+            targetProgress = 0;
+        } else if (rect.bottom < window.innerHeight - 1) {
+            targetProgress = 1;
+        }
+
+        updateColumns();
+    };
+
+    const handleWheel = (event) => {
+        if (event.ctrlKey || event.metaKey) return;
+
+        if (isSkippingToArtist) {
+            event.preventDefault();
+            return;
+        }
+
+        const rect = hero.getBoundingClientRect();
+        const isHeroActive = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
+        const wheelDelta = getWheelDelta(event);
+
+        if (wheelDelta > 0 && shouldSkipToArtist()) {
+            event.preventDefault();
+            skipToArtist();
+            return;
+        }
+
+        const nextProgress = wheelDelta > 0 ? 1 : 0;
+        const shouldHoldHero =
+            isHeroActive &&
+            nextProgress !== targetProgress &&
+            ((wheelDelta > 0 && targetProgress < 1) || (wheelDelta < 0 && targetProgress > 0));
+
+        if (!shouldHoldHero) {
+            return;
+        }
+
+        event.preventDefault();
+        targetProgress = nextProgress;
+        updateColumns();
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
+    window.addEventListener(
+        "keydown",
+        (event) => {
+            const scrollKeys = [" ", "PageDown", "ArrowDown"];
+
+            if (event.defaultPrevented || !scrollKeys.includes(event.key) || !shouldSkipToArtist()) return;
+
+            event.preventDefault();
+            skipToArtist();
+        },
+        { capture: true }
+    );
+    window.addEventListener(
+        "touchstart",
+        (event) => {
+            if (!shouldSkipToArtist() || !event.touches.length) return;
+            hero.dataset.touchStartY = String(event.touches[0].clientY);
+        },
+        { passive: true }
+    );
+    window.addEventListener(
+        "touchmove",
+        (event) => {
+            const startY = Number(hero.dataset.touchStartY || 0);
+
+            if (!startY || !event.touches.length) return;
+
+            const isSwipingUp = startY - event.touches[0].clientY > 10;
+
+            if (isSkippingToArtist || (isSwipingUp && shouldSkipToArtist())) {
+                event.preventDefault();
+                if (!isSkippingToArtist) skipToArtist();
+            }
+        },
+        { passive: false, capture: true }
+    );
+    window.addEventListener("scroll", syncColumnsWithPage, { passive: true });
+    window.addEventListener("resize", syncColumnsWithPage);
+    syncColumnsWithPage();
 })();
 
 (() => {
