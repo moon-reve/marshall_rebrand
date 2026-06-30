@@ -59,11 +59,13 @@
 }
 
 .footer-logo {
+  display: inline-block;
   font-family: 'AmplifyPersonalUseOnly', cursive;
   font-size: 4.1667vw;
   color: var(--cream-light);
   line-height: 1;
   margin-bottom: 2.0833vw;
+  text-decoration: none;
 }
 
 .footer-tagline {
