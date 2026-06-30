@@ -740,7 +740,7 @@
     const heroPanels = document.querySelectorAll('.hero-panel');
     const heroContent = document.querySelector('.hero-content');
     const heroVlines = document.querySelectorAll('.hero-vline');
-    const panelTimings = [[0, 0.56],[0.08, 0.66],[0.24, 0.82],[0.40, 0.96]];
+    const panelTimings = [[0, 0.56],[0.08, 0.66],[0.24, 0.82],[0.40, 1]];
     let targetProgress = 0, renderedProgress = 0, rafId = null;
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
     function seq(p, s, e) { return clamp((p - s) / (e - s), 0, 1); }
@@ -758,7 +758,7 @@
     function update() {
         if (!heroStage || !hero) return;
         const rect = heroStage.getBoundingClientRect();
-        const dist = Math.max(heroStage.offsetHeight - hero.offsetHeight, window.innerHeight * 0.45, 1);
+        const dist = Math.max(heroStage.offsetHeight, 1);
         targetProgress = clamp(-rect.top / dist, 0, 1);
         if (rafId) return;
         function tick() {
