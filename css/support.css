@@ -41,7 +41,7 @@
 .support-hero__title {
     margin: 0 0 0.95rem;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 4.1536vw;
+    font-size: 150px;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
     letter-spacing: -0.073vw;
@@ -607,17 +607,21 @@
 
 .support-editorial__top {
     display: grid;
-    grid-template-columns: minmax(0, 1.86fr) minmax(360px, 1fr);
+    grid-template-columns: minmax(0, 6fr) minmax(360px, 4fr);
     min-height: 520px;
 }
 
 .support-faq--editorial {
-    padding: 78px 3.95vw 74px;
-    background: #17100d;
+    padding: 78px 3.95vw 74px max(3.95vw, calc((100vw - ((6 * 12.65vw) + (5 * 20px))) / 2));
+    background-color: #171514;
+    background-image: url("../assets/images/support-leather-texture.png");
+    background-repeat: repeat;
+    background-size: 220px 118px;
+    background-position: left top;
 }
 
 .support-service--editorial {
-    padding: 78px 3.05vw 74px;
+    padding: 78px max(3.05vw, calc((100vw - ((6 * 12.65vw) + (5 * 20px))) / 2)) 74px 3.05vw;
     background: #dfc699;
 }
 
@@ -665,13 +669,17 @@
     min-height: 58px;
     padding-right: 1.25vw;
     padding-left: 1.25vw;
-    color: #17100d;
+    color: #f7f2ea;
     font-size: 0.9375vw;
     font-weight: 500;
 }
 
+.faq-list--editorial .faq-list__button span:nth-child(2) {
+    font-weight: 400;
+}
+
 .faq-list__number {
-    color: #b65b25;
+    color: #c6962c;
     font-size: 0.5729vw;
     font-weight: 700;
     line-height: 1;
@@ -710,14 +718,14 @@
 }
 
 .service-row .service-block__title {
-    font-size: 0.7292vw;
+    font-size: 0.7813vw;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: 0.05em;
 }
 
 .service-row .service-block__primary {
-    font-size: 0.7081vw;
+    font-size: 0.75vw;
     font-weight: 500;
     line-height: 1.35;
 }
@@ -732,11 +740,15 @@
 
 .support-guide__heading,
 .guide-flow__item {
-    padding: 62px 3.05vw 54px;
+    padding: 48px 4.6875vw;
 }
 
 .support-guide__heading {
+    display: grid;
+    align-content: center;
+    justify-items: start;
     border-right: 1px solid rgba(247, 242, 234, 0.1);
+    text-align: left;
 }
 
 .support-guide__heading .support-editorial__title {
@@ -783,6 +795,7 @@
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.0413vw;
+    text-align: center;
 }
 
 .guide-flow__item small {
@@ -803,7 +816,7 @@
     justify-content: space-between;
     gap: 40px;
     min-height: 160px;
-    padding: 0 4.15vw;
+    padding: 48px 4.6875vw;
     color: #17100d;
     background: #f5f0e8;
 }
