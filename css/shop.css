@@ -243,10 +243,11 @@ body {
     z-index: 1;
     inset: 0;
     background: linear-gradient(
-        180deg,
-        #d9c5a9 0%,
-        rgba(217, 197, 169, 0.72) 38%,
-        rgba(217, 197, 169, 0.18) 100%
+        0deg,
+        rgba(23, 17, 14, 0.74) 0%,
+        rgba(23, 17, 14, 0.52) 34%,
+        rgba(23, 17, 14, 0.18) 68%,
+        rgba(217, 197, 169, 0.08) 100%
     );
     pointer-events: none;
 }
@@ -256,7 +257,7 @@ body {
     z-index: 4;
     align-self: center;
     margin: 0 auto;
-    color: #2b2118;
+    color: #d9c5a9;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
     font-size: 5.82vw;
@@ -280,6 +281,10 @@ body {
     text-align: center;
 }
 
+.shop-products__heading .shop-section__subtitle {
+    color: #d9c5a9;
+}
+
 .shop-best__carousel {
     --shop-best-grid-padding: 4.6875vw;
     --shop-best-visible: 4;
@@ -287,7 +292,7 @@ body {
     --shop-best-index: 0;
     position: relative;
     z-index: 2;
-    margin: 4.6875vw 0;
+    margin: 0;
     padding: 0 var(--shop-best-grid-padding);
     box-sizing: border-box;
     background: #ffffff;
