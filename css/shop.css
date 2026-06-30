@@ -274,7 +274,7 @@ body {
     color: #2b2118;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: 0.833vw;
-    font-weight: 300;
+    font-weight: 500;
     line-height: 1.4;
     letter-spacing: -0.01em;
     white-space: normal;
@@ -432,6 +432,21 @@ body {
     width: var(--product-compact-width);
     height: calc(var(--card-width) * 0.4329);
     overflow: visible;
+}
+
+.product-card__image-box--middleton {
+    width: calc(var(--product-compact-width) * 0.8);
+    height: calc(var(--card-width) * 0.3463);
+}
+
+.product-card__image-box--stockwell {
+    width: calc(var(--product-compact-width) * 1.1);
+    height: calc(var(--card-width) * 0.4762);
+}
+
+.product-card__image-box--dsl40 {
+    width: calc(var(--product-compact-width) * 2);
+    height: calc(var(--card-width) * 0.8658);
 }
 
 .product-card__image {
