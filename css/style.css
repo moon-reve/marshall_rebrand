@@ -2510,21 +2510,25 @@ a {
 
 .finale__top-button {
     bottom: 2.9vh;
-    left: 75vw;
+    right: 1.77vw;
+    left: auto;
     margin: 0;
     padding: 0;
     border: 0;
     background: transparent;
+    color: #2b2118;
     font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
     line-height: 1.15;
     letter-spacing: -0.03em;
+    text-align: right;
     cursor: pointer;
     transition: color 0.2s ease;
 }
 
 .finale__top-button:hover,
 .finale__top-button:focus-visible {
-    color: #c8c8c8;
+    color: #120d0a;
 }
 
 .finale__art {
