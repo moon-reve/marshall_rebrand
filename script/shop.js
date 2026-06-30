@@ -354,6 +354,10 @@ let smoothTargetY = 0;
 let smoothCurrentY = 0;
 let smoothRafId = null;
 let smoothScrollCompleteCallback = null;
+let smoothScrollEase = 0.12;
+let smoothScrollStartY = 0;
+let smoothScrollStartedAt = 0;
+let smoothScrollDuration = 0;
 
 function updateShopScrollbarWidth() {
     if (!smoothScrollEl) return;
@@ -362,24 +366,47 @@ function updateShopScrollbarWidth() {
     document.documentElement.style.setProperty("--shop-scrollbar-width", `${scrollbarWidth}px`);
 }
 
-function smoothScrollTo(y, onComplete) {
+function smoothScrollTo(y, onComplete, options = {}) {
     if (!smoothScrollEl) return;
     const maxY = smoothScrollEl.scrollHeight - smoothScrollEl.clientHeight;
     smoothTargetY = Math.max(0, Math.min(y, maxY));
     smoothScrollCompleteCallback = typeof onComplete === "function" ? onComplete : null;
+    smoothScrollEase = options.ease ?? 0.12;
+    smoothScrollDuration = options.duration ?? 0;
+    smoothScrollStartY = smoothCurrentY;
+    smoothScrollStartedAt = performance.now();
     if (!smoothRafId) smoothRafId = requestAnimationFrame(smoothScrollTick);
 }
 
 function smoothScrollTick() {
     const dist = smoothTargetY - smoothCurrentY;
-    if (Math.abs(dist) < 0.1) {
+    if (smoothScrollDuration > 0) {
+        const elapsed = performance.now() - smoothScrollStartedAt;
+        const progress = clamp(elapsed / smoothScrollDuration, 0, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+        smoothCurrentY = smoothScrollStartY + (smoothTargetY - smoothScrollStartY) * easedProgress;
+
+        if (progress < 1) {
+            smoothRafId = requestAnimationFrame(smoothScrollTick);
+        } else {
+            smoothCurrentY = smoothTargetY;
+            smoothRafId = null;
+            smoothScrollDuration = 0;
+            const onComplete = smoothScrollCompleteCallback;
+            smoothScrollCompleteCallback = null;
+            smoothScrollEase = 0.12;
+            onComplete?.();
+        }
+    } else if (Math.abs(dist) < 0.1) {
         smoothCurrentY = smoothTargetY;
         smoothRafId = null;
         const onComplete = smoothScrollCompleteCallback;
         smoothScrollCompleteCallback = null;
+        smoothScrollEase = 0.12;
         onComplete?.();
     } else {
-        smoothCurrentY += dist * 0.12;
+        smoothCurrentY += dist * smoothScrollEase;
         smoothRafId = requestAnimationFrame(smoothScrollTick);
     }
     if (smoothScrollEl) smoothScrollEl.scrollTop = smoothCurrentY;
@@ -481,6 +508,7 @@ let shopActiveProductIndex = -1;
 let shopManualProductId = null;
 let hasSkippedHeroOnScroll = false;
 let isSkippingHeroToBest = false;
+let shopHeroProgressLead = 0;
 let shopHeroTouchStartY = 0;
 let shopProductWheelDelta = 0;
 let shopProductWheelLockedUntil = 0;
@@ -702,8 +730,13 @@ function scrollToShopBest() {
     const targetTop = Math.max(shopBestTop, 0);
     hasSkippedHeroOnScroll = true;
     isSkippingHeroToBest = true;
+    shopHeroProgressLead = window.innerHeight * 0.3;
+    if (!shopAnimationFrame) updateShopHeroTransition();
     smoothScrollTo(targetTop, () => {
         isSkippingHeroToBest = false;
+        shopHeroProgressLead = 0;
+    }, {
+        duration: 1100,
     });
 }
 
@@ -881,8 +914,8 @@ function updateShopHeroTransition() {
     if (!shopHeroStage || !shopHero || !shopHeroPanels.length) return;
 
     const stageRect = shopHeroStage.getBoundingClientRect();
-    const scrollDistance = Math.max(window.innerHeight * 0.45, 1);
-    shopTargetProgress = clamp(-stageRect.top / scrollDistance, 0, 1);
+    const scrollDistance = Math.max(window.innerHeight * 1.08, 1);
+    shopTargetProgress = clamp((-stageRect.top + shopHeroProgressLead) / scrollDistance, 0, 1);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         if (shopAnimationFrame) cancelAnimationFrame(shopAnimationFrame);
@@ -896,7 +929,7 @@ function updateShopHeroTransition() {
 
     function renderTransition() {
         const distance = shopTargetProgress - shopRenderedProgress;
-        shopRenderedProgress += distance * 0.085;
+        shopRenderedProgress += distance * 0.065;
 
         if (Math.abs(distance) < 0.0001) {
             shopRenderedProgress = shopTargetProgress;
