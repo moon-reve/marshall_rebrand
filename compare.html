@@ -737,14 +737,50 @@
 (function () {
     const heroStage = document.querySelector('[data-compare-hero-stage]');
     const hero = document.querySelector('.hero');
+    const quizSection = document.querySelector('.quiz-section');
     const heroPanels = document.querySelectorAll('.hero-panel');
     const heroContent = document.querySelector('.hero-content');
     const heroVlines = document.querySelectorAll('.hero-vline');
     const panelTimings = [[0, 0.56],[0.08, 0.66],[0.24, 0.82],[0.40, 1]];
     let targetProgress = 0, renderedProgress = 0, rafId = null;
+    let isSkippingToQuiz = false;
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
     function seq(p, s, e) { return clamp((p - s) / (e - s), 0, 1); }
     function ease(t) { return t * t * (3 - 2 * t); }
+    function getQuizTop() {
+        if (!quizSection) return 0;
+        return window.scrollY + quizSection.getBoundingClientRect().top;
+    }
+    function isBeforeQuiz() {
+        return quizSection && window.scrollY < getQuizTop() - 2;
+    }
+    function completeSkipWhenSettled() {
+        const quizTop = getQuizTop();
+        if (Math.abs(window.scrollY - quizTop) < 2) {
+            isSkippingToQuiz = false;
+            return;
+        }
+        requestAnimationFrame(completeSkipWhenSettled);
+    }
+    function skipToQuiz() {
+        if (!quizSection || isSkippingToQuiz) return;
+        isSkippingToQuiz = true;
+        window.scrollTo({
+            top: getQuizTop(),
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+        });
+        requestAnimationFrame(completeSkipWhenSettled);
+    }
+    function shouldSkipFromHero() {
+        if (!heroStage || !quizSection || !isBeforeQuiz()) return false;
+        const rect = heroStage.getBoundingClientRect();
+        return rect.top <= 1 && rect.bottom > 1;
+    }
+    function getWheelDelta(event) {
+        if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
+        if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
+        return event.deltaY;
+    }
     function render(progress) {
         heroPanels.forEach((panel, i) => {
             const [s, e] = panelTimings[i];
@@ -772,6 +808,37 @@
     }
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    window.addEventListener('wheel', (event) => {
+        if (event.ctrlKey || event.metaKey) return;
+        if (isSkippingToQuiz) {
+            event.preventDefault();
+            return;
+        }
+        if (getWheelDelta(event) > 0 && shouldSkipFromHero()) {
+            event.preventDefault();
+            skipToQuiz();
+        }
+    }, { passive: false, capture: true });
+    window.addEventListener('keydown', (event) => {
+        const scrollKeys = [' ', 'PageDown', 'ArrowDown'];
+        if (event.defaultPrevented || !scrollKeys.includes(event.key)) return;
+        if (!shouldSkipFromHero()) return;
+        event.preventDefault();
+        skipToQuiz();
+    }, { capture: true });
+    window.addEventListener('touchstart', (event) => {
+        if (!shouldSkipFromHero() || !event.touches.length) return;
+        heroStage.dataset.touchStartY = String(event.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('touchmove', (event) => {
+        const startY = Number(heroStage?.dataset.touchStartY || 0);
+        if (!startY || !event.touches.length) return;
+        const isSwipingUp = startY - event.touches[0].clientY > 10;
+        if (isSkippingToQuiz || (isSwipingUp && shouldSkipFromHero())) {
+            event.preventDefault();
+            if (!isSkippingToQuiz) skipToQuiz();
+        }
+    }, { passive: false, capture: true });
     render(0);
 })();
 </script>
