@@ -8,7 +8,9 @@
 .support-hero {
     position: relative;
     width: 100%;
-    aspect-ratio: 1920 / 731;
+    height: calc(100vh - var(--shop-topbar-height));
+    min-height: calc(100vh - var(--shop-topbar-height));
+    aspect-ratio: auto;
     overflow: hidden;
     background: #070503;
 }
@@ -725,7 +727,8 @@
 .support-guide--editorial {
     display: grid;
     grid-template-columns: 1.32fr repeat(4, 1fr);
-    min-height: 340px;
+    height: calc(100vh - var(--shop-topbar-height));
+    min-height: calc(100vh - var(--shop-topbar-height));
     color: #f3ede4;
     background: #17100d;
 }
@@ -819,7 +822,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    min-height: 160px;
+    height: calc(100vh - var(--shop-topbar-height));
+    min-height: calc(100vh - var(--shop-topbar-height));
     padding: 48px 4.6875vw;
     color: #17100d;
     background: #f5f0e8;
@@ -1050,7 +1054,7 @@
     }
 
     .support-help-cta {
-        padding: 44px 6vw;
+        padding: 44px 4.6875vw;
     }
 
     .support-panel--notice,
@@ -1156,7 +1160,7 @@
 
     .support-guide__heading,
     .guide-flow__item {
-        padding: 44px 8vw;
+        padding: 44px 4.6875vw;
         border-right: 0;
         border-bottom: 1px solid rgba(247, 242, 234, 0.1);
     }
@@ -1174,7 +1178,7 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 28px;
-        padding: 42px 8vw;
+        padding: 42px 4.6875vw;
     }
 
     .support-help-cta h2 {
