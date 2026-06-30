@@ -1209,8 +1209,7 @@ a {
 .evolution-intro {
     position: relative;
     width: 100vw;
-    height: 76.11vh;
-    min-height: 66.67vh;
+    height: 100vh;
     overflow: hidden;
     background: #fff;
 }
