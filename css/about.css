@@ -266,12 +266,12 @@
     grid-area: content;
     align-self: center;
     display: grid;
-    grid-template-columns: 7.8125vw 31.25vw 4.6875vw 1fr;
-    grid-template-areas: "nav image . text";
+    grid-template-columns: max-content 4.6875vw 31.25vw 4.6875vw 1fr;
+    grid-template-areas: "nav . image . text";
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    margin-left: -2.604vw;
+    padding: 1.5625vw 4.6875vw;
 }
 
 .about-history.is-pinned .about-history__sticky {
