@@ -132,7 +132,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    HERO
 ═══════════════════════════════════════════════════════ */
 .hero-stage {
-  height: 150vh;
+  height: 100vh;
+  background: var(--dark);
 }
 .hero {
   position: sticky;
@@ -140,7 +141,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: var(--hero-dark);
+  background: transparent;
 }
 .hero-grid {
   position: absolute;
