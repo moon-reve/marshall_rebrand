@@ -143,6 +143,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
   background: transparent;
 }
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 48% 40% at 62% 52%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.05) 44%, rgba(0, 0, 0, 0.34) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.12) 34%, rgba(0, 0, 0, 0.12) 66%, rgba(0, 0, 0, 0.32) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.24) 100%);
+}
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -157,18 +168,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transform: translate3d(0, var(--hero-panel-y, 0%), 0);
   will-change: transform;
 }
-.hero-panel--03,
-.hero-panel--04 {
-  background-image: url('../assets/images/hero-right.avif');
-  background-size: auto 100%;
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100%;
+  background-image: url('../assets/images/compare-hero-miricanvas.png');
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 }
-.hero-panel--03 {
-  background-position: calc(25vw - 100vh * 675 / 940) 0;
-}
-.hero-panel--04 {
-  background-position: calc(0px - 100vh * 675 / 940) 0;
-}
+.hero-panel--01::before { left: 0; }
+.hero-panel--02::before { left: -25vw; }
+.hero-panel--03::before { left: -50vw; }
+.hero-panel--04::before { left: -75vw; }
 .hero-vlines {
   position: absolute;
   inset: 0;
@@ -193,7 +207,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   z-index: 3;
   left: 0; top: 0;
   width: 50vw; height: 100%;
-  background: var(--hero-dark);
+  background: transparent;
   padding: 0 4.6875vw;
   display: flex; flex-direction: column;
   justify-content: center; gap: 6vh;
@@ -484,7 +498,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: #ffffff;
 }
 .product-result.is-visible {
-  display: block;
+  display: flex;
+  min-height: 100vh;
   animation: productReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
@@ -502,16 +517,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin: 0 auto;
   display: flex;
   align-items: stretch;
+  min-height: 100vh;
 }
 
 .product-card {
   flex: 1;
   width: 22.65625vw;
   min-width: 22.65625vw;
+  min-height: 100vh;
   background: var(--white);
   display: flex;
   flex-direction: column;
-  padding: 2.3958vw 2.3958vw 4.1667vw;
+  padding: 2.3958vw 2.3958vw 3.125vw;
   border-right: 1px solid #ede8e0;
   border-bottom: 1px solid #ede8e0;
   position: relative;
@@ -536,7 +553,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: relative;
 }
 .product-card--bestseller .card-top {
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .badge-bestseller {
@@ -566,6 +583,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .btn-wishlist svg {
   width: 100%;
   height: 100%;
+}
+.product-result .btn-wishlist {
+  display: none;
 }
 
 /* ── product image ── */
@@ -774,15 +794,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .product-specs {
   border-top: 1px solid var(--spec-border);
   flex: 1;
+  margin-top: auto;
 }
 
 .spec-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 2.2396vw;
+  min-height: 3.0208vw;
   border-bottom: 1px solid var(--spec-border);
-  gap: 0.4167vw;
+  gap: 0.8333vw;
+  padding: 0.2604vw 0;
 }
 
 .spec-label {
@@ -790,6 +812,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-weight: 500;
   color: #000;
   letter-spacing: -0.0078vw;
+  line-height: 1.55;
   flex-shrink: 0;
 }
 
@@ -798,17 +821,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-weight: 500;
   color: #000;
   letter-spacing: -0.0078vw;
+  line-height: 1.55;
   text-align: right;
 }
 
 /* detail link */
 .detail-link {
   display: block;
-  margin-top: 1.25vw;
+  margin-top: 1.8229vw;
   font-size: 0.7081vw;
   font-weight: 500;
   color: #000;
   letter-spacing: -0.0078vw;
+  line-height: 1.55;
   text-align: right;
   transition: opacity 0.2s;
 }

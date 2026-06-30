@@ -802,7 +802,47 @@
     (function () {
       const quizSteps = document.querySelectorAll('.quiz-step');
       const productResult = document.getElementById('product-result');
+      const productGrids = productResult ? Array.from(productResult.querySelectorAll('.product-grid')) : [];
+      const recommendationGrid = productGrids[0];
+      const productCards = productResult ? Array.from(productResult.querySelectorAll('.product-card')) : [];
       const answers = {};
+      let currentRecommendationCards = [];
+
+      function shuffleCards(cards) {
+        return [...cards].sort(() => Math.random() - 0.5);
+      }
+
+      function pickRecommendations() {
+        if (productCards.length <= 4) return productCards;
+
+        const previousCards = new Set(currentRecommendationCards);
+        const nextPool = productCards.filter(card => !previousCards.has(card));
+        const pool = nextPool.length >= 4 ? nextPool : productCards;
+        const picked = shuffleCards(pool).slice(0, 4);
+
+        currentRecommendationCards = picked;
+        return picked;
+      }
+
+      function renderRecommendations(shouldScroll) {
+        if (!productResult || !recommendationGrid || productCards.length === 0) return;
+        if (!answers[1] || !answers[2] || !answers[3]) return;
+
+        const pickedCards = pickRecommendations();
+
+        productGrids.forEach((grid, index) => {
+          grid.style.display = index === 0 ? 'flex' : 'none';
+        });
+
+        recommendationGrid.replaceChildren(...pickedCards);
+        productResult.classList.add('is-visible');
+
+        if (shouldScroll) {
+          setTimeout(() => {
+            productResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 150);
+        }
+      }
 
       quizSteps.forEach(step => {
         const stepNum = parseInt(step.dataset.step);
@@ -815,6 +855,13 @@
             card.classList.add('is-active');
             answers[stepNum] = card.dataset.value;
 
+            const hasAllAnswers = answers[1] && answers[2] && answers[3];
+            const shouldRenderImmediately = hasAllAnswers && (stepNum < 3 || productResult?.classList.contains('is-visible'));
+
+            if (shouldRenderImmediately) {
+              renderRecommendations(stepNum === 3);
+            }
+
             setTimeout(() => {
               const nextStep = document.querySelector(`.quiz-step[data-step="${stepNum + 1}"]`);
               if (nextStep) {
@@ -823,12 +870,7 @@
                 nextStep.classList.add('is-active');
               } else {
                 // STEP 3 완료 → 추천상품 reveal
-                if (productResult) {
-                  productResult.classList.add('is-visible');
-                  setTimeout(() => {
-                    productResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }, 150);
-                }
+                if (!shouldRenderImmediately) renderRecommendations(true);
               }
             }, 550);
           });
