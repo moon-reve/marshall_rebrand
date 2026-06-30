@@ -5,23 +5,36 @@
     --about-tan: #ddc7a9;
     --about-gold: #c89218;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
     color: var(--about-brown);
     background: var(--about-cream);
 }
 
 .about-hero {
-    height: 100vh;
+    height: 460vh;
     background: var(--about-tan);
 }
 
 .about-hero__sticky {
-    position: sticky;
+    position: absolute;
     top: 0;
+    width: 100vw;
     height: 100vh;
     min-height: 100vh;
     overflow: hidden;
     background: transparent;
+}
+
+.about-hero.is-pinned .about-hero__sticky {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+}
+
+.about-hero.is-ended .about-hero__sticky {
+    position: absolute;
+    top: auto;
+    bottom: 0;
 }
 
 .about-hero__media-grid {
@@ -47,6 +60,17 @@
     inset: 0;
     overflow: hidden;
     background: #061011;
+}
+
+.about-hero__fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #000;
+    opacity: var(--about-hero-dark-opacity, 0.8);
+    pointer-events: none;
+    transition: opacity 1s ease-out;
 }
 
 .about-hero__fill--brown {
@@ -76,19 +100,84 @@
 .about-hero__panel-img {
     position: absolute;
     top: 0;
-    width: 50vw;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     object-fit: cover;
-    object-position: 54% 50%;
+    object-position: center;
     pointer-events: none;
 }
 
-.about-hero__panel--03 .about-hero__panel-img {
+.about-hero__panel--01 .about-hero__panel-img {
     left: 0;
 }
 
-.about-hero__panel--04 .about-hero__panel-img {
+.about-hero__panel--02 .about-hero__panel-img {
     left: -25vw;
+}
+
+.about-hero__panel--03 .about-hero__panel-img {
+    left: -50vw;
+}
+
+.about-hero__panel--04 .about-hero__panel-img {
+    left: -75vw;
+}
+
+.about-hero__dissolve-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 25vw);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    opacity: var(--about-hero-dissolve-opacity, 0);
+    pointer-events: none;
+    transition: opacity 1s ease-out;
+}
+
+.about-hero__dissolve-panel {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    transform: translate3d(0, var(--about-dissolve-panel-y, 0%), 0);
+    will-change: transform;
+}
+
+.about-hero__dissolve-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+}
+
+.about-hero__dissolve-img {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+}
+
+.about-hero__dissolve-panel--01 .about-hero__dissolve-img {
+    left: 0;
+}
+
+.about-hero__dissolve-panel--02 .about-hero__dissolve-img {
+    left: -25vw;
+}
+
+.about-hero__dissolve-panel--03 .about-hero__dissolve-img {
+    left: -50vw;
+}
+
+.about-hero__dissolve-panel--04 .about-hero__dissolve-img {
+    left: -75vw;
 }
 
 .about-hero__copy {
@@ -97,15 +186,25 @@
     z-index: 3;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 6vh;
-    width: 50vw;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
     height: 100%;
-    padding: 6vw 4.55vw 3.5vw;
+    box-sizing: border-box;
+    padding: 6vw 4.55vw 30vh;
     color: #f8efe2;
+    text-align: center;
     pointer-events: none;
     transform: translate3d(0, var(--about-content-y, 0%), 0);
     will-change: transform;
+}
+
+.about-hero__copy-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6vh;
+    width: 100%;
 }
 
 .about-hero__copy h1 {
@@ -126,6 +225,35 @@
     font-weight: 300;
     line-height: 1.7;
     letter-spacing: 0.02em;
+}
+
+.about-hero__text-flow {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    height: 100%;
+    opacity: var(--about-hero-text-opacity, 0);
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.about-hero__text-flow-inner {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+.about-hero__copy-track {
+    position: absolute;
+    top: 132.85vh;
+    left: 4.6875vw;
+    width: calc(100vw - 9.375vw);
+    z-index: 2;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
 }
 
 .about-intro {
@@ -602,16 +730,12 @@
     }
 
     .about-hero {
-        height: 100vh;
+        height: 460vh;
     }
 
     .about-hero__copy {
-        width: 50vw;
-        padding: 96px 4vw 52px;
-    }
-
-    .about-hero__panel-img {
-        object-position: 52% 50%;
+        width: 100%;
+        padding: 96px 4vw 30vh;
     }
 
     .about-intro,
