@@ -269,3 +269,176 @@ renderAboutHistorySlide(0, false);
 window.addEventListener("scroll", updateAboutHistoryInteraction, { passive: true });
 window.addEventListener("resize", updateAboutHistoryInteraction);
 updateAboutHistoryInteraction();
+
+const aboutPhilosophy = document.querySelector(".about-philosophy");
+const aboutStatNumbers = Array.from(document.querySelectorAll(".about-stat strong"));
+
+function initializeAboutStatNumbers() {
+    if (!aboutStatNumbers.length) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const playStatAnimations = [];
+
+    aboutStatNumbers.forEach((stat, statIndex) => {
+        const rawValue = stat.textContent.trim();
+
+        stat.setAttribute("aria-label", rawValue);
+
+        function renderStaticValue() {
+            const fragment = document.createDocumentFragment();
+            const numericValue = rawValue.match(/^\d+/)?.[0] || "";
+            const suffixValue = rawValue.slice(numericValue.length);
+
+            if (numericValue) {
+                const value = document.createElement("span");
+                value.className = "about-stat__value";
+                value.textContent = numericValue;
+                fragment.append(value);
+            }
+
+            if (suffixValue) {
+                const suffix = document.createElement("span");
+                suffix.className = "about-stat__suffix";
+                suffix.textContent = suffixValue;
+                fragment.append(suffix);
+            }
+
+            stat.replaceChildren(fragment);
+        }
+
+        function buildSlots() {
+            const characters = rawValue.split("");
+            const slots = [];
+            const fragment = document.createDocumentFragment();
+
+            characters.forEach((character, characterIndex) => {
+                if (!/\d/.test(character)) {
+                    const suffix = document.createElement("span");
+                    suffix.className = "about-stat__suffix";
+                    suffix.textContent = character;
+                    suffix.setAttribute("aria-hidden", "true");
+                    fragment.append(suffix);
+                    return;
+                }
+
+                const slot = document.createElement("span");
+                const strip = document.createElement("span");
+                const targetDigit = Number(character);
+                const startOffset = 12 + statIndex * 2 + characterIndex;
+
+                slot.className = "about-stat__digit";
+                slot.setAttribute("aria-hidden", "true");
+                strip.className = "about-stat__digit-strip";
+
+                for (let number = 0; number < 30; number += 1) {
+                    const value = document.createElement("span");
+                    value.textContent = String(number % 10);
+                    strip.append(value);
+                }
+
+                slot.append(strip);
+                fragment.append(slot);
+                slots.push({ strip, targetDigit, startOffset, progress: startOffset });
+            });
+
+            stat.replaceChildren(fragment);
+            return slots;
+        }
+
+        function renderSlots(slots) {
+            slots.forEach((slot) => {
+                const digitHeight = slot.strip.querySelector("span")?.offsetHeight ?? 0;
+                if (!digitHeight) return;
+
+                const digitIndex = slot.targetDigit + slot.progress;
+                slot.strip.style.transform = `translateY(${-digitIndex * digitHeight}px)`;
+            });
+        }
+
+        function finishSlots(slots) {
+            slots.forEach((slot) => {
+                slot.progress = 0;
+            });
+            renderSlots(slots);
+            renderStaticValue();
+        }
+
+        function playSlots() {
+            if (stat.dataset.aboutStatAnimating === "true") return;
+            stat.dataset.aboutStatAnimating = "true";
+
+            const slots = buildSlots();
+
+            slots.forEach((slot) => {
+                slot.progress = slot.startOffset;
+            });
+            renderSlots(slots);
+
+            if (reducedMotion) {
+                finishSlots(slots);
+                stat.dataset.aboutStatAnimating = "false";
+                return;
+            }
+
+            function animateSlots() {
+                let allDone = true;
+
+                slots.forEach((slot) => {
+                    const distance = -slot.progress;
+
+                    if (Math.abs(distance) < 0.004) {
+                        slot.progress = 0;
+                    } else {
+                        const speed = Math.abs(distance) < 0.5 ? 0.14 : 0.06;
+                        slot.progress += distance * speed;
+                        allDone = false;
+                    }
+                });
+
+                renderSlots(slots);
+
+                if (!allDone) {
+                    requestAnimationFrame(animateSlots);
+                } else {
+                    finishSlots(slots);
+                    stat.dataset.aboutStatAnimating = "false";
+                }
+            }
+
+            requestAnimationFrame(animateSlots);
+        }
+
+        renderStaticValue();
+        playStatAnimations.push(playSlots);
+    });
+
+    function playAllStats() {
+        playStatAnimations.forEach((playSlots, index) => {
+            window.setTimeout(playSlots, index * 90);
+        });
+    }
+
+    if ("IntersectionObserver" in window) {
+        const observerTarget = aboutPhilosophy || aboutStatNumbers[0];
+        let isPhilosophyVisible = false;
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                if (isPhilosophyVisible) return;
+                isPhilosophyVisible = true;
+                playAllStats();
+                return;
+            }
+
+            isPhilosophyVisible = false;
+        }, {
+            rootMargin: "0px 0px -20% 0px",
+            threshold: 0.2,
+        });
+
+        observer.observe(observerTarget);
+    } else {
+        playAllStats();
+    }
+}
+
+initializeAboutStatNumbers();

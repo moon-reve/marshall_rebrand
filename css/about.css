@@ -503,18 +503,57 @@
 }
 
 .about-stat strong {
-    display: block;
+    display: flex;
+    align-items: flex-end;
     margin-bottom: 1.15vw;
     color: var(--about-gold);
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    font-variant-numeric: lining-nums tabular-nums;
     font-size: clamp(48px, 4.26vw, 82px);
     font-weight: 400;
-    line-height: 0.95;
+    line-height: 1;
 }
 
-.about-stat strong span {
+.about-stat__value,
+.about-stat__digit {
+    display: inline-block;
+    font: inherit;
+    font-size: 1em;
+    line-height: 1;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    font-variant-numeric: lining-nums tabular-nums;
+}
+
+.about-stat__digit {
+    height: 1em;
+    overflow: hidden;
+    vertical-align: bottom;
+    clip-path: inset(0 -100vw);
+}
+
+.about-stat__digit-strip {
+    display: flex;
+    flex-direction: column;
+    font: inherit;
+    font-size: 1em;
+    line-height: 1;
+    will-change: transform;
+}
+
+.about-stat__digit-strip > span {
+    display: block;
+    height: 1em;
+    font: inherit;
+    font-size: 1em;
+    line-height: 1;
+}
+
+.about-stat__suffix {
+    align-self: flex-end;
     font-size: 0.62em;
+    line-height: 1;
 }
 
 .about-stat h3 {
