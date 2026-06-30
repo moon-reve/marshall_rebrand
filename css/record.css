@@ -88,7 +88,7 @@
         linear-gradient(to bottom, #07100d 0 50%, #d9c5a9 50% 100%);
     background-position:
         left top,
-        right top,
+        right -0.2vw,
         left -0.2vw,
         left top;
     background-size:

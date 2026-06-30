@@ -125,7 +125,7 @@ const aboutHistorySlides = [
         year: "현재",
         title: "마샬 코리아",
         description: "한국 공식 유통 파트너를 통해 전 제품 라인업 정식 서비스 제공.",
-        image: "./assets/images/about-history-korea.png",
+        image: "./assets/images/about_now_marshallkr.avif",
         alt: "Marshall의 초기 음악 역사를 보여주는 흑백 사진",
         position: "center bottom",
     },

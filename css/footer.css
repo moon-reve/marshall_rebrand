@@ -95,21 +95,23 @@
   margin-bottom: 2.0833vw;
 }
 
+.site-footer .footer-col-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .footer-col ul {
   display: flex;
   flex-direction: column;
   gap: 0.5208vw;
 }
 
-.footer-col ul li a {
+.footer-col ul li {
   font-size: 0.6608vw;
   font-weight: 300;
   color: rgba(255, 234, 198, 0.55);
   letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-.footer-col ul li a:hover {
-  color: var(--cream-light);
+  cursor: default;
 }
 
 /* bottom bar */
@@ -136,14 +138,13 @@
   gap: 0.8333vw;
 }
 
-.footer-legal a {
+.footer-legal-text {
   font-size: 0.5664vw;
   font-weight: 300;
   color: rgba(255, 234, 198, 0.4);
   letter-spacing: 0.03em;
-  transition: color 0.2s;
+  cursor: default;
 }
-.footer-legal a:hover { color: var(--cream-light); }
 
 .footer-divider {
   font-size: 0.5664vw;
