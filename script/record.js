@@ -1,5 +1,6 @@
 (() => {
     const hero = document.querySelector(".record-hero");
+    const artistCatalog = document.querySelector(".artist-catalog");
 
     if (!hero) {
         return;
@@ -211,6 +212,7 @@
     let targetProgress = 0;
     let renderedProgress = 0;
     let animationFrame = 0;
+    let isSkippingToArtist = false;
     const arrowLayer = hero.querySelector(".record-hero__arrows");
     const columnGrids = [];
     const copyBlocks = columnTargets
@@ -253,6 +255,38 @@
         if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
         if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
         return event.deltaY;
+    };
+    const getArtistTop = () => {
+        if (!artistCatalog) return 0;
+        return window.scrollY + artistCatalog.getBoundingClientRect().top;
+    };
+    const isBeforeArtist = () => artistCatalog && window.scrollY < getArtistTop() - 2;
+    const shouldSkipToArtist = () => {
+        if (!artistCatalog || !isBeforeArtist()) return false;
+        const rect = hero.getBoundingClientRect();
+        return rect.top <= 1 && rect.bottom > 1;
+    };
+    const completeSkipWhenSettled = () => {
+        const artistTop = getArtistTop();
+
+        if (Math.abs(window.scrollY - artistTop) < 2) {
+            isSkippingToArtist = false;
+            return;
+        }
+
+        requestAnimationFrame(completeSkipWhenSettled);
+    };
+    const skipToArtist = () => {
+        if (!artistCatalog || isSkippingToArtist) return;
+
+        isSkippingToArtist = true;
+        targetProgress = 1;
+        updateColumns();
+        window.scrollTo({
+            top: getArtistTop(),
+            behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+        });
+        requestAnimationFrame(completeSkipWhenSettled);
     };
 
     const renderColumns = (progress) => {
@@ -332,9 +366,23 @@
     };
 
     const handleWheel = (event) => {
+        if (event.ctrlKey || event.metaKey) return;
+
+        if (isSkippingToArtist) {
+            event.preventDefault();
+            return;
+        }
+
         const rect = hero.getBoundingClientRect();
         const isHeroActive = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
         const wheelDelta = getWheelDelta(event);
+
+        if (wheelDelta > 0 && shouldSkipToArtist()) {
+            event.preventDefault();
+            skipToArtist();
+            return;
+        }
+
         const nextProgress = wheelDelta > 0 ? 1 : 0;
         const shouldHoldHero =
             isHeroActive &&
@@ -351,6 +399,42 @@
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
+    window.addEventListener(
+        "keydown",
+        (event) => {
+            const scrollKeys = [" ", "PageDown", "ArrowDown"];
+
+            if (event.defaultPrevented || !scrollKeys.includes(event.key) || !shouldSkipToArtist()) return;
+
+            event.preventDefault();
+            skipToArtist();
+        },
+        { capture: true }
+    );
+    window.addEventListener(
+        "touchstart",
+        (event) => {
+            if (!shouldSkipToArtist() || !event.touches.length) return;
+            hero.dataset.touchStartY = String(event.touches[0].clientY);
+        },
+        { passive: true }
+    );
+    window.addEventListener(
+        "touchmove",
+        (event) => {
+            const startY = Number(hero.dataset.touchStartY || 0);
+
+            if (!startY || !event.touches.length) return;
+
+            const isSwipingUp = startY - event.touches[0].clientY > 10;
+
+            if (isSkippingToArtist || (isSwipingUp && shouldSkipToArtist())) {
+                event.preventDefault();
+                if (!isSkippingToArtist) skipToArtist();
+            }
+        },
+        { passive: false, capture: true }
+    );
     window.addEventListener("scroll", syncColumnsWithPage, { passive: true });
     window.addEventListener("resize", syncColumnsWithPage);
     syncColumnsWithPage();

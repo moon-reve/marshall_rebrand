@@ -30,17 +30,26 @@
 .record-hero {
     position: relative;
     z-index: 2;
-    height: 100vh;
-    overflow: hidden;
+    height: 160vh;
+    overflow: visible;
     background: transparent;
     touch-action: pan-y;
 }
 
-.record-hero > .artist-grid {
+.record-hero__sticky {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #d9c5a9;
+}
+
+.record-hero__sticky > .artist-grid {
     z-index: 6;
 }
 
-.record-hero.is-column-scroll-ready > .artist-grid {
+.record-hero.is-column-scroll-ready .record-hero__sticky > .artist-grid {
     display: none;
 }
 
@@ -375,7 +384,7 @@
     position: sticky;
     top: 0;
     z-index: 0;
-    margin-top: -100vh;
+    margin-top: -60vh;
     height: 100vh;
     background: #d9c5a9;
     color: #2b2118;
