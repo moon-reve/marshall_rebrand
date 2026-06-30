@@ -11,7 +11,7 @@
 }
 
 .about-hero {
-    height: 115vh;
+    height: 100vh;
     background: var(--about-tan);
 }
 
@@ -51,6 +51,14 @@
 
 .about-hero__fill--brown {
     background: var(--about-brown);
+}
+
+.about-hero__fill--photo {
+    background-color: var(--about-brown);
+    background-image: var(--about-hero-panel-image, none);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .about-hero__line {
@@ -118,12 +126,26 @@
 }
 
 .about-intro {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box;
+    min-height: 56.25vw;
+    padding: 0 4.65vw 7vw;
+    overflow: hidden;
+    background-image: url("../assets/images/about-intro-bg.webp");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.about-intro__text {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    min-height: 19.55vw;
-    padding: 0 4.65vw;
-    background: var(--about-tan);
+    width: 100%;
 }
 
 .about-intro h2,
@@ -137,13 +159,17 @@
     letter-spacing: 0;
 }
 
+.about-intro h2,
+.about-intro p {
+    color: #2b2118;
+}
+
 .about-intro p {
     justify-self: end;
     max-width: 31.4vw;
     margin: 0;
-    color: #342419;
-    font-size: clamp(14px, 0.94vw, 18px);
-    font-weight: 600;
+    font-size: 0.833vw;
+    font-weight: 400;
     line-height: 1.55;
     text-align: left;
 }
@@ -197,7 +223,7 @@
     margin: 0;
     color: #241911;
     font-size: clamp(13px, 0.84vw, 16px);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.7;
 }
 
@@ -243,7 +269,7 @@
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    padding: 4.6875vw;
+    margin-left: -2.604vw;
 }
 
 .about-history.is-pinned .about-history__sticky {
@@ -276,7 +302,7 @@
     margin: 0;
     color: rgba(246, 239, 229, 0.96);
     font-size: clamp(14px, 0.94vw, 18px);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.95;
 }
 
@@ -401,7 +427,7 @@
     margin: 0;
     color: rgba(246, 239, 229, 0.92);
     font-size: clamp(14px, 0.95vw, 18px);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.55;
 }
 
@@ -511,6 +537,7 @@
 
 @media (max-width: 64em) {
     .about-intro,
+    .about-intro__text,
     .about-story,
     .about-history,
     .about-philosophy {
@@ -518,7 +545,7 @@
     }
 
     .about-hero {
-        height: 115vh;
+        height: 100vh;
     }
 
     .about-hero__copy {
@@ -633,6 +660,10 @@
 
     .about-intro h2 {
         font-size: 66px;
+    }
+
+    .about-intro p {
+        font-size: 3.2vw;
     }
 
     .about-philosophy__list {
