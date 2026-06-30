@@ -8,7 +8,9 @@
 .support-hero {
     position: relative;
     width: 100%;
-    aspect-ratio: 1920 / 731;
+    height: calc(100vh - var(--shop-topbar-height));
+    min-height: calc(100vh - var(--shop-topbar-height));
+    aspect-ratio: auto;
     overflow: hidden;
     background: #070503;
 }
@@ -726,7 +728,8 @@
     display: grid;
     grid-template-columns: minmax(240px, 0.32fr) minmax(0, 1fr);
     gap: 36px;
-    min-height: 430px;
+    height: calc(100vh - var(--shop-topbar-height));
+    min-height: calc(100vh - var(--shop-topbar-height));
     padding: 64px 4.6875vw 44px;
     color: #f3ede4;
     background: #17100d;
@@ -846,7 +849,8 @@
     grid-template-columns: minmax(0, 1fr) 280px minmax(260px, 360px);
     align-items: center;
     gap: 44px;
-    min-height: 270px;
+    height: calc(100vh - var(--shop-topbar-height));
+    min-height: calc(100vh - var(--shop-topbar-height));
     overflow: hidden;
     padding: 56px 4.6875vw;
     color: #f7f2ea;
@@ -1145,7 +1149,7 @@
     .support-help-cta {
         grid-template-columns: 1fr;
         gap: 32px;
-        padding: 46px 6vw;
+        padding: 46px 4.6875vw;
     }
 
     .support-help-cta__contact {
@@ -1257,7 +1261,7 @@
 
     .support-guide--editorial {
         grid-template-columns: 1fr;
-        padding: 44px 8vw;
+        padding: 44px 4.6875vw;
     }
 
     .support-guide__heading,
@@ -1295,7 +1299,7 @@
         align-items: flex-start;
         grid-template-columns: 1fr;
         gap: 28px;
-        padding: 42px 8vw;
+        padding: 42px 4.6875vw;
     }
 
     .support-help-cta h2 {
