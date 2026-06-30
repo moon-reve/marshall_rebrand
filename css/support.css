@@ -125,12 +125,8 @@
     position: relative;
     min-height: 19.3vw;
     overflow: hidden;
-    padding: 1vw 1.9vw 1.25vw;
-    background-color: #171514;
-    background-image: url("../assets/images/support-leather-texture.avif");
-    background-repeat: repeat;
-    background-size: 220px 118px;
-    background-position: left top;
+    padding: 46px 1.9vw;
+    background: #17100d;
     border-top: 0;
 }
 
@@ -138,9 +134,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background:
-        linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.08)),
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.045), transparent 42%);
+    background: none;
     pointer-events: none;
 }
 
@@ -162,10 +156,12 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(6, 12.65vw);
+    grid-template-columns: repeat(6, 9.8vw);
     align-items: center;
     justify-content: center;
     gap: 20px;
+    width: fit-content;
+    margin: 0 auto;
     counter-reset: support-card;
 }
 
@@ -176,10 +172,10 @@
     align-items: flex-start;
     justify-content: flex-end;
     justify-self: center;
-    width: 12.65vw;
-    height: 17.72vw;
+    width: 9.8vw;
+    height: 13.72vw;
     gap: 0;
-    padding: 1.65vw 1.4vw 1.65vw;
+    padding: 1.28vw 1.07vw 1.28vw;
     color: #d8c1a2;
     background: rgba(33, 25, 20, 0.9);
     border: 1px solid rgba(216, 193, 162, 0.06);
@@ -194,12 +190,12 @@
 .support-card::before {
     content: counter(support-card, decimal-leading-zero);
     position: absolute;
-    top: 1.52vw;
-    left: 1.4vw;
+    top: 1.17vw;
+    left: 1.07vw;
     z-index: 1;
     color: #d8ae70;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 2.9167vw;
+    font-size: 2.26vw;
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0;
@@ -220,10 +216,10 @@
 
 .support-card__icon {
     position: absolute;
-    right: var(--support-card-icon-right, -1.2vw);
-    bottom: var(--support-card-icon-bottom, 4.55vw);
-    width: var(--support-card-icon-size, 9.4vw);
-    height: var(--support-card-icon-size, 9.4vw);
+    right: var(--support-card-icon-right, -0.94vw);
+    bottom: var(--support-card-icon-bottom, 3.52vw);
+    width: var(--support-card-icon-size, 7.3vw);
+    height: var(--support-card-icon-size, 7.3vw);
     flex: 0 0 auto;
     color: currentColor;
     opacity: 0.3;
@@ -231,39 +227,39 @@
 }
 
 .support-card--register {
-    --support-card-icon-size: 10.7vw;
-    --support-card-icon-right: -1.35vw;
-    --support-card-icon-bottom: 4.32vw;
+    --support-card-icon-size: 8.31vw;
+    --support-card-icon-right: -1.04vw;
+    --support-card-icon-bottom: 3.36vw;
 }
 
 .support-card--delivery {
-    --support-card-icon-size: 10.9vw;
-    --support-card-icon-right: -2.35vw;
-    --support-card-icon-bottom: 4.08vw;
+    --support-card-icon-size: 8.47vw;
+    --support-card-icon-right: -1.81vw;
+    --support-card-icon-bottom: 3.16vw;
 }
 
 .support-card--warranty {
-    --support-card-icon-size: 11.4vw;
-    --support-card-icon-right: -2.25vw;
-    --support-card-icon-bottom: 3.98vw;
+    --support-card-icon-size: 8.84vw;
+    --support-card-icon-right: -1.74vw;
+    --support-card-icon-bottom: 3.1vw;
 }
 
 .support-card--return {
-    --support-card-icon-size: 11.4vw;
-    --support-card-icon-right: -2.85vw;
-    --support-card-icon-bottom: 3.92vw;
+    --support-card-icon-size: 8.84vw;
+    --support-card-icon-right: -2.22vw;
+    --support-card-icon-bottom: 3.04vw;
 }
 
 .support-card--manual {
-    --support-card-icon-size: 11.15vw;
-    --support-card-icon-right: -2.2vw;
-    --support-card-icon-bottom: 4.02vw;
+    --support-card-icon-size: 8.64vw;
+    --support-card-icon-right: -1.72vw;
+    --support-card-icon-bottom: 3.13vw;
 }
 
 .support-card--firmware {
-    --support-card-icon-size: 11.15vw;
-    --support-card-icon-right: -1.95vw;
-    --support-card-icon-bottom: 3.95vw;
+    --support-card-icon-size: 8.64vw;
+    --support-card-icon-right: -1.51vw;
+    --support-card-icon-bottom: 3.08vw;
 }
 
 .support-card:hover .support-card__icon,
@@ -275,10 +271,10 @@
     position: relative;
     z-index: 1;
     color: #d8c1a2;
-    font-size: 1.25vw;
+    font-size: 0.98vw;
     font-weight: 500;
     line-height: 1.2;
-    letter-spacing: -0.0275vw;
+    letter-spacing: -0.0215vw;
     text-align: center;
     white-space: nowrap;
 }
@@ -612,16 +608,12 @@
 }
 
 .support-faq--editorial {
-    padding: 78px 3.95vw 74px max(3.95vw, calc((100vw - ((6 * 12.65vw) + (5 * 20px))) / 2));
-    background-color: #171514;
-    background-image: url("../assets/images/support-leather-texture.png");
-    background-repeat: repeat;
-    background-size: 220px 118px;
-    background-position: left top;
+    padding: 78px 4.6875vw 74px;
+    background: #17100d;
 }
 
 .support-service--editorial {
-    padding: 78px max(3.05vw, calc((100vw - ((6 * 12.65vw) + (5 * 20px))) / 2)) 74px 3.05vw;
+    padding: 78px 4.6875vw 74px;
     background: #dfc699;
 }
 
@@ -744,11 +736,22 @@
 }
 
 .support-guide__heading {
+    position: relative;
     display: grid;
     align-content: center;
     justify-items: start;
-    border-right: 1px solid rgba(247, 242, 234, 0.1);
     text-align: left;
+}
+
+.support-guide__heading::after,
+.guide-flow__item::after {
+    content: "";
+    position: absolute;
+    top: 48px;
+    right: 0;
+    bottom: 48px;
+    width: 1px;
+    background: rgba(247, 242, 234, 0.1);
 }
 
 .support-guide__heading .support-editorial__title {
@@ -760,6 +763,7 @@
 }
 
 .guide-flow__item {
+    position: relative;
     display: grid;
     grid-template-rows: 64px 58px 48px;
     align-items: center;
@@ -767,12 +771,11 @@
     align-content: center;
     min-width: 0;
     color: #f3ede4;
-    border-right: 1px solid rgba(247, 242, 234, 0.1);
     text-decoration: none;
 }
 
-.guide-flow__item:last-child {
-    border-right: 0;
+.guide-flow__item:last-child::after {
+    display: none;
 }
 
 .guide-flow__icon {
@@ -808,6 +811,7 @@
     font-weight: 400;
     line-height: 1.45;
     text-align: center;
+    white-space: nowrap;
 }
 
 .support-help-cta {
@@ -1155,6 +1159,11 @@
         padding: 44px 8vw;
         border-right: 0;
         border-bottom: 1px solid rgba(247, 242, 234, 0.1);
+    }
+
+    .support-guide__heading::after,
+    .guide-flow__item::after {
+        display: none;
     }
 
     .guide-flow__item:last-child {
