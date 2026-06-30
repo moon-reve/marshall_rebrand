@@ -426,6 +426,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #d8c1a2;
+  opacity: 0.3;
+  transition: color 0.3s, opacity 0.3s;
+}
+.step-card:hover .step-card-svg {
+  color: #ffe5b8;
+  opacity: 1;
+}
+.step-card.is-active .step-card-svg {
+  color: #ffeac6;
+  opacity: 1;
 }
 .step-card-svg svg {
   width: 100%;
