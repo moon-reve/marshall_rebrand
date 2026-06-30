@@ -238,6 +238,7 @@
     height: 420vh;
     background: #1a1208;
     color: #f6efe5;
+    isolation: isolate;
 }
 
 .about-history__sticky {
@@ -259,7 +260,14 @@
     height: 100vh;
     padding: 7.2vw 4.9vw 5.2vw;
     overflow: hidden;
-    background: #1a1208;
+    background-color: #1a1208;
+    background-image:
+        radial-gradient(circle at 48% 50%, rgba(26, 18, 8, 0.08) 0%, rgba(26, 18, 8, 0.3) 58%, rgba(11, 7, 4, 0.56) 100%),
+        linear-gradient(rgba(22, 13, 5, 0.28), rgba(22, 13, 5, 0.28)),
+        url("../assets/images/about-history-bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .about-history__content {
@@ -272,6 +280,13 @@
     box-sizing: border-box;
     width: 100%;
     padding: 1.5625vw 4.6875vw;
+}
+
+.about-history__heading,
+.about-history__summary,
+.about-history__content {
+    position: relative;
+    z-index: 1;
 }
 
 .about-history.is-pinned .about-history__sticky {
