@@ -689,8 +689,8 @@ a {
     background-size: 320% 100%;
     background-position: 180% 50%;
     mix-blend-mode: screen;
-    -webkit-mask: url("../assets/images/marshall_logo_4_transparent.png") center / 100% 100% no-repeat;
-    mask: url("../assets/images/marshall_logo_4_transparent.png") center / 100% 100% no-repeat;
+    -webkit-mask: url("../assets/images/marshall_logo_4_transparent.avif") center / 100% 100% no-repeat;
+    mask: url("../assets/images/marshall_logo_4_transparent.avif") center / 100% 100% no-repeat;
     animation: hero-gold-shine 5.5s ease-in-out infinite;
 }
 
@@ -983,7 +983,7 @@ a {
     z-index: 3;
     width: 100vw;
     height: 100vh;
-    background-image: url("../assets/images/bg-hero_15.png");
+    background-image: url("../assets/images/bg-hero_15.avif");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -1463,7 +1463,7 @@ a {
     overflow: hidden;
     background:
         linear-gradient(rgba(23, 17, 14, 0.35), rgba(23, 17, 14, 0.35)),
-        url("../assets/images/sound-stage-background.webp") center / cover no-repeat;
+        url("../assets/images/sound-stage-background.avif") center / cover no-repeat;
 }
 
 .sound-sticky.is-pinned {
@@ -1814,7 +1814,7 @@ a {
     bottom: 12.04vh;
     width: 40vw;
     height: 22.5vw;
-    background-image: url("../assets/images/sound_image_1.png");
+    background-image: url("../assets/images/sound_image_1.avif");
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: 100%;
@@ -1826,7 +1826,7 @@ a {
     right: 3.125vw;
     width: 40vw;
     height: 22.5vw;
-    background-image: url("../assets/images/sound_image_2.png");
+    background-image: url("../assets/images/sound_image_2.avif");
     background-repeat: no-repeat;
     background-position: right top;
     background-size: 100%;
@@ -1867,7 +1867,7 @@ a {
     overflow: hidden;
     background:
         linear-gradient(rgba(23, 17, 14, 0.35), rgba(23, 17, 14, 0.35)),
-        url("../assets/images/sound-stage-background.webp") center / cover no-repeat;
+        url("../assets/images/sound-stage-background.avif") center / cover no-repeat;
 }
 
 .signature-sound__title {
@@ -1920,7 +1920,7 @@ a {
     min-height: 1280px;
     background:
         linear-gradient(rgba(23, 17, 14, 0.35), rgba(23, 17, 14, 0.35)),
-        url("../assets/images/sound-stage-background.webp") center / cover no-repeat;
+        url("../assets/images/sound-stage-background.avif") center / cover no-repeat;
 }
 
 .headphone-sequence__sticky {
@@ -1934,7 +1934,7 @@ a {
     overflow: hidden;
     background:
         linear-gradient(rgba(23, 17, 14, 0.35), rgba(23, 17, 14, 0.35)),
-        url("../assets/images/sound-stage-background.webp") center / cover no-repeat;
+        url("../assets/images/sound-stage-background.avif") center / cover no-repeat;
 }
 
 .headphone-sequence__sticky.is-pinned {
@@ -2022,7 +2022,7 @@ a {
     min-height: 1280px;
     background:
         linear-gradient(rgba(23, 17, 14, 0.35), rgba(23, 17, 14, 0.35)),
-        url("../assets/images/sound-stage-background.webp") center / cover no-repeat;
+        url("../assets/images/sound-stage-background.avif") center / cover no-repeat;
 }
 
 .sound-speaker__sticky {
@@ -2036,7 +2036,7 @@ a {
     overflow: hidden;
     background:
         linear-gradient(rgba(23, 17, 14, 0.35), rgba(23, 17, 14, 0.35)),
-        url("../assets/images/sound-stage-background.webp") center / cover no-repeat;
+        url("../assets/images/sound-stage-background.avif") center / cover no-repeat;
 }
 
 .sound-speaker__sticky.is-pinned {

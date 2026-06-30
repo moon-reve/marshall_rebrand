@@ -159,7 +159,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .hero-panel--03,
 .hero-panel--04 {
-  background-image: url('../assets/images/hero-right.png');
+  background-image: url('../assets/images/hero-right.avif');
   background-size: auto 100%;
   background-repeat: no-repeat;
 }
@@ -829,7 +829,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-texture {
   position: absolute;
   inset: 0;
-  background: url('../assets/images/footer-raw-01.png') center/cover no-repeat;
+  background: url('../assets/images/footer-raw-01.avif') center/cover no-repeat;
   mix-blend-mode: exclusion;
   opacity: 0.35;
   pointer-events: none;

@@ -42,7 +42,7 @@ body {
     left: 0;
     width: 100%;
     aspect-ratio: 3000 / 2000;
-    background-image: url("../assets/images/shop_bestseller_bg.webp");
+    background-image: url("../assets/images/shop_bestseller_bg.avif");
     background-repeat: no-repeat;
     background-position: center top;
     background-size: 100% auto;
@@ -979,7 +979,7 @@ body {
     overflow: hidden;
     color: #f4f0ec;
     background-color: #151515;
-    background-image: url("../assets/images/support-leather-texture.png");
+    background-image: url("../assets/images/support-leather-texture.avif");
     background-repeat: repeat;
     background-size: 220px 118px;
     background-position: left top;

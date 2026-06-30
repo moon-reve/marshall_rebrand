@@ -35,7 +35,7 @@
 .footer-texture {
   position: absolute;
   inset: 0;
-  background: url('../assets/images/footer-raw-01.png') center/cover no-repeat;
+  background: url('../assets/images/footer-raw-01.avif') center/cover no-repeat;
   mix-blend-mode: exclusion;
   opacity: 0.35;
   pointer-events: none;
