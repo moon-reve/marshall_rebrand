@@ -15,6 +15,8 @@ const fixedUi = document.querySelector("[data-fixed-ui]");
 const fixedNav = document.querySelector(".fixed-nav");
 const fixedNavLinks = document.querySelectorAll(".fixed-nav a");
 const shopTopbar = document.querySelector(".shop-topbar");
+const shopTopbarNav = document.querySelector(".shop-topbar__nav");
+const shopTopbarMenu = document.querySelector(".shop-topbar__menu");
 const fixedGauge = document.querySelector(".fixed-gauge");
 const fixedGaugeTicks = document.querySelectorAll(".fixed-gauge__tick");
 const designPanel = document.querySelector("[data-design-panel]");
@@ -69,6 +71,7 @@ const fixedGaugeStartAngle = (fixedGaugeDotBaseAngle + 180) % 360;
 const fixedGaugeEndAngle = fixedGaugeTickAngles[5];
 const fixedGaugeMaxRotation = getClockwiseAngleDistance(fixedGaugeStartAngle, fixedGaugeEndAngle);
 const fixedGaugeActivationRange = 0;
+const mobileViewportQuery = window.matchMedia("(max-width: 480px)");
 
 speakersTransitionBg.className = "speakers-transition-bg";
 speakersGrid?.prepend(speakersTransitionBg);
@@ -149,6 +152,13 @@ const speakersPanelTimings = [
     [0.4, 0.96],
 ];
 
+const mobileSpeakersPanelTimings = [
+    [0.02, 0.96],
+    [1, 1.01],
+    [1, 1.01],
+    [1, 1.01],
+];
+
 const lineArtTransition = "stroke-dashoffset 0.22s cubic-bezier(0.22, 1, 0.36, 1)";
 
 function getLineArtPathProgress(drawLength, startLength, length, totalLength) {
@@ -174,11 +184,28 @@ function sequenceProgress(progress, start, end) {
     return clamp((progress - start) / (end - start), 0, 1);
 }
 
+function isMobileViewport() {
+    return mobileViewportQuery.matches;
+}
+
+function getSpeakersPanelTiming(index) {
+    const timings = isMobileViewport() ? mobileSpeakersPanelTimings : speakersPanelTimings;
+
+    return timings[index] || [0, 1];
+}
+
 function renderSpeakersEntry(progress) {
     const easedProgress = progress * progress * (3 - 2 * progress);
 
+    if (isMobileViewport()) {
+        speakersGrid?.style.setProperty("--speakers-dissolve-opacity", `${easedProgress}`);
+        heroMediaGrid?.style.setProperty("--hero-entry-blur", `${easedProgress * 5}px`);
+        heroMediaGrid?.style.setProperty("--hero-entry-brightness", `${1 - easedProgress * 0.42}`);
+    }
+
     speakersImages.forEach((image) => {
         image.style.setProperty("--speakers-entry-y", `${(1 - easedProgress) * 100}vh`);
+        image.style.setProperty("--speakers-panel-y", "0%");
     });
 }
 
@@ -273,10 +300,15 @@ function renderHeroMediaExit(progress) {
 function renderSpeakersTransitionBackground(progress) {
     const [firstPanelStart, firstPanelEnd] = speakersPanelTimings[0];
     const backgroundProgress = sequenceProgress(progress, firstPanelStart, firstPanelEnd);
+    const easedBackgroundProgress = backgroundProgress * backgroundProgress * (3 - 2 * backgroundProgress);
 
     speakersTransitionBg.style.setProperty(
         "--speakers-transition-bg-opacity",
-        `${backgroundProgress}`
+        `${isMobileViewport() ? easedBackgroundProgress : backgroundProgress}`
+    );
+    speakersTransitionBg.style.setProperty(
+        "--speakers-transition-bg-y",
+        `${isMobileViewport() ? (1 - easedBackgroundProgress) * -14 : 0}vh`
     );
 }
 
@@ -284,7 +316,7 @@ function renderSpeakersImages(progress, useFirstPanelSequence = true) {
     let isFirstPanelMoving = false;
 
     speakersImages.forEach((image, index) => {
-        const [start, end] = speakersPanelTimings[index];
+        const [start, end] = getSpeakersPanelTiming(index);
         let panelProgress = sequenceProgress(progress, start, end);
 
         if (index === 0 && useFirstPanelSequence) {
@@ -349,10 +381,15 @@ function updateHeroScroll() {
 
     // speakers-stage가 아직 뷰포트 위에 없는 동안 entry 페이즈 (조명이 켜진 후에만)
     const isEntryPhase = heroProgress > 0 && heroLightsOn && speakersRect.top > 0;
+    const isMobileSpeakersHold =
+        isMobileViewport() &&
+        speakersRect.top <= 1 &&
+        speakersRect.bottom > window.innerHeight * 0.5 &&
+        speakersRenderedProgress < 0.02;
     const isHeroContentVisible = heroRect.bottom > 0 && speakersRect.top > 0;
 
     speakersGrid.classList.toggle("is-entry", isEntryPhase);
-    heroAbout?.classList.toggle("is-speakers-entering", isEntryPhase);
+    heroAbout?.classList.toggle("is-speakers-entering", isEntryPhase || isMobileSpeakersHold);
     heroContent?.classList.toggle("is-active", isHeroContentVisible);
 
     if (isEntryPhase) {
@@ -361,11 +398,30 @@ function updateHeroScroll() {
         renderSpeakersTransitionBackground(0);
         renderSpeakersEntry(heroProgress);
     } else {
+        const isMobileSpeakersSequence =
+            isMobileViewport() &&
+            speakersRect.top <= 1 &&
+            speakersRect.bottom > 0;
+
+        if (isMobileViewport()) {
+            heroMediaGrid?.style.removeProperty("--hero-entry-blur");
+            heroMediaGrid?.style.removeProperty("--hero-entry-brightness");
+
+            if (isMobileSpeakersSequence) {
+                speakersGrid?.style.setProperty("--speakers-dissolve-opacity", "1");
+                heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
+            } else {
+                speakersGrid?.style.removeProperty("--speakers-dissolve-opacity");
+            }
+        }
+
         speakersImages.forEach((image) => {
             image.style.setProperty("--speakers-entry-y", "0vh");
         });
         renderHeroContentExit(speakersRenderedProgress);
-        renderHeroMediaExit(speakersRenderedProgress);
+        if (!isMobileSpeakersSequence) {
+            renderHeroMediaExit(speakersRenderedProgress);
+        }
         renderSpeakersTransitionBackground(speakersRect.bottom > 0 ? speakersRenderedProgress : 0);
     }
 }
@@ -405,6 +461,7 @@ function prepareBeginningText() {
 
 function renderBeginningTextProgress(progress) {
     const characterCount = beginningTextChars.length;
+    const baseOpacity = isMobileViewport() ? 0.48 : 0.25;
 
     beginningTextChars.forEach((character, index) => {
         const characterStart = index / characterCount;
@@ -414,7 +471,7 @@ function renderBeginningTextProgress(progress) {
             1
         );
 
-        character.style.opacity = `${0.25 + characterProgress * 0.75}`;
+        character.style.opacity = `${baseOpacity + characterProgress * (1 - baseOpacity)}`;
     });
 }
 
@@ -768,8 +825,12 @@ function updateSpeakersTransition() {
     if (!speakersStage || !speakersImages.length) return;
 
     const stageRect = speakersStage.getBoundingClientRect();
-    const scrollDistance = Math.max(speakersStage.offsetHeight, 1);
-    speakersTargetProgress = clamp((window.innerHeight - stageRect.top) / scrollDistance, 0, 1);
+    const scrollDistance = isMobileViewport()
+        ? Math.max(speakersStage.offsetHeight - window.innerHeight, window.innerHeight)
+        : Math.max(speakersStage.offsetHeight, 1);
+    speakersTargetProgress = isMobileViewport()
+        ? clamp(-stageRect.top / scrollDistance, 0, 1)
+        : clamp((window.innerHeight - stageRect.top) / scrollDistance, 0, 1);
 
     if (fixedNav && heroStage) {
         const heroBottom = heroStage.getBoundingClientRect().bottom;
@@ -785,7 +846,11 @@ function updateSpeakersTransition() {
         } else {
             speakersFirstPanelHoldUntil = 0;
             speakersFirstPanelIsSequenced = false;
-            const nowRevealed = heroBottom <= navTriggerPoint;
+            const hasEnteredSpeakersOnMobile =
+                isMobileViewport() &&
+                stageRect.top <= 1 &&
+                stageRect.bottom > window.innerHeight * 0.2;
+            const nowRevealed = hasEnteredSpeakersOnMobile || heroBottom <= navTriggerPoint;
             fixedNav.classList.toggle("is-speakers-revealed", nowRevealed);
             if (nowRevealed) {
                 fixedNav.style.removeProperty("--nav-exit-y");
@@ -825,7 +890,11 @@ function updateSpeakersTransition() {
 
         const isFirstPanelMoving = renderSpeakersImages(speakersRenderedProgress);
         renderHeroContentExit(speakersRenderedProgress);
-        renderHeroMediaExit(speakersRenderedProgress);
+        if (isMobileViewport()) {
+            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
+        } else {
+            renderHeroMediaExit(speakersRenderedProgress);
+        }
         renderSpeakersTransitionBackground(speakersRenderedProgress);
 
         if (
@@ -845,6 +914,7 @@ function updateSpeakersTransition() {
 function animateSpeakersToEnd() {
     if (!speakersStage || speakersIsAutoAnimating || speakersRenderedProgress >= 0.98) return;
 
+    window.finishHeroYearEntrance?.();
     speakersIsAutoAnimating = true;
     speakersFirstPanelHoldUntil = 0;
     speakersFirstPanelIsSequenced = false;
@@ -857,7 +927,7 @@ function animateSpeakersToEnd() {
     const startBeginningProgress = beginningTextRenderedProgress;
     const startScrollY = window.scrollY;
     const startTime = performance.now();
-    const duration = 1400;
+    const duration = isMobileViewport() ? 3200 : 1400;
     let targetScrollY = speakersStage.offsetTop + speakersStage.offsetHeight - window.innerHeight;
     let targetBeginningProgress = 0;
 
@@ -877,7 +947,11 @@ function animateSpeakersToEnd() {
         speakersTargetProgress = speakersRenderedProgress;
         renderSpeakersImages(speakersRenderedProgress, false);
         renderHeroContentExit(speakersRenderedProgress);
-        renderHeroMediaExit(speakersRenderedProgress);
+        if (isMobileViewport()) {
+            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
+        } else {
+            renderHeroMediaExit(speakersRenderedProgress);
+        }
         renderSpeakersTransitionBackground(speakersRenderedProgress);
         window.scrollTo(0, mix(startScrollY, targetScrollY, easedProgress));
 
@@ -897,7 +971,11 @@ function animateSpeakersToEnd() {
         speakersPreviousTargetProgress = 1;
         renderSpeakersImages(1, false);
         renderHeroContentExit(1);
-        renderHeroMediaExit(1);
+        if (isMobileViewport()) {
+            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
+        } else {
+            renderHeroMediaExit(1);
+        }
         renderSpeakersTransitionBackground(1);
 
         if (beginningTextChars.length) {
@@ -921,6 +999,7 @@ function animateSpeakersToEnd() {
 function animateSpeakersEntryToEnd() {
     if (!heroStage || !speakersStage || !speakersGrid || speakersEntryIsAutoAnimating) return;
 
+    window.finishHeroYearEntrance?.();
     const heroRect = heroStage.getBoundingClientRect();
     const speakersRect = speakersStage.getBoundingClientRect();
     const heroScrollDistance = Math.max(heroStage.offsetHeight - window.innerHeight, 1);
@@ -931,6 +1010,13 @@ function animateSpeakersEntryToEnd() {
     speakersEntryIsAutoAnimating = true;
     speakersGrid.classList.add("is-entry");
     heroAbout?.classList.add("is-speakers-entering");
+
+    if (isMobileViewport() && fixedNav) {
+        fixedNav.classList.add("is-speakers-revealed");
+        fixedNav.classList.remove("is-hero", "is-hero-top", "is-nav-dropping");
+        fixedNav.style.removeProperty("--nav-exit-y");
+    }
+
     renderHeroContentExit(0);
     renderHeroMediaExit(0);
     renderSpeakersTransitionBackground(0);
@@ -938,8 +1024,8 @@ function animateSpeakersEntryToEnd() {
     if (speakersEntryAutoAnimationFrame) cancelAnimationFrame(speakersEntryAutoAnimationFrame);
 
     const startTime = performance.now();
-    const duration = 950;
-    const targetScrollY = heroStage.offsetTop + heroStage.offsetHeight - window.innerHeight + 1;
+    const duration = isMobileViewport() ? 1650 : 950;
+    const targetScrollY = heroStage.offsetTop + heroStage.offsetHeight - window.innerHeight;
 
     function renderSpeakersEntryAutoAnimation(now) {
         const progress = clamp((now - startTime) / duration, 0, 1);
@@ -958,14 +1044,27 @@ function animateSpeakersEntryToEnd() {
 
         renderSpeakersEntry(1);
         renderHeroContentExit(0);
-        renderHeroMediaExit(0);
+        if (isMobileViewport()) {
+            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
+        } else {
+            renderHeroMediaExit(0);
+        }
         renderSpeakersTransitionBackground(0);
         window.scrollTo(0, targetScrollY);
+        speakersRenderedProgress = 0;
+        speakersTargetProgress = 0;
+        speakersPreviousTargetProgress = 0;
+
+        if (isMobileViewport() && fixedNav) {
+            fixedNav.classList.add("is-speakers-revealed");
+            fixedNav.classList.remove("is-hero", "is-hero-top", "is-nav-dropping");
+            fixedNav.style.removeProperty("--nav-exit-y");
+        }
 
         speakersEntryAutoAnimationFrame = null;
         requestAnimationFrame(() => {
             speakersEntryIsAutoAnimating = false;
-            speakersWheelUnlockAt = performance.now() + 650;
+            speakersWheelUnlockAt = performance.now() + 1100;
             updateScrollEffects();
         });
     }
@@ -1036,6 +1135,82 @@ function handleSpeakersWheel(event) {
 
     event.preventDefault();
     animateSpeakersToEnd();
+}
+
+function initializeMobileHeroSwipeSnap() {
+    if (!heroStage || !speakersStage || !speakersImages.length) return;
+
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchHandled = false;
+
+    function isHeroTransitionArea() {
+        const heroRect = heroStage.getBoundingClientRect();
+        const speakersRect = speakersStage.getBoundingClientRect();
+
+        return (
+            (heroRect.bottom > 0 && heroRect.top < window.innerHeight) ||
+            (speakersRect.top < window.innerHeight && speakersRect.bottom > 0 && speakersRenderedProgress < 0.98)
+        );
+    }
+
+    function snapToNextHeroScreen() {
+        if (speakersEntryIsAutoAnimating || speakersIsAutoAnimating) return;
+
+        const heroRect = heroStage.getBoundingClientRect();
+        const speakersRect = speakersStage.getBoundingClientRect();
+        const heroScrollDistance = Math.max(heroStage.offsetHeight - window.innerHeight, 1);
+        const heroProgress = clamp(-heroRect.top / heroScrollDistance, 0, 1);
+
+        if (!heroLightsOn) {
+            triggerHeroLightsOn();
+            return;
+        }
+
+        if (heroLightsAnimating || performance.now() < speakersWheelUnlockAt) return;
+
+        if (heroProgress < 0.98 && speakersRect.top > 0) {
+            animateSpeakersEntryToEnd();
+            return;
+        }
+    }
+
+    window.addEventListener("touchstart", (event) => {
+        if (!isMobileViewport() || event.touches.length !== 1) return;
+
+        touchStartY = event.touches[0].clientY;
+        touchStartX = event.touches[0].clientX;
+        touchHandled = false;
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (event) => {
+        if (!isMobileViewport() || event.touches.length !== 1) return;
+        const speakersRect = speakersStage.getBoundingClientRect();
+        const isSpeakersScrollSequence =
+            speakersRect.top <= 1 &&
+            speakersRect.bottom > window.innerHeight &&
+            speakersRenderedProgress < 0.98;
+
+        if (isSpeakersScrollSequence && performance.now() >= speakersWheelUnlockAt) return;
+
+        if (touchHandled) {
+            if (isHeroTransitionArea() || performance.now() < speakersWheelUnlockAt) {
+                event.preventDefault();
+            }
+            return;
+        }
+        if (!isHeroTransitionArea()) return;
+
+        const touch = event.touches[0];
+        const deltaY = touchStartY - touch.clientY;
+        const deltaX = Math.abs(touchStartX - touch.clientX);
+
+        if (deltaY < 28 || deltaY < deltaX) return;
+
+        event.preventDefault();
+        touchHandled = true;
+        snapToNextHeroScreen();
+    }, { passive: false });
 }
 
 function initializeSmoothWheelScroll() {
@@ -1679,6 +1854,37 @@ function initializeFinaleTopButton() {
     });
 }
 
+function closeMobileMenu() {
+    if (!shopTopbar || !shopTopbarMenu) return;
+
+    shopTopbar.classList.remove("is-menu-open");
+    document.body.classList.remove("is-mobile-menu-open");
+    shopTopbarMenu.setAttribute("aria-expanded", "false");
+    shopTopbarMenu.setAttribute("aria-label", "Open menu");
+}
+
+function initializeMobileTopbarMenu() {
+    if (!shopTopbar || !shopTopbarMenu || !shopTopbarNav) return;
+
+    shopTopbarMenu.addEventListener("click", () => {
+        const isOpen = shopTopbar.classList.toggle("is-menu-open");
+
+        document.body.classList.toggle("is-mobile-menu-open", isOpen);
+        shopTopbarMenu.setAttribute("aria-expanded", `${isOpen}`);
+        shopTopbarMenu.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+        if (isOpen) shopTopbar.classList.remove("is-hidden");
+    });
+
+    shopTopbarNav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) closeMobileMenu();
+    });
+
+    mobileViewportQuery.addEventListener("change", (event) => {
+        if (!event.matches) closeMobileMenu();
+        updateScrollEffects();
+    });
+}
+
 function updateScrollEffects() {
     updateHeroScroll();
     updateSpeakersTransition();
@@ -1700,6 +1906,18 @@ let previousTopbarScrollY = window.scrollY;
 
 function updateTopbarVisibility() {
     if (!shopTopbar) return;
+
+    if (isMobileViewport()) {
+        shopTopbar.classList.remove("is-hidden");
+        previousTopbarScrollY = window.scrollY;
+        return;
+    }
+
+    if (shopTopbar.classList.contains("is-menu-open")) {
+        shopTopbar.classList.remove("is-hidden");
+        previousTopbarScrollY = window.scrollY;
+        return;
+    }
 
     const currentScrollY = window.scrollY;
     const scrollDelta = currentScrollY - previousTopbarScrollY;
@@ -1735,6 +1953,7 @@ function updateTopbarVisibility() {
     var entranceDigitH = 0;
     var entranceFrame = null;
     var entrancePlayed = false;
+    var entranceForcedFinishTimer = null;
 
     function getEntranceDigitH() {
         var span = slotEls[0].querySelector(".hero__year-strip > span");
@@ -1756,9 +1975,16 @@ function updateTopbarVisibility() {
 
     function finishEntranceYear() {
         entranceSlots.forEach(function (slot) { slot.progress = 0; });
+        entranceDigitH = getEntranceDigitH();
         renderEntranceYear();
+        if (entranceForcedFinishTimer) {
+            clearTimeout(entranceForcedFinishTimer);
+            entranceForcedFinishTimer = null;
+        }
         entranceFrame = null;
     }
+
+    window.finishHeroYearEntrance = finishEntranceYear;
 
     function playEntranceYear() {
         if (entrancePlayed) return;
@@ -1778,7 +2004,9 @@ function updateTopbarVisibility() {
                 if (Math.abs(diff) < 0.004) {
                     slot.progress = 0;
                 } else {
-                    var settleSpeed = Math.abs(diff) < 0.5 ? 0.14 : 0.055;
+                    var settleSpeed = isMobileViewport()
+                        ? 0.16
+                        : (Math.abs(diff) < 0.5 ? 0.14 : 0.055);
                     slot.progress += diff * settleSpeed;
                     allDone = false;
                 }
@@ -1796,6 +2024,11 @@ function updateTopbarVisibility() {
 
         if (entranceFrame) cancelAnimationFrame(entranceFrame);
         entranceFrame = requestAnimationFrame(animateEntranceYear);
+
+        if (isMobileViewport()) {
+            if (entranceForcedFinishTimer) clearTimeout(entranceForcedFinishTimer);
+            entranceForcedFinishTimer = setTimeout(finishEntranceYear, 1200);
+        }
     }
 
     requestAnimationFrame(function () {
@@ -1988,6 +2221,7 @@ window.addEventListener("scroll", () => {
     updateScrollEffects();
 }, { passive: true });
 window.addEventListener("wheel", handleSpeakersWheel, { passive: false });
+initializeMobileHeroSwipeSnap();
 initializeSmoothWheelScroll();
 window.addEventListener("resize", updateScrollEffects);
 beginningScrollArt?.addEventListener("load", () => {
@@ -1999,6 +2233,7 @@ initializeFinaleCreditTypewriter();
 initializeFixedNavTypewriter();
 initializeFinaleTitleSlideDown();
 initializeFinaleTopButton();
+initializeMobileTopbarMenu();
 headphoneStageArt?.addEventListener("load", () => {
     prepareHeadphoneArtPaths();
     updateHeadphoneArtReveal();
