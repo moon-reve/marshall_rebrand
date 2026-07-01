@@ -100,6 +100,11 @@
     const scheduleAutoSlide = () => {
         window.clearTimeout(autoTimer);
         autoTimer = window.setTimeout(() => {
+            if (window.scrollY > 2) {
+                autoTimer = 0;
+                return;
+            }
+
             if (slideIndex === slides.length) {
                 moveToFirstSlide();
             } else {
@@ -185,6 +190,11 @@
 
     nextButton?.addEventListener("pointerdown", (event) => {
         event.stopPropagation();
+    });
+
+    window.addEventListener("record:pauseHeroSlides", () => {
+        window.clearTimeout(autoTimer);
+        autoTimer = 0;
     });
 
     scheduleAutoSlide();
@@ -377,25 +387,23 @@
         const isHeroActive = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
         const wheelDelta = getWheelDelta(event);
 
-        if (wheelDelta > 0 && shouldSkipToArtist()) {
-            event.preventDefault();
-            skipToArtist();
-            return;
-        }
-
         const nextProgress = wheelDelta > 0 ? 1 : 0;
         const shouldHoldHero =
             isHeroActive &&
             nextProgress !== targetProgress &&
             ((wheelDelta > 0 && targetProgress < 1) || (wheelDelta < 0 && targetProgress > 0));
 
-        if (!shouldHoldHero) {
+        if (shouldHoldHero) {
+            event.preventDefault();
+            targetProgress = nextProgress;
+            updateColumns();
             return;
         }
 
-        event.preventDefault();
-        targetProgress = nextProgress;
-        updateColumns();
+        if (wheelDelta > 0 && targetProgress === 1 && renderedProgress > 0.98 && shouldSkipToArtist()) {
+            event.preventDefault();
+            skipToArtist();
+        }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
@@ -435,7 +443,10 @@
         },
         { passive: false, capture: true }
     );
-    window.addEventListener("scroll", syncColumnsWithPage, { passive: true });
+    window.addEventListener("scroll", () => {
+        window.dispatchEvent(new CustomEvent("record:pauseHeroSlides"));
+        syncColumnsWithPage();
+    }, { passive: true });
     window.addEventListener("resize", syncColumnsWithPage);
     syncColumnsWithPage();
 })();
