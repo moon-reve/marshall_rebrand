@@ -229,8 +229,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   line-height: 0.92;
   letter-spacing: -0.02em;
   color: var(--cream-light);
+  white-space: nowrap;
 }
 .hero-desc {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
   font-size: 0.833vw;
   font-weight: 300;
   line-height: 1.4;

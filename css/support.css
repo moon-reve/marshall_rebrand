@@ -8,8 +8,7 @@
 .support-hero {
     position: relative;
     width: 100%;
-    height: calc(100vh - var(--shop-topbar-height));
-    min-height: calc(100vh - var(--shop-topbar-height));
+    height: 100vh;
     aspect-ratio: auto;
     overflow: hidden;
     background: #070503;
@@ -1202,8 +1201,7 @@
 
 @media (max-width: 40em) {
     .support-hero {
-        height: calc(100vh - var(--shop-topbar-height));
-        min-height: calc(100vh - var(--shop-topbar-height));
+        height: 100vh;
         aspect-ratio: auto;
     }
 
