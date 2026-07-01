@@ -119,7 +119,7 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #d9c5a9;
+    background: transparent;
     opacity: var(--about-hero-dissolve-opacity, 0);
     pointer-events: none;
     transition: opacity 1.2s ease-out;
@@ -186,6 +186,21 @@
     pointer-events: none;
     transform: translate3d(0, var(--about-content-y, 0%), 0);
     will-change: transform;
+}
+
+.about-hero__history-intro {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    padding: 0 4.9vw 3vh;
+    background: #d9c5a9;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .about-hero__copy-box {
@@ -350,10 +365,10 @@
 
 .about-history {
     position: relative;
+    margin-top: -20vh;
     height: 420vh;
     background: #d9c5a9;
     color: #2b2118;
-    isolation: isolate;
 }
 
 .about-history__sticky {
@@ -362,13 +377,10 @@
     left: 0;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas:
-        "heading"
-        "summary"
-        "content";
+    grid-template-rows: 1fr;
+    grid-template-areas: "content";
     column-gap: 0;
-    row-gap: 1.875vw;
+    row-gap: 0;
     align-items: start;
     box-sizing: border-box;
     width: 100%;
@@ -388,8 +400,14 @@
     box-sizing: border-box;
     width: 100%;
     padding: 1.5625vw 4.6875vw;
+    opacity: var(--about-history-content-opacity, 0);
+    transform: translate3d(0, var(--about-history-content-y, 36px), 0);
+    transition:
+        opacity 220ms ease,
+        transform 220ms ease;
 }
 
+.about-history__intro,
 .about-history__heading,
 .about-history__summary,
 .about-history__content {
@@ -400,7 +418,7 @@
 .about-history.is-pinned .about-history__sticky {
     position: fixed;
     inset: 0 0 auto;
-    z-index: 1;
+    z-index: auto;
 }
 
 .about-history.is-ended .about-history__sticky {
@@ -410,44 +428,87 @@
     z-index: auto;
 }
 
+.about-history__intro {
+    grid-area: intro;
+    justify-self: center;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    opacity: 1;
+    transform: translate3d(0, var(--about-history-intro-y, 0px), 0);
+    transition: transform 220ms ease;
+}
+
+.about-history__heading-group {
+    justify-self: center;
+    position: relative;
+    margin: 0 0 5.56vh;
+}
+
 .about-history__heading {
-    grid-area: heading;
+    justify-self: center;
     margin: 0;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
-    font-size: clamp(38px, 4vw, 77px);
+    font-size: 5.82vw;
     font-weight: 400;
     line-height: 1;
+    text-align: center;
     letter-spacing: 0;
 }
 
 .about-history__summary {
-    grid-area: summary;
     width: 100%;
     margin: 0;
     color: #2b2118;
-    font-size: clamp(14px, 0.94vw, 18px);
+    font-size: 0.833vw;
     font-weight: 400;
     line-height: 1.95;
+    text-align: center;
+}
+
+.history__label {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 1.2vh);
+    display: flex;
+    align-items: center;
+    gap: 0.42vw;
+    margin: 0;
+    color: #2b2118;
+    font-size: 0.833vw;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+}
+
+.history__marker {
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 6px solid #f5a000;
 }
 
 .about-history__nav {
     grid-area: nav;
-    align-self: center;
+    align-self: stretch;
     justify-self: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(12px, 1.302vw, 25px);
+    gap: 0;
+    height: 100%;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
 .about-history__nav li {
-    width: clamp(12px, 0.84vw, 16px);
-    height: clamp(12px, 0.84vw, 16px);
-    border-radius: 50%;
+    width: clamp(4px, 0.3125vw, 6px);
+    height: auto;
+    flex: 1 1 0;
+    border-radius: 0;
     background: rgba(43, 33, 24, 0.28);
     transition: background-color 220ms ease;
 }
@@ -753,6 +814,10 @@
         padding: 96px 4vw;
     }
 
+    .about-hero__history-intro {
+        display: none;
+    }
+
     .about-history,
     .about-philosophy {
         padding: 72px 6vw;
@@ -770,6 +835,7 @@
 
     .about-history {
         display: block;
+        margin-top: 0;
         height: auto;
         min-height: 0;
     }
@@ -801,20 +867,26 @@
     }
 
     .about-history__nav {
-        flex-direction: row;
-        gap: 12px;
+        flex-direction: column;
+        gap: 0;
         margin-top: 44px;
         margin-bottom: 28px;
         transform: none;
     }
 
     .about-history__nav li {
-        width: 12px;
-        height: 12px;
+        width: 6px;
+        height: 56px;
     }
 
     .about-history__text {
         margin-top: 42px;
+    }
+
+    .about-history__intro,
+    .about-history__content {
+        opacity: 1;
+        transform: none;
     }
 
     .about-philosophy__list {
