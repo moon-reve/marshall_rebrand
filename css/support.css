@@ -140,11 +140,17 @@
 
 .support-actions {
     position: relative;
-    min-height: 19.3vw;
+    display: grid;
+    grid-template-rows: 19.3vw minmax(0, 1fr);
+    align-content: center;
+    gap: 0;
+    min-height: 100vh;
+    height: 100vh;
     overflow: hidden;
     padding: 46px 4.6875vw;
     background: #17100d;
     border-top: 0;
+    box-sizing: border-box;
 }
 
 .support-actions::before {
@@ -173,14 +179,21 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(6, 6.53vw);
+    grid-template-columns: repeat(6, 6.92vw);
     align-items: center;
+    align-self: center;
     justify-content: center;
     justify-items: center;
     gap: 20px;
     width: fit-content;
     margin: 0 auto;
     counter-reset: support-card;
+}
+
+.support-actions .support-editorial__top {
+    position: relative;
+    z-index: 1;
+    min-height: 0;
 }
 
 .support-card {
@@ -190,10 +203,10 @@
     align-items: flex-start;
     justify-content: flex-end;
     justify-self: center;
-    width: 6.53vw;
-    height: 9.15vw;
+    width: 6.92vw;
+    height: 9.7vw;
     gap: 0;
-    padding: 0.85vw 0.71vw 0.85vw;
+    padding: 0.9vw 0.75vw 0.9vw;
     color: #d8c1a2;
     background: rgba(33, 25, 20, 0.9);
     border: 1px solid rgba(216, 193, 162, 0.06);
@@ -208,12 +221,12 @@
 .support-card::before {
     content: counter(support-card, decimal-leading-zero);
     position: absolute;
-    top: 0.78vw;
-    left: 0.71vw;
+    top: 0.83vw;
+    left: 0.75vw;
     z-index: 1;
     color: #d8ae70;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 1.51vw;
+    font-size: 1.6vw;
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0;
@@ -234,10 +247,10 @@
 
 .support-card__icon {
     position: absolute;
-    right: var(--support-card-icon-right, -0.63vw);
-    bottom: var(--support-card-icon-bottom, 2.35vw);
-    width: var(--support-card-icon-size, 4.87vw);
-    height: var(--support-card-icon-size, 4.87vw);
+    right: var(--support-card-icon-right, -0.67vw);
+    bottom: var(--support-card-icon-bottom, 2.49vw);
+    width: var(--support-card-icon-size, 5.16vw);
+    height: var(--support-card-icon-size, 5.16vw);
     flex: 0 0 auto;
     color: currentColor;
     opacity: 0.3;
@@ -245,39 +258,39 @@
 }
 
 .support-card--register {
-    --support-card-icon-size: 5.54vw;
-    --support-card-icon-right: -0.69vw;
-    --support-card-icon-bottom: 2.24vw;
+    --support-card-icon-size: 5.87vw;
+    --support-card-icon-right: -0.73vw;
+    --support-card-icon-bottom: 2.37vw;
 }
 
 .support-card--delivery {
-    --support-card-icon-size: 5.65vw;
-    --support-card-icon-right: -1.21vw;
-    --support-card-icon-bottom: 2.11vw;
+    --support-card-icon-size: 5.99vw;
+    --support-card-icon-right: -1.28vw;
+    --support-card-icon-bottom: 2.24vw;
 }
 
 .support-card--warranty {
-    --support-card-icon-size: 5.89vw;
-    --support-card-icon-right: -1.16vw;
-    --support-card-icon-bottom: 2.07vw;
+    --support-card-icon-size: 6.24vw;
+    --support-card-icon-right: -1.23vw;
+    --support-card-icon-bottom: 2.19vw;
 }
 
 .support-card--return {
-    --support-card-icon-size: 5.89vw;
-    --support-card-icon-right: -1.48vw;
-    --support-card-icon-bottom: 2.03vw;
+    --support-card-icon-size: 6.24vw;
+    --support-card-icon-right: -1.57vw;
+    --support-card-icon-bottom: 2.15vw;
 }
 
 .support-card--manual {
-    --support-card-icon-size: 5.76vw;
-    --support-card-icon-right: -1.15vw;
-    --support-card-icon-bottom: 2.09vw;
+    --support-card-icon-size: 6.11vw;
+    --support-card-icon-right: -1.22vw;
+    --support-card-icon-bottom: 2.22vw;
 }
 
 .support-card--firmware {
-    --support-card-icon-size: 5.76vw;
-    --support-card-icon-right: -1.01vw;
-    --support-card-icon-bottom: 2.05vw;
+    --support-card-icon-size: 6.11vw;
+    --support-card-icon-right: -1.07vw;
+    --support-card-icon-bottom: 2.17vw;
 }
 
 .support-card:hover .support-card__icon,
@@ -289,7 +302,7 @@
     position: relative;
     z-index: 1;
     color: #d8c1a2;
-    font-size: 0.65vw;
+    font-size: 0.69vw;
     font-weight: 500;
     line-height: 1.2;
     letter-spacing: -0.0143vw;
@@ -620,19 +633,33 @@
 }
 
 .support-editorial__top {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(360px, 4fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     min-height: 520px;
 }
 
+.support-editorial__top::before {
+    content: "";
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    z-index: 1;
+    width: 1px;
+    height: 97%;
+    background: rgba(247, 242, 234, 0.22);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 .support-faq--editorial {
-    padding: 78px 4.6875vw 74px;
+    padding: 78px 4.6875vw 74px 0;
     background: #17100d;
 }
 
 .support-service--editorial {
-    padding: 78px 4.6875vw 74px;
-    background: #dfc699;
+    padding: 78px 0 74px 4.6875vw;
+    background: transparent;
 }
 
 .support-section-kicker {
@@ -657,6 +684,10 @@
 }
 
 .support-faq--editorial .support-editorial__title {
+    color: #f7f2ea;
+}
+
+.support-service--editorial .support-editorial__title {
     color: #f7f2ea;
 }
 
@@ -704,7 +735,6 @@
 .service-table {
     margin-top: 32px;
     background: transparent;
-    border: 1px solid #17100d;
 }
 
 .service-row {
@@ -713,7 +743,7 @@
     align-items: center;
     min-height: 68px;
     padding: 0 26px;
-    border-bottom: 1px solid rgba(23, 16, 13, 0.32);
+    border-bottom: 1px solid rgba(247, 242, 234, 0.22);
 }
 
 .service-row:last-child {
@@ -723,7 +753,7 @@
 .service-row .service-block__title,
 .service-row .service-block__primary {
     margin: 0;
-    color: #17100d;
+    color: #f7f2ea;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     letter-spacing: 0;
 }
@@ -788,11 +818,11 @@
 .guide-flow {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 24px;
     align-content: center;
-    justify-self: center;
-    width: min(100%, calc((100vh - var(--shop-topbar-height) - 160px) * 1.45));
-    max-width: 1040px;
+    justify-self: stretch;
+    width: 100%;
+    max-width: none;
 }
 
 .guide-flow__item {
@@ -913,7 +943,7 @@
 
 .support-help-cta__copy {
     max-width: none;
-    transform: translateY(4vh);
+    transform: translateY(-4vh);
 }
 
 .support-help-cta__contact {
@@ -922,6 +952,7 @@
     display: grid;
     justify-items: center;
     gap: 18px;
+    width: max-content;
     margin-top: 4vh;
     transform: translateY(4vh);
     padding-left: 0;
@@ -931,8 +962,9 @@
 .support-help-cta__button {
     display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    width: 360px;
+    justify-content: center;
+    position: relative;
+    width: 100%;
     height: 42px;
     padding: 0 22px;
     color: #fff8ea;
@@ -1080,6 +1112,10 @@
     }
 
     .support-actions {
+        grid-template-rows: auto auto;
+        gap: 36px;
+        height: auto;
+        min-height: 100vh;
         padding-right: 5vw;
         padding-left: 5vw;
     }
@@ -1125,6 +1161,10 @@
         grid-template-columns: 1fr;
     }
 
+    .support-editorial__top::before {
+        display: none;
+    }
+
     .support-faq--editorial,
     .support-service--editorial {
         padding: 64px 6vw;
@@ -1168,6 +1208,7 @@
         grid-template-columns: 1fr;
         gap: 32px;
         height: auto;
+        min-height: 100vh;
         padding: 88px 4.6875vw 46px;
     }
 
