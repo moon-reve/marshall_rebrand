@@ -1860,11 +1860,23 @@ body {
         --shop-product-category-height: auto;
         --shop-product-info-line: 0px;
         --shop-product-mobile-panel-height: clamp(420px, 56svh, 500px);
+        height: auto;
+    }
+
+    .shop-product.is-scrolling-up {
+        height: auto;
+    }
+
+    .shop-product__frame {
+        position: relative;
+        top: auto;
+        height: auto;
     }
 
     .shop-product__pin {
         display: flex;
         flex-direction: column;
+        height: auto;
         min-height: 0;
         padding-top: 0;
     }
@@ -1919,10 +1931,12 @@ body {
         position: relative;
         top: auto;
         width: 100%;
+        height: auto;
     }
 
     .shop-product__info {
         flex: 0 0 auto;
+        height: auto;
         min-height: var(--shop-product-mobile-panel-height);
         gap: 36px;
         padding: 42px 0;
