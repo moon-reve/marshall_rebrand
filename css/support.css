@@ -26,14 +26,25 @@
     filter: brightness(1.16);
 }
 
-.support-hero__content {
+.support-hero::after {
+    content: "";
     position: absolute;
     inset: 0;
     z-index: 1;
+    background: #000;
+    opacity: var(--support-hero-dark-opacity, 0.8);
+    pointer-events: none;
+    transition: opacity 0.18s ease-out;
+}
+
+.support-hero__content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     display: flex;
     align-items: center;
     padding: 0 4.6875vw;
-    background: linear-gradient(180deg, rgba(7, 5, 3, 0.04) 0%, rgba(7, 5, 3, 0.32) 40%, rgba(7, 5, 3, 0.5) 100%);
+    background: linear-gradient(180deg, rgba(7, 5, 3, 0.04) 0%, rgba(7, 5, 3, var(--support-hero-mid-opacity, 0.32)) 40%, rgba(7, 5, 3, var(--support-hero-bottom-opacity, 0.5)) 100%);
 }
 
 .support-hero__copy {
@@ -726,10 +737,11 @@
 
 .support-guide--editorial {
     display: grid;
+    box-sizing: border-box;
     grid-template-columns: minmax(240px, 0.32fr) minmax(0, 1fr);
     gap: 36px;
-    height: calc(100vh - var(--shop-topbar-height));
-    min-height: calc(100vh - var(--shop-topbar-height));
+    height: 100vh;
+    min-height: 100vh;
     padding: 64px 4.6875vw 44px;
     color: #f3ede4;
     background: #17100d;
@@ -772,17 +784,22 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
     align-content: center;
+    justify-self: center;
+    width: min(100%, calc((100vh - var(--shop-topbar-height) - 160px) * 1.25));
+    max-width: 920px;
 }
 
 .guide-flow__item {
     position: relative;
     display: grid;
-    grid-template-columns: 76px minmax(0, 1fr) 46px;
-    align-items: center;
-    gap: 24px;
+    grid-template-rows: 76px minmax(0, 1fr) 46px;
+    align-items: start;
+    justify-items: start;
+    gap: 18px;
+    aspect-ratio: 1.25 / 1;
     min-width: 0;
-    min-height: 142px;
-    padding: 26px 28px;
+    min-height: 0;
+    padding: 28px;
     color: #f3ede4;
     background: rgba(255, 255, 255, 0.045);
     border: 1px solid rgba(255, 232, 196, 0.035);
@@ -819,6 +836,10 @@
     text-align: left;
 }
 
+.guide-flow__body {
+    align-self: end;
+}
+
 .guide-flow__item small {
     display: block;
     margin-top: 14px;
@@ -834,6 +855,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    justify-self: end;
+    align-self: end;
     width: 38px;
     height: 38px;
     color: #fff8ea;
@@ -846,22 +869,23 @@
 .support-help-cta {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px minmax(260px, 360px);
-    align-items: center;
-    gap: 44px;
-    height: calc(100vh - var(--shop-topbar-height));
-    min-height: calc(100vh - var(--shop-topbar-height));
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    align-items: start;
+    gap: 36px;
+    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
-    padding: 56px 4.6875vw;
-    color: #f7f2ea;
-    background: #241810;
+    padding: 14vh 4.6875vw 44px;
+    color: #17100d;
+    background: #dfc699;
 }
 
 .support-help-cta h2 {
-    margin: 0 0 16px;
-    color: #f7f2ea;
+    margin: 0 0 24px;
+    color: #17100d;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 3.3333vw;
+    font-size: 150px;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
     line-height: 1.04;
@@ -870,15 +894,15 @@
 
 .support-help-cta p {
     margin: 0;
-    color: rgba(247, 242, 234, 0.86);
-    font-size: 0.8496vw;
+    color: rgba(23, 16, 13, 0.82);
+    font-size: 18px;
     font-weight: 300;
     line-height: 1.7;
     letter-spacing: 0.02em;
 }
 
 .support-help-cta__copy {
-    max-width: 560px;
+    max-width: 920px;
 }
 
 .support-help-cta__contact {
@@ -886,36 +910,21 @@
     z-index: 1;
     display: grid;
     justify-items: start;
-    gap: 20px;
-    padding-left: 44px;
-    border-left: 1px solid rgba(247, 242, 234, 0.22);
-}
-
-.support-help-cta__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 58px;
-    height: 58px;
-    color: #fff8ea;
-    background: rgba(151, 98, 43, 0.66);
-    border-radius: 50%;
-}
-
-.support-help-cta__icon svg {
-    width: 29px;
-    height: 29px;
+    gap: 18px;
+    padding-left: 36px;
+    border-left: 1px solid rgba(23, 16, 13, 0.22);
 }
 
 .support-help-cta__button {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    width: 260px;
-    height: 44px;
-    padding: 0 24px;
+    width: 230px;
+    height: 42px;
+    padding: 0 22px;
     color: #fff8ea;
-    border: 1px solid rgba(198, 150, 44, 0.85);
+    background: #17100d;
+    border: 1px solid #17100d;
     border-radius: 7px;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
@@ -923,16 +932,6 @@
     font-weight: 700;
     line-height: 1;
     letter-spacing: 0.25vw;
-}
-
-.support-help-cta__image {
-    position: relative;
-    z-index: 1;
-    align-self: end;
-    width: min(24vw, 360px);
-    max-width: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 24px 42px rgba(0, 0, 0, 0.4));
 }
 
 .support-footer {
@@ -1127,12 +1126,15 @@
 
     .guide-flow {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: min(100%, 640px);
     }
 
     .guide-flow__item {
-        grid-template-columns: 62px minmax(0, 1fr) 38px;
+        grid-template-columns: none;
+        grid-template-rows: 62px minmax(0, 1fr) 38px;
         gap: 18px;
-        min-height: 130px;
+        aspect-ratio: 1.25 / 1;
+        min-height: 0;
         padding: 22px;
     }
 
@@ -1149,17 +1151,17 @@
     .support-help-cta {
         grid-template-columns: 1fr;
         gap: 32px;
+        height: auto;
         padding: 46px 4.6875vw;
+    }
+
+    .support-help-cta h2 {
+        font-size: clamp(64px, 12vw, 120px);
     }
 
     .support-help-cta__contact {
         padding-left: 0;
         border-left: 0;
-    }
-
-    .support-help-cta__image {
-        justify-self: end;
-        width: min(42vw, 320px);
     }
 
     .support-panel--notice,
@@ -1277,11 +1279,14 @@
 
     .guide-flow {
         grid-template-columns: 1fr;
+        width: 100%;
     }
 
     .guide-flow__item {
-        grid-template-columns: 58px minmax(0, 1fr) 34px;
-        min-height: 118px;
+        grid-template-columns: none;
+        grid-template-rows: 58px minmax(0, 1fr) 34px;
+        aspect-ratio: 1.25 / 1;
+        min-height: 0;
         padding: 20px;
     }
 
@@ -1299,6 +1304,7 @@
         align-items: flex-start;
         grid-template-columns: 1fr;
         gap: 28px;
+        height: auto;
         padding: 42px 4.6875vw;
     }
 
@@ -1308,10 +1314,6 @@
 
     .support-help-cta__button {
         width: 100%;
-    }
-
-    .support-help-cta__image {
-        display: none;
     }
 
     .support-panel--notice,
