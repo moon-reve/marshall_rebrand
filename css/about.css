@@ -490,12 +490,6 @@
     line-height: 1;
 }
 
-.about-history__text .about-history__year.is-current-label {
-    font-family: inherit;
-    font-variation-settings: normal;
-    font-weight: 700;
-}
-
 .about-history__year-slot {
     display: inline-block;
     width: 0.58em;
