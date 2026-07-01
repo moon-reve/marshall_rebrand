@@ -8,7 +8,7 @@ const aboutHeroCopy = document.querySelector(".about-hero__copy");
 const aboutHeroTextFlow = document.querySelector(".about-hero__text-flow");
 const aboutHeroTextFlowInner = document.querySelector(".about-hero__text-flow-inner");
 const aboutHeroCopyTrack = document.querySelector(".about-hero__copy-track");
-const aboutHeroStoryText = document.querySelector("[data-about-design-story-text]");
+const aboutHistoryStage = document.querySelector("[data-about-history]");
 
 const aboutPanelTimings = [
     [0, 0.56],
@@ -92,7 +92,7 @@ function renderAboutHeroPanels(progress) {
     aboutHeroDissolveOn = dissolveProgress > 0.01 || textOpacity > 0.01;
     aboutHeroCopy?.style.setProperty("--about-content-y", `${-copyProgress * 100}%`);
     aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", `${dissolveProgress}`);
-    aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", `${1 - dissolveProgress}`);
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", "1");
 
     const trackEnd = aboutHeroCopyTrack
         ? -(aboutHeroCopyTrack.offsetTop + aboutHeroCopyTrack.offsetHeight + viewportHeight * 0.16)
@@ -103,9 +103,9 @@ function renderAboutHeroPanels(progress) {
         aboutHeroTextFlowInner.style.transform = `translate3d(0, ${textOffset}px, 0)`;
     }
 
-    const storyTextRect = aboutHeroStoryText?.getBoundingClientRect();
-    const exitProgress = storyTextRect
-        ? aboutClamp((viewportHeight * 0.6 - storyTextRect.bottom) / viewportHeight, 0, 1)
+    const historyRect = aboutHistoryStage?.getBoundingClientRect();
+    const exitProgress = historyRect
+        ? aboutClamp((viewportHeight - historyRect.top) / viewportHeight, 0, 1)
         : aboutClamp((heroScroll - viewportHeight * 0.55) / viewportHeight, 0, 1);
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
@@ -144,7 +144,7 @@ function updateAboutHeroTransition() {
 
     function renderTransition() {
         const distance = aboutTargetProgress - aboutRenderedProgress;
-        aboutRenderedProgress += distance * 0.085;
+        aboutRenderedProgress += distance * 0.08;
 
         if (Math.abs(distance) < 0.0001) {
             aboutRenderedProgress = aboutTargetProgress;
