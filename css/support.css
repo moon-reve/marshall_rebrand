@@ -61,6 +61,7 @@
     line-height: 0.92;
     color: #ffeac6;
     text-shadow: 0 0 12px rgba(0, 0, 0, 0.18);
+    white-space: nowrap;
 }
 
 .support-hero__description {

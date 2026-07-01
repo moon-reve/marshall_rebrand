@@ -174,11 +174,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: 6vw 4.55vw 30vh;
+    padding: 6vw 4.55vw;
     color: #f8efe2;
     text-align: center;
     pointer-events: none;
@@ -714,7 +714,7 @@
 
     .about-hero__copy {
         width: 100%;
-        padding: 96px 4vw 30vh;
+        padding: 96px 4vw;
     }
 
     .about-history,
