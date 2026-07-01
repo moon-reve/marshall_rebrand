@@ -249,39 +249,39 @@ const aboutHistorySlides = [
     {
         year: "1962",
         title: "마샬의 처음",
-        description: "Jim Marshall, 런던 사우스올에 악기점 오픈 및 첫 앰프 제작.",
+        description: "Jim Marshall은 런던 사우스올에 작은 악기점을 열고 뮤지션들의 목소리에 귀 기울였습니다. <br> 더 나은 사운드를 향한 열정으로 직접 첫 마샬 앰프를 제작하며, <br> 오늘날 전설의 시작을 만들어냈습니다.",
         image: "./assets/images/about-history-1962.avif",
         alt: "Jim Marshall의 1962년 역사를 소개하는 잡지 페이지",
         position: "center center",
     },
     {
         year: "1965",
-        title: "스택 엠프 시대",
-        description: "마샬 스택이 세계 무대를 장악. Jimi Hendrix, The Who, Led Zeppelin이 마샬을 선택.",
+        title: "무대를 장악한 스택 앰프",
+        description: "마샬 스택 앰프는 압도적인 출력과 강렬한 사운드로 공연 문화를 바꾸었습니다. <br> Jimi Hendrix, The Who, Led Zeppelin 등 세계적인 록 아티스트들의 선택을 받으며<br> 록 음악의 상징으로 자리 잡았습니다.",
         image: "./assets/images/about-history-1965.avif",
         alt: "무대 뒤에 쌓인 Marshall 스택 앰프",
         position: "center center",
     },
     {
         year: "1990",
-        title: "글로벌 확장",
-        description: "전 세계 80개국 유통망 구축. 록의 상징에서 글로벌 음향 브랜드로 성장.",
+        title: "글로벌 오디오 브랜드로",
+        description: "마샬은 80여 개국으로 유통망을 확대하며 전 세계 무대로 영역을 넓혔습니다. <br> 영국을 대표하는 앰프 브랜드를 넘어, 수많은 뮤지션과 음악 팬들에게 사랑받는 <br> 글로벌 오디오 브랜드로 성장했습니다.",
         image: "./assets/images/about-history-1990.avif",
         alt: "Marshall 헤드폰을 착용한 인물",
         position: "center center",
     },
     {
         year: "2010",
-        title: "라이프스타일 브랜드로",
-        description: "마샬 헤드폰 및 포터블 스피커 첫 출시. 음악을 일상으로 가져오다.",
+        title: "언제 어디서나 마샬 사운드",
+        description: "헤드폰과 포터블 스피커를 출시하며 무대 위를 넘어 일상 속으로 브랜드를 확장했습니다. <br> 언제 어디서나 마샬 특유의 강렬한 사운드와 클래식한 디자인을 경험할 수 있는 <br> 라이프스타일 브랜드로 자리매김했습니다.",
         image: "./assets/images/about-history-2010.avif",
         alt: "기타와 Marshall 앰프",
         position: "center bottom",
     },
     {
-        year: "현재",
+        year: "Today",
         title: "마샬 코리아",
-        description: "한국 공식 유통 파트너를 통해 전 제품 라인업 정식 서비스 제공.",
+        description: "한국 공식 유통 파트너를 통해 다양한 제품 라인업과 공식 서비스를 제공하며 <br> 국내 시장을 확대해 나가고 있습니다. 변함없는 사운드 철학과 브랜드 가치를 바탕으로 <br> 더 많은 사람들에게 마샬의 경험을 전하고 있습니다.",
         image: "./assets/images/about_now_marshallkr.avif",
         alt: "Marshall의 초기 음악 역사를 보여주는 흑백 사진",
         position: "center bottom",
@@ -373,7 +373,7 @@ function renderAboutHistorySlide(index, animate = true) {
             renderAboutHistoryYear(slide.year, animate);
         }
         aboutHistoryTitle.textContent = slide.title;
-        aboutHistoryDescription.textContent = slide.description;
+        aboutHistoryDescription.innerHTML = slide.description;
         aboutHistoryImage.src = slide.image;
         aboutHistoryImage.alt = slide.alt;
         aboutHistoryImage.style.objectPosition = slide.position;
