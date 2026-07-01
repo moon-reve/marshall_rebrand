@@ -15,8 +15,13 @@
 
   <header class="shop-topbar" data-node-id="2638:219" aria-label="Compare header">
       <div class="shop-topbar__main">
+          <button class="shop-topbar__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="compare-topbar-nav">
+              <span></span>
+              <span></span>
+              <span></span>
+          </button>
           <a class="shop-topbar__brand" href="./index.html" data-node-id="2638:218" aria-label="Marshall home">Marshall</a>
-          <nav class="shop-topbar__nav" data-node-id="2638:211" aria-label="Shop navigation">
+          <nav class="shop-topbar__nav" id="compare-topbar-nav" data-node-id="2638:211" aria-label="Shop navigation">
               <ul>
                   <li><a href="./about.html">ABOUT</a></li>
                   <li><a href="./shop.html" data-node-id="2638:213">SHOP</a></li>
@@ -735,6 +740,35 @@
 </div><!-- /page -->
 <script>
 (function () {
+    const shopTopbar = document.querySelector('.shop-topbar');
+    const shopTopbarMenu = document.querySelector('.shop-topbar__menu');
+    const shopTopbarNav = document.querySelector('.shop-topbar__nav');
+    if (shopTopbar && shopTopbarMenu && shopTopbarNav) {
+        const setShopMenuOpen = (isOpen) => {
+            shopTopbar.classList.toggle('is-menu-open', isOpen);
+            shopTopbarMenu.setAttribute('aria-expanded', String(isOpen));
+            shopTopbarMenu.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+        };
+        shopTopbarMenu.addEventListener('click', (event) => {
+            event.stopPropagation();
+            setShopMenuOpen(!shopTopbar.classList.contains('is-menu-open'));
+        });
+        shopTopbarNav.addEventListener('click', (event) => {
+            if (event.target.closest('a')) setShopMenuOpen(false);
+        });
+        document.addEventListener('click', (event) => {
+            if (!shopTopbar.classList.contains('is-menu-open')) return;
+            if (shopTopbar.contains(event.target)) return;
+            setShopMenuOpen(false);
+        });
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') setShopMenuOpen(false);
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 640) setShopMenuOpen(false);
+        });
+    }
+
     const heroStage = document.querySelector('[data-compare-hero-stage]');
     const hero = document.querySelector('.hero');
     const quizSection = document.querySelector('.quiz-section');
