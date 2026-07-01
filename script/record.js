@@ -1,4 +1,43 @@
 (() => {
+    const topbar = document.querySelector(".record-page .shop-topbar");
+    const menuButton = topbar?.querySelector(".shop-topbar__menu");
+    const nav = topbar?.querySelector(".shop-topbar__nav");
+
+    if (!topbar || !menuButton || !nav) {
+        return;
+    }
+
+    const setMenuOpen = (isOpen) => {
+        topbar.classList.toggle("is-menu-open", isOpen);
+        menuButton.setAttribute("aria-expanded", String(isOpen));
+        menuButton.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    };
+
+    menuButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setMenuOpen(!topbar.classList.contains("is-menu-open"));
+    });
+
+    nav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) setMenuOpen(false);
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!topbar.classList.contains("is-menu-open")) return;
+        if (topbar.contains(event.target)) return;
+        setMenuOpen(false);
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setMenuOpen(false);
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) setMenuOpen(false);
+    });
+})();
+
+(() => {
     const hero = document.querySelector(".record-hero");
     const artistCatalog = document.querySelector(".artist-catalog");
 
@@ -447,7 +486,7 @@
         return;
     }
 
-    const visibleCount = 4;
+    const visibleCount = window.matchMedia("(max-width: 640px)").matches ? 1 : 4;
     const cards = list.querySelectorAll(".artist-card");
     const prevButton = document.querySelector(".artist-catalog__arrow--prev");
     const nextButton = document.querySelector(".artist-catalog__arrow--next");
