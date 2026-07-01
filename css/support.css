@@ -173,6 +173,7 @@
     grid-template-columns: repeat(6, 6.53vw);
     align-items: center;
     justify-content: center;
+    justify-items: center;
     gap: 20px;
     width: fit-content;
     margin: 0 auto;
@@ -699,7 +700,8 @@
 
 .service-table {
     margin-top: 32px;
-    background: #fbfaf7;
+    background: transparent;
+    border: 1px solid #17100d;
 }
 
 .service-row {
@@ -708,7 +710,7 @@
     align-items: center;
     min-height: 68px;
     padding: 0 26px;
-    border-bottom: 1px solid rgba(29, 18, 14, 0.16);
+    border-bottom: 1px solid rgba(23, 16, 13, 0.32);
 }
 
 .service-row:last-child {
@@ -786,8 +788,8 @@
     gap: 14px;
     align-content: center;
     justify-self: center;
-    width: min(100%, calc((100vh - var(--shop-topbar-height) - 160px) * 1.25));
-    max-width: 920px;
+    width: min(100%, calc((100vh - var(--shop-topbar-height) - 160px) * 1.45));
+    max-width: 1040px;
 }
 
 .guide-flow__item {
@@ -797,7 +799,7 @@
     align-items: start;
     justify-items: start;
     gap: 18px;
-    aspect-ratio: 1.25 / 1;
+    aspect-ratio: 1.45 / 1;
     min-width: 0;
     min-height: 0;
     padding: 28px;
@@ -871,13 +873,14 @@
     position: relative;
     display: grid;
     box-sizing: border-box;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    align-items: start;
-    gap: 36px;
+    grid-template-columns: 1fr;
+    align-content: center;
+    justify-items: center;
+    gap: 34px;
     height: 100vh;
     min-height: 100vh;
     overflow: hidden;
-    padding: 14vh 4.6875vw 44px;
+    padding: 44px 4.6875vw;
     color: #17100d;
     background: #dfc699;
 }
@@ -891,6 +894,8 @@
     font-variation-settings: "opsz" 18;
     line-height: 1.04;
     letter-spacing: -0.0667vw;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .support-help-cta p {
@@ -900,27 +905,31 @@
     font-weight: 300;
     line-height: 1.7;
     letter-spacing: 0.02em;
+    text-align: center;
 }
 
 .support-help-cta__copy {
-    max-width: 920px;
+    max-width: none;
+    transform: translateY(4vh);
 }
 
 .support-help-cta__contact {
     position: relative;
     z-index: 1;
     display: grid;
-    justify-items: start;
+    justify-items: center;
     gap: 18px;
-    padding-left: 36px;
-    border-left: 1px solid rgba(23, 16, 13, 0.22);
+    margin-top: 4vh;
+    transform: translateY(4vh);
+    padding-left: 0;
+    border-left: 0;
 }
 
 .support-help-cta__button {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    width: 230px;
+    width: 360px;
     height: 42px;
     padding: 0 22px;
     color: #fff8ea;
@@ -1075,7 +1084,10 @@
     .support-actions__grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(90px, 1fr));
+        justify-content: center;
+        justify-items: center;
         gap: 24px;
+        width: fit-content;
         max-width: 520px;
         margin: 0 auto;
     }
@@ -1134,7 +1146,7 @@
         grid-template-columns: none;
         grid-template-rows: 62px minmax(0, 1fr) 38px;
         gap: 18px;
-        aspect-ratio: 1.25 / 1;
+        aspect-ratio: 1.45 / 1;
         min-height: 0;
         padding: 22px;
     }
@@ -1153,7 +1165,7 @@
         grid-template-columns: 1fr;
         gap: 32px;
         height: auto;
-        padding: 46px 4.6875vw;
+        padding: 88px 4.6875vw 46px;
     }
 
     .support-help-cta h2 {
@@ -1163,6 +1175,11 @@
     .support-help-cta__contact {
         padding-left: 0;
         border-left: 0;
+    }
+
+    .support-help-cta__copy,
+    .support-help-cta__contact {
+        transform: none;
     }
 
     .support-panel--notice,
@@ -1226,7 +1243,10 @@
 
     .support-actions__grid {
         grid-template-columns: repeat(2, minmax(86px, 1fr));
+        justify-content: center;
+        justify-items: center;
         gap: 18px;
+        width: fit-content;
         max-width: 250px;
     }
 
@@ -1286,7 +1306,7 @@
     .guide-flow__item {
         grid-template-columns: none;
         grid-template-rows: 58px minmax(0, 1fr) 34px;
-        aspect-ratio: 1.25 / 1;
+        aspect-ratio: 1.45 / 1;
         min-height: 0;
         padding: 20px;
     }
@@ -1302,15 +1322,20 @@
     }
 
     .support-help-cta {
-        align-items: flex-start;
+        align-items: center;
         grid-template-columns: 1fr;
         gap: 28px;
         height: auto;
-        padding: 42px 4.6875vw;
+        padding: 72px 4.6875vw 42px;
     }
 
     .support-help-cta h2 {
         font-size: 8vw;
+    }
+
+    .support-help-cta__copy,
+    .support-help-cta__contact {
+        transform: none;
     }
 
     .support-help-cta__button {
