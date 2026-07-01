@@ -8,6 +8,7 @@ const aboutHeroCopy = document.querySelector(".about-hero__copy");
 const aboutHeroTextFlow = document.querySelector(".about-hero__text-flow");
 const aboutHeroTextFlowInner = document.querySelector(".about-hero__text-flow-inner");
 const aboutHeroCopyTrack = document.querySelector(".about-hero__copy-track");
+const aboutHeroStoryText = document.querySelector("[data-about-design-story-text]");
 
 const aboutPanelTimings = [
     [0, 0.56],
@@ -102,8 +103,10 @@ function renderAboutHeroPanels(progress) {
         aboutHeroTextFlowInner.style.transform = `translate3d(0, ${textOffset}px, 0)`;
     }
 
-    const exitStartDistance = viewportHeight * 0.55;
-    const exitProgress = aboutClamp((heroScroll - exitStartDistance) / viewportHeight, 0, 1);
+    const storyTextRect = aboutHeroStoryText?.getBoundingClientRect();
+    const exitProgress = storyTextRect
+        ? aboutClamp((viewportHeight * 0.6 - storyTextRect.bottom) / viewportHeight, 0, 1)
+        : aboutClamp((heroScroll - viewportHeight * 0.55) / viewportHeight, 0, 1);
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));

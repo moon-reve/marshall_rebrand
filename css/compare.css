@@ -210,24 +210,25 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: transparent;
   padding: 0 4.6875vw;
   display: flex; flex-direction: column;
-  justify-content: center; gap: 6vh;
+  justify-content: center; gap: 5.56vh;
   transform: translate3d(0, var(--hero-content-y, 0%), 0);
   will-change: transform;
 }
 .hero-title {
   font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
   font-variation-settings: "opsz" 18;
-  font-size: 4.1536vw;
+  font-size: 5.82vw;
   font-weight: 400;
-  line-height: 1.04;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
   color: var(--cream-light);
 }
 .hero-desc {
-  font-size: 0.8496vw;
+  font-size: 0.833vw;
   font-weight: 300;
-  line-height: 1.7;
+  line-height: 1.4;
   color: rgba(255, 234, 198, 0.75);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
 }
 
 

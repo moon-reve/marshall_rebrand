@@ -52,13 +52,13 @@
 }
 
 .support-hero__title {
-    margin: 0 0 0.95rem;
+    margin: 0 0 5.56vh;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 4.1536vw;
+    font-size: 5.82vw;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
-    letter-spacing: 0;
-    line-height: 1.04;
+    letter-spacing: -0.02em;
+    line-height: 0.92;
     color: #ffeac6;
     text-shadow: 0 0 12px rgba(0, 0, 0, 0.18);
 }
@@ -68,10 +68,10 @@
     margin: 0 0 3.33vw;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     color: rgba(255, 234, 198, 0.75);
-    font-size: 0.8496vw;
+    font-size: 0.833vw;
     font-weight: 300;
-    line-height: 1.7;
-    letter-spacing: 0.02em;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
     word-break: keep-all;
 }
 
