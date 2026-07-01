@@ -347,8 +347,8 @@
 .about-history {
     position: relative;
     height: 420vh;
-    background: #1a1208;
-    color: #f6efe5;
+    background: #d9c5a9;
+    color: #2b2118;
     isolation: isolate;
 }
 
@@ -371,22 +371,15 @@
     height: 100vh;
     padding: 7.2vw 4.9vw 5.2vw;
     overflow: hidden;
-    background-color: #1a1208;
-    background-image:
-        radial-gradient(circle at 48% 50%, rgba(26, 18, 8, 0.08) 0%, rgba(26, 18, 8, 0.3) 58%, rgba(11, 7, 4, 0.56) 100%),
-        linear-gradient(rgba(22, 13, 5, 0.28), rgba(22, 13, 5, 0.28)),
-        url("../assets/images/about-history-bg.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #d9c5a9;
 }
 
 .about-history__content {
     grid-area: content;
     align-self: center;
     display: grid;
-    grid-template-columns: max-content 4.6875vw 31.25vw 4.6875vw 1fr;
-    grid-template-areas: "nav . image . text";
+    grid-template-columns: 31.25vw 4.6875vw max-content 4.6875vw 1fr;
+    grid-template-areas: "image . nav . text";
     align-items: center;
     box-sizing: border-box;
     width: 100%;
@@ -428,7 +421,7 @@
     grid-area: summary;
     width: 100%;
     margin: 0;
-    color: rgba(246, 239, 229, 0.96);
+    color: #2b2118;
     font-size: clamp(14px, 0.94vw, 18px);
     font-weight: 400;
     line-height: 1.95;
@@ -451,12 +444,12 @@
     width: clamp(12px, 0.84vw, 16px);
     height: clamp(12px, 0.84vw, 16px);
     border-radius: 50%;
-    background: rgba(246, 239, 229, 0.42);
+    background: rgba(43, 33, 24, 0.28);
     transition: background-color 220ms ease;
 }
 
 .about-history__nav li.is-active {
-    background: #ead4b4;
+    background: #2b2118;
 }
 
 .about-history__nav span {
@@ -553,7 +546,7 @@
 
 .about-history__text p {
     margin: 0;
-    color: rgba(246, 239, 229, 0.92);
+    color: #2b2118;
     font-size: clamp(14px, 0.95vw, 18px);
     font-weight: 400;
     line-height: 1.55;
@@ -597,49 +590,82 @@
     }
 }
 
+.about-philosophy-wrap {
+    position: relative;
+    height: 100vh;
+    background: var(--about-cream);
+}
+
 .about-philosophy {
-    display: grid;
-    grid-template-columns: 22.55vw 1fr;
-    gap: 2.7vw;
-    align-items: start;
-    min-height: 31.25vw;
-    padding: 7.45vw 4.65vw 5vw;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100vh;
+    padding: clamp(72px, 5vw, 96px) 4.65vw;
     background: var(--about-cream);
 }
 
 .about-philosophy h2 {
-    font-size: clamp(38px, 4.28vw, 82px);
+    margin: 0 0 clamp(120px, 9.9vw, 190px);
+    color: #2b2118;
+    text-align: center;
+    font-size: clamp(64px, 4.48vw, 86px);
+    font-weight: 400;
     line-height: 0.95;
 }
 
 .about-philosophy__list {
+    margin-right: auto;
+    margin-left: auto;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0;
+    grid-template-columns:
+        clamp(260px, 17.7vw, 340px)
+        clamp(280px, 18.2vw, 350px)
+        clamp(280px, 18.2vw, 350px)
+        clamp(260px, 15.6vw, 300px);
+    gap: clamp(36px, 3.65vw, 70px);
+    width: min(100%, 1410px);
 }
 
 .about-stat {
     position: relative;
     min-width: 0;
-    padding-left: 2.35vw;
+    padding-left: 0;
+}
+
+.about-stat:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: clamp(18px, 1.41vw, 27px);
+    right: 0;
+    width: 1px;
+    height: clamp(220px, 15vw, 288px);
+    background-image: linear-gradient(to bottom, #c8922a 35%, transparent 0);
+    background-size: 1px 4px;
+    background-repeat: repeat-y;
 }
 
 .about-stat + .about-stat {
-    border-left: 1px dotted rgba(120, 78, 42, 0.25);
+    border-left: 0;
 }
 
 .about-stat strong {
     display: flex;
     align-items: flex-end;
-    margin-bottom: 1.15vw;
-    color: var(--about-gold);
+    margin-bottom: 8px;
+    color: #c8922a;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
     font-feature-settings: "lnum" 1, "tnum" 1;
     font-variant-numeric: lining-nums tabular-nums;
-    font-size: clamp(48px, 4.26vw, 82px);
+    font-size: clamp(56px, 4.48vw, 86px);
     font-weight: 400;
-    line-height: 1;
+    line-height: 1.3;
 }
 
 .about-stat__value,
@@ -683,29 +709,41 @@
 }
 
 .about-stat h3 {
-    min-height: 4.45vw;
-    margin: 0 0 3.45vw;
-    color: #24180f;
+    min-height: 0;
+    margin: 0 0 clamp(52px, 4.01vw, 77px);
+    color: #2b2118;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
-    font-size: clamp(21px, 1.65vw, 32px);
-    font-weight: 400;
-    line-height: 1.08;
+    font-size: clamp(24px, 1.67vw, 32px);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.022em;
 }
 
 .about-stat p {
-    max-width: 11.7vw;
+    max-width: 250px;
     margin: 0;
-    color: #22170f;
-    font-size: clamp(12px, 0.78vw, 15px);
+    color: #2b2118;
+    font-size: clamp(14px, 0.94vw, 18px);
     font-weight: 500;
-    line-height: 1.62;
+    line-height: 1.5;
+    letter-spacing: -0.022em;
 }
 
 @media (max-width: 64em) {
     .about-history,
     .about-philosophy {
         grid-template-columns: 1fr;
+    }
+
+    .about-philosophy-wrap {
+        height: auto;
+    }
+
+    .about-philosophy {
+        position: relative;
+        height: auto;
+        min-height: 100vh;
     }
 
     .about-hero {
