@@ -8,7 +8,6 @@ const aboutHeroCopy = document.querySelector(".about-hero__copy");
 const aboutHeroTextFlow = document.querySelector(".about-hero__text-flow");
 const aboutHeroTextFlowInner = document.querySelector(".about-hero__text-flow-inner");
 const aboutHeroCopyTrack = document.querySelector(".about-hero__copy-track");
-const aboutHeroHistoryIntro = document.querySelector(".about-hero__history-intro");
 const aboutHistoryStage = document.querySelector("[data-about-history]");
 
 const aboutPanelTimings = [
@@ -72,7 +71,6 @@ function triggerAboutHeroLightsOff() {
     aboutHeroDissolvePanels.forEach((panel) => panel.style.setProperty("--about-dissolve-panel-y", "0%"));
     aboutHeroCopy?.style.setProperty("--about-content-y", "0%");
     aboutHeroCopy?.style.setProperty("--about-hero-copy-opacity", "0");
-    if (aboutHeroHistoryIntro) aboutHeroHistoryIntro.style.visibility = "hidden";
     aboutHeroTextFlow?.style.setProperty("--about-hero-text-opacity", "0");
     if (aboutHeroTextFlowInner) aboutHeroTextFlowInner.style.transform = "translate3d(0, 0, 0)";
 }
@@ -109,9 +107,6 @@ function renderAboutHeroPanels(progress) {
     const exitProgress = historyRect
         ? aboutClamp((viewportHeight - historyRect.top) / viewportHeight, 0, 1)
         : aboutClamp((heroScroll - viewportHeight * 0.55) / viewportHeight, 0, 1);
-    if (aboutHeroHistoryIntro) {
-        aboutHeroHistoryIntro.style.visibility = exitProgress > 0.28 ? "visible" : "hidden";
-    }
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));
@@ -413,17 +408,12 @@ function updateAboutHistoryInteraction() {
     const pinHeight = aboutHistorySticky?.offsetHeight || window.innerHeight;
     const scrollDistance = Math.max(aboutHistory.offsetHeight - pinHeight, 1);
     const progress = aboutClamp(-rect.top / scrollDistance, 0, 1);
-    const contentEnterProgress = aboutEaseSmooth(aboutSequenceProgress(progress, 0.16, 0.28));
-    const slideProgress = aboutSequenceProgress(progress, 0.24, 1);
-    const nextIndex = Math.min(aboutHistorySlides.length - 1, Math.floor(slideProgress * aboutHistorySlides.length));
+    const nextIndex = Math.min(aboutHistorySlides.length - 1, Math.floor(progress * aboutHistorySlides.length));
     const isPinned = rect.top <= 0 && rect.bottom >= pinHeight;
     const isEnded = rect.bottom < pinHeight;
 
     aboutHistory.classList.toggle("is-pinned", isPinned);
     aboutHistory.classList.toggle("is-ended", isEnded);
-    aboutHistory.style.setProperty("--about-history-intro-y", "0px");
-    aboutHistory.style.setProperty("--about-history-content-opacity", `${contentEnterProgress}`);
-    aboutHistory.style.setProperty("--about-history-content-y", `${(1 - contentEnterProgress) * 36}px`);
     renderAboutHistorySlide(nextIndex);
 }
 
