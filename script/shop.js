@@ -7,7 +7,10 @@ const shopHeroStage = document.querySelector("[data-shop-hero-stage]");
 const shopHero = document.querySelector(".shop-hero");
 const shopHeroPanels = document.querySelectorAll(".shop-hero__media-panel");
 const shopHeroContent = document.querySelector(".shop-hero__content");
+const shopTopbar = document.querySelector(".shop-topbar");
 const shopTopbarMain = document.querySelector(".shop-topbar__main");
+const shopTopbarMenu = document.querySelector(".shop-topbar__menu");
+const shopTopbarNav = document.querySelector(".shop-topbar__nav");
 const shopBestSection = document.querySelector(".shop-best");
 const shopCategoryButtons = document.querySelectorAll("[data-shop-category]");
 const shopBestCards = document.querySelectorAll("[data-shop-product-card]");
@@ -755,6 +758,37 @@ function skipHeroOnFirstScroll(event, scrollAmount = 1) {
 }
 
 function initializeShopInteractions() {
+    if (shopTopbar && shopTopbarMenu && shopTopbarNav) {
+        const setShopMenuOpen = (isOpen) => {
+            shopTopbar.classList.toggle("is-menu-open", isOpen);
+            shopTopbarMenu.setAttribute("aria-expanded", String(isOpen));
+            shopTopbarMenu.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+        };
+
+        shopTopbarMenu.addEventListener("click", (event) => {
+            event.stopPropagation();
+            setShopMenuOpen(!shopTopbar.classList.contains("is-menu-open"));
+        });
+
+        shopTopbarNav.addEventListener("click", (event) => {
+            if (event.target.closest("a")) setShopMenuOpen(false);
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!shopTopbar.classList.contains("is-menu-open")) return;
+            if (shopTopbar.contains(event.target)) return;
+            setShopMenuOpen(false);
+        });
+
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") setShopMenuOpen(false);
+        });
+
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 640) setShopMenuOpen(false);
+        });
+    }
+
     shopCategoryButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const category = button.dataset.shopCategory;
