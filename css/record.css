@@ -671,10 +671,12 @@
 
 .record-feature__cover-arrow--prev {
     left: -3.6458vw;
+    color: #d9c5a9;
 }
 
 .record-feature__cover-arrow--next {
     left: 39.1667vw;
+    color: #d9c5a9;
 }
 
 .record-feature__cover-arrow.is-hidden {
