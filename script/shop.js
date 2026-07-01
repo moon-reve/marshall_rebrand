@@ -5,6 +5,7 @@ document.addEventListener("click", (event) => {
 
 const shopHeroStage = document.querySelector("[data-shop-hero-stage]");
 const shopHero = document.querySelector(".shop-hero");
+const shopHeroMediaGrid = document.querySelector(".shop-hero__media-grid");
 const shopHeroPanels = document.querySelectorAll(".shop-hero__media-panel");
 const shopHeroContent = document.querySelector(".shop-hero__content");
 const shopTopbar = document.querySelector(".shop-topbar");
@@ -31,6 +32,8 @@ const shopPanelTimings = [
     [0.24, 0.82],
     [0.4, 0.96],
 ];
+let shopHeroLightsTimer = 0;
+let shopHeroCopyRevealTimer = 0;
 const shopProductCatalog = {
     speaker: [
         {
@@ -945,6 +948,28 @@ function renderShopHeroPanels(progress) {
     shopHeroContent?.style.setProperty("--shop-content-y", `${-contentProgress * 100}%`);
 }
 
+function triggerShopHeroLightsOn() {
+    if (!shopHeroMediaGrid) return;
+
+    window.clearTimeout(shopHeroLightsTimer);
+    window.clearTimeout(shopHeroCopyRevealTimer);
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        shopHeroMediaGrid.style.setProperty("--shop-hero-dark-opacity", "0");
+        shopHeroContent?.style.setProperty("--shop-hero-copy-opacity", "1");
+        return;
+    }
+
+    shopHeroMediaGrid.style.setProperty("--shop-hero-dark-opacity", "0.8");
+    shopHeroContent?.style.setProperty("--shop-hero-copy-opacity", "0");
+    shopHeroLightsTimer = window.setTimeout(() => {
+        shopHeroMediaGrid.style.setProperty("--shop-hero-dark-opacity", "0");
+        shopHeroCopyRevealTimer = window.setTimeout(() => {
+            shopHeroContent?.style.setProperty("--shop-hero-copy-opacity", "1");
+        }, 350);
+    }, 500);
+}
+
 function updateShopHeroTransition() {
     if (!shopHeroStage || !shopHero || !shopHeroPanels.length) return;
 
@@ -999,6 +1024,7 @@ function updateShopScrollEffects() {
 }
 
 renderShopHeroPanels(0);
+triggerShopHeroLightsOn();
 renderShopProductImages(shopProductDetails);
 renderShopProductDetails(0);
 initializeShopInteractions();
