@@ -23,6 +23,7 @@ let aboutHeroLightsAnimating = false;
 let aboutHeroLightsOn = false;
 let aboutHeroLightsStartTimer = null;
 let aboutHeroLightsCompleteTimer = null;
+let aboutHeroCopyRevealTimer = null;
 let aboutHeroDissolveOn = false;
 let aboutHeroTouchStartY = 0;
 
@@ -43,6 +44,9 @@ function triggerAboutHeroLightsOn() {
     aboutHeroLightsAnimating = true;
     aboutHeroLightsStartTimer = setTimeout(() => {
         aboutHeroMediaGrid?.style.setProperty("--about-hero-dark-opacity", "0");
+        aboutHeroCopyRevealTimer = setTimeout(() => {
+            aboutHeroCopy?.style.setProperty("--about-hero-copy-opacity", "1");
+        }, 350);
         aboutHeroLightsCompleteTimer = setTimeout(() => {
             aboutHeroLightsOn = true;
             aboutHeroLightsAnimating = false;
@@ -53,25 +57,20 @@ function triggerAboutHeroLightsOn() {
 function triggerAboutHeroLightsOff() {
     if (aboutHeroLightsStartTimer) clearTimeout(aboutHeroLightsStartTimer);
     if (aboutHeroLightsCompleteTimer) clearTimeout(aboutHeroLightsCompleteTimer);
+    if (aboutHeroCopyRevealTimer) clearTimeout(aboutHeroCopyRevealTimer);
     aboutHeroLightsStartTimer = null;
     aboutHeroLightsCompleteTimer = null;
+    aboutHeroCopyRevealTimer = null;
     aboutHeroLightsAnimating = false;
     aboutHeroLightsOn = false;
     aboutHeroDissolveOn = false;
     aboutHeroMediaGrid?.style.setProperty("--about-hero-dark-opacity", "0.8");
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", "1");
     aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", "0");
     aboutHeroDissolvePanels.forEach((panel) => panel.style.setProperty("--about-dissolve-panel-y", "0%"));
     aboutHeroCopy?.style.setProperty("--about-content-y", "0%");
+    aboutHeroCopy?.style.setProperty("--about-hero-copy-opacity", "0");
     aboutHeroTextFlow?.style.setProperty("--about-hero-text-opacity", "0");
-    if (aboutHeroTextFlowInner) aboutHeroTextFlowInner.style.transform = "translate3d(0, 0, 0)";
-}
-
-function triggerAboutHeroDissolve() {
-    if (aboutHeroDissolveOn) return;
-    aboutHeroDissolveOn = true;
-    aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", "1");
-    aboutHeroCopy?.style.setProperty("--about-content-y", "-100%");
-    aboutHeroTextFlow?.style.setProperty("--about-hero-text-opacity", "1");
     if (aboutHeroTextFlowInner) aboutHeroTextFlowInner.style.transform = "translate3d(0, 0, 0)";
 }
 
@@ -80,30 +79,31 @@ function renderAboutHeroPanels(progress) {
         panel.style.setProperty("--about-panel-y", "0%");
     });
 
-    const [contentStart, contentEnd] = aboutPanelTimings[0];
-    const contentProgress = aboutEaseSmooth(aboutSequenceProgress(progress, contentStart, contentEnd));
-    aboutHeroCopy?.style.setProperty("--about-content-y", aboutHeroDissolveOn ? "-100%" : `${-contentProgress * 100}%`);
-
     const stageRect = aboutHeroStage?.getBoundingClientRect();
-    const copyScrollDistance = window.innerHeight * 1.65;
-    const textProgress = stageRect
-        ? aboutClamp(-stageRect.top / copyScrollDistance, 0, 1)
-        : 0;
-    const easedTextProgress = aboutEaseSmooth(textProgress);
-    const textOpacity = aboutHeroDissolveOn ? 1 : 0;
+    const heroScroll = stageRect ? Math.max(-stageRect.top, 0) : 0;
+    const viewportHeight = window.innerHeight;
+
+    const copyProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.02, viewportHeight * 0.38));
+    const dissolveProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.12, viewportHeight * 0.42));
+    const textOpacity = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 0.42));
+    const textProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 1.65));
+
+    aboutHeroDissolveOn = dissolveProgress > 0.01 || textOpacity > 0.01;
+    aboutHeroCopy?.style.setProperty("--about-content-y", `${-copyProgress * 100}%`);
+    aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", `${dissolveProgress}`);
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", `${1 - dissolveProgress}`);
+
     const trackEnd = aboutHeroCopyTrack
-        ? -(aboutHeroCopyTrack.offsetTop + aboutHeroCopyTrack.offsetHeight + window.innerHeight * 0.16)
+        ? -(aboutHeroCopyTrack.offsetTop + aboutHeroCopyTrack.offsetHeight + viewportHeight * 0.16)
         : 0;
-    const textOffset = aboutHeroDissolveOn ? easedTextProgress * trackEnd : 0;
+    const textOffset = textProgress * trackEnd;
     aboutHeroTextFlow?.style.setProperty("--about-hero-text-opacity", `${textOpacity}`);
     if (aboutHeroTextFlowInner) {
         aboutHeroTextFlowInner.style.transform = `translate3d(0, ${textOffset}px, 0)`;
     }
 
-    const exitStartDistance = copyScrollDistance + window.innerHeight * 0.72;
-    const exitProgress = stageRect
-        ? aboutClamp((-stageRect.top - exitStartDistance) / window.innerHeight, 0, 1)
-        : 0;
+    const exitStartDistance = viewportHeight * 0.55;
+    const exitProgress = aboutClamp((heroScroll - exitStartDistance) / viewportHeight, 0, 1);
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));
@@ -122,7 +122,7 @@ function updateAboutHeroTransition() {
 
     aboutHeroStage.classList.toggle("is-pinned", isHeroPinned);
     aboutHeroStage.classList.toggle("is-ended", isHeroEnded);
-    aboutHeroMediaGrid?.style.setProperty("--about-hero-dark-opacity", aboutHeroLightsOn || aboutHeroLightsAnimating ? "0" : "0.8");
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-dark-opacity", aboutHeroLightsOn || aboutHeroLightsAnimating || stageRect.top < -4 ? "0" : "0.8");
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         if (aboutAnimationFrame) cancelAnimationFrame(aboutAnimationFrame);
@@ -166,10 +166,7 @@ function revealAboutHeroOnFirstScroll(event) {
     if (heroRect.top < -10 || heroRect.bottom <= 0) return false;
 
     if (aboutHeroLightsOn && !aboutHeroDissolveOn) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        triggerAboutHeroDissolve();
-        return true;
+        return false;
     }
 
     if (aboutHeroLightsOn) return false;
@@ -185,12 +182,22 @@ function revealAboutHeroOnFirstScroll(event) {
 
 function dimAboutHeroOnReverseScroll() {
     if (!aboutHeroStage || (!aboutHeroLightsOn && !aboutHeroLightsAnimating)) return false;
+    if (aboutHeroDissolveOn) return false;
 
     const heroRect = aboutHeroStage.getBoundingClientRect();
     if (heroRect.top >= window.innerHeight || heroRect.bottom <= 0) return false;
 
     triggerAboutHeroLightsOff();
     return true;
+}
+
+function autoRevealAboutHeroLights() {
+    if (!aboutHeroStage || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const heroRect = aboutHeroStage.getBoundingClientRect();
+    if (heroRect.top > 10 || heroRect.bottom <= 0) return;
+
+    triggerAboutHeroLightsOn();
 }
 
 renderAboutHeroPanels(0);
@@ -225,6 +232,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("scroll", updateAboutHeroTransition, { passive: true });
 window.addEventListener("resize", updateAboutHeroTransition);
 updateAboutHeroTransition();
+window.setTimeout(autoRevealAboutHeroLights, 350);
 
 const aboutHistory = document.querySelector("[data-about-history]");
 const aboutHistorySticky = document.querySelector(".about-history__sticky");
