@@ -13,6 +13,7 @@
     position: relative;
     width: 100%;
     height: 100vh;
+    min-height: 100vh;
     aspect-ratio: auto;
     overflow: hidden;
     background: #070503;
@@ -642,11 +643,11 @@
 .support-editorial__top::before {
     content: "";
     position: absolute;
-    top: 53%;
+    top: 58%;
     left: 50%;
     z-index: 1;
     width: 1px;
-    height: 97%;
+    height: 99%;
     background: rgba(247, 242, 234, 0.22);
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -778,7 +779,7 @@
     gap: 36px;
     height: 100vh;
     min-height: 100vh;
-    padding: 64px 4.6875vw 44px;
+    padding: 5vh 4.6875vw;
     color: #f3ede4;
     background: #17100d;
 }
@@ -818,9 +819,12 @@
 .guide-flow {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 24px;
     align-content: center;
+    align-self: stretch;
     justify-self: stretch;
+    height: 100%;
     width: 100%;
     max-width: none;
 }
@@ -832,7 +836,7 @@
     align-items: start;
     justify-items: start;
     gap: 18px;
-    aspect-ratio: 1.45 / 1;
+    aspect-ratio: auto;
     min-width: 0;
     min-height: 0;
     padding: 28px;
@@ -941,6 +945,10 @@
     text-align: center;
 }
 
+.support-help-cta__copy p + p {
+    margin-top: 10px;
+}
+
 .support-help-cta__copy {
     max-width: none;
     transform: translateY(-4vh);
@@ -952,7 +960,7 @@
     display: grid;
     justify-items: center;
     gap: 18px;
-    width: max-content;
+    width: min(420px, 100%);
     margin-top: 4vh;
     transform: translateY(4vh);
     padding-left: 0;
@@ -965,18 +973,18 @@
     justify-content: center;
     position: relative;
     width: 100%;
-    height: 42px;
-    padding: 0 22px;
-    color: #fff8ea;
-    background: #17100d;
+    height: 56px;
+    padding: 0 28px;
+    color: #17100d;
+    background: transparent;
     border: 1px solid #17100d;
     border-radius: 7px;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.8333vw;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: 0.25vw;
+    letter-spacing: 0.08em;
 }
 
 .support-footer {
@@ -1173,7 +1181,7 @@
     .support-guide--editorial {
         grid-template-columns: 1fr;
         gap: 28px;
-        padding: 54px 6vw 40px;
+        padding: 5vh 6vw;
     }
 
     .support-guide__heading {
@@ -1182,6 +1190,7 @@
 
     .guide-flow {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
         width: min(100%, 640px);
     }
 
@@ -1189,7 +1198,7 @@
         grid-template-columns: none;
         grid-template-rows: 62px minmax(0, 1fr) 38px;
         gap: 18px;
-        aspect-ratio: 1.45 / 1;
+        aspect-ratio: auto;
         min-height: 0;
         padding: 22px;
     }
@@ -1483,8 +1492,8 @@
     }
 
     .support-hero {
-        height: auto;
-        min-height: 100svh;
+        height: 100vh;
+        min-height: 100vh;
         aspect-ratio: auto;
     }
 
@@ -1664,17 +1673,7 @@
 
     .support-guide--editorial {
         grid-template-columns: 1fr;
-        height: auto;
-        min-height: 0;
-        gap: 28px;
-        padding: 48px clamp(20px, 5.58vw, 24px);
-    }
-
-    .support-guide__copy {
-        max-width: 100%;
-        margin-top: 18px;
-        font-size: 15px;
-        line-height: 1.65;
+        padding: 5vh 4.6875vw;
     }
 
     .support-guide__heading,
@@ -1690,18 +1689,16 @@
 
     .guide-flow {
         grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
         width: 100%;
     }
 
     .guide-flow__item {
-        grid-template-columns: 56px minmax(0, 1fr) 38px;
-        grid-template-rows: none;
-        align-items: center;
-        gap: 14px;
+        grid-template-columns: none;
+        grid-template-rows: 58px minmax(0, 1fr) 34px;
         aspect-ratio: auto;
-        min-height: 104px;
-        padding: 18px;
+        min-height: 0;
+        padding: 20px;
     }
 
     .guide-flow__icon-wrap {
