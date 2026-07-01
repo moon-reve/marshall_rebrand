@@ -361,6 +361,7 @@ let smoothScrollEase = 0.12;
 let smoothScrollStartY = 0;
 let smoothScrollStartedAt = 0;
 let smoothScrollDuration = 0;
+let previousShopScrollY = 0;
 
 function updateShopScrollbarWidth() {
     if (!smoothScrollEl) return;
@@ -687,19 +688,19 @@ function renderShopProductDetails(productOrIndex) {
         updateShopCategoryState(product.category);
         updateShopBestCardState(product.id);
 
-        const weightRow = shopProductSpecRows.find((row) => row.querySelector("dt")?.textContent.trim() === "Weight");
+        const weightRow = shopProductSpecRows.find((row) => row.querySelector(".shop-product__spec-term")?.textContent.trim() === "Weight");
         const outputRow = shopProductSpecRows.find((row) => {
-            const label = row.querySelector("dt")?.textContent.trim();
+            const label = row.querySelector(".shop-product__spec-term")?.textContent.trim();
             return label === "Output" || label === "Battery Life";
         });
-        const priceRow = shopProductSpecRows.find((row) => row.querySelector("dt")?.textContent.trim() === "Price");
+        const priceRow = shopProductSpecRows.find((row) => row.querySelector(".shop-product__spec-term")?.textContent.trim() === "Price");
 
-        if (weightRow) weightRow.querySelector("dd").textContent = product.weight;
+        if (weightRow) weightRow.querySelector(".shop-product__spec-value").textContent = product.weight;
         if (outputRow) {
-            outputRow.querySelector("dt").textContent = product.outputLabel || "Output";
-            outputRow.querySelector("dd").textContent = product.output;
+            outputRow.querySelector(".shop-product__spec-term").textContent = product.outputLabel || "Output";
+            outputRow.querySelector(".shop-product__spec-value").textContent = product.output;
         }
-        if (priceRow) priceRow.querySelector("dd").innerHTML = formatShopPrice(product);
+        if (priceRow) priceRow.querySelector(".shop-product__spec-value").innerHTML = formatShopPrice(product);
 
         requestAnimationFrame(() => {
             shopProductSection?.classList.remove("is-changing");
@@ -981,35 +982,20 @@ function updateShopHeroTransition() {
     shopAnimationFrame = requestAnimationFrame(renderTransition);
 }
 
-function updateShopProductScrollMask() {
-    if (!shopProductSection) return;
-
-    const productRect = shopProductSection.getBoundingClientRect();
-    const infoLine = getShopProductInfoLine();
-    const footerRect = shopFooter?.getBoundingClientRect();
-    const isFooterInMaskArea = footerRect ? footerRect.top < infoLine : false;
-    const isActive = productRect.top <= 0 && productRect.bottom > infoLine && !isFooterInMaskArea;
-    shopProductSection.classList.toggle("is-scroll-mask-active", isActive);
-}
-
-function updateShopProductCategoryRelease() {
-    if (!shopProductSection || !shopFooter) return;
-
-    const footerRect = shopFooter.getBoundingClientRect();
-    const footerOverlap = Math.max(0, window.innerHeight - footerRect.top);
-    shopProductSection.style.setProperty("--shop-footer-overlap", `${footerOverlap}px`);
-}
-
 function updateShopScrollEffects() {
     if (smoothCurrentY <= 2) {
         hasSkippedHeroOnScroll = false;
     }
 
+    const isScrollingUp = smoothCurrentY < previousShopScrollY - 0.5;
+    const productRect = shopProductSection?.getBoundingClientRect();
+    const isInProductSection = productRect && productRect.top < window.innerHeight && productRect.bottom > 0;
+    shopProductSection?.classList.toggle("is-scrolling-up", Boolean(isScrollingUp && isInProductSection));
+    previousShopScrollY = smoothCurrentY;
+
     updateShopScrollbarWidth();
     updateShopHeroTransition();
     updateShopProductDetails();
-    updateShopProductScrollMask();
-    updateShopProductCategoryRelease();
 }
 
 renderShopHeroPanels(0);

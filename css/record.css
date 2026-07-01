@@ -573,8 +573,8 @@
     position: relative;
     height: 54.1667vw;
     min-height: 760px;
-    background: #1b1410;
-    color: #ffeac6;
+    background: #d9c5a9;
+    color: #2b2118;
 }
 
 .record-feature__heading {
@@ -594,7 +594,7 @@
     z-index: 2;
     top: 7.0833vw;
     right: 4.6875vw;
-    color: #ffeac6;
+    color: #2b2118;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0;
     line-height: 1;
@@ -649,7 +649,7 @@
     padding: 0;
     border: 0;
     background: transparent;
-    color: #ffeac6;
+    color: #2b2118;
     cursor: pointer;
     font-size: 1.35vw;
     font-weight: 300;
@@ -731,7 +731,7 @@
 
 .record-detail h3 {
     margin: 0;
-    color: #c8922a;
+    color: #2b2118;
     font-size: 2.0833vw;
     font-weight: 700;
     line-height: 1;
@@ -740,7 +740,7 @@
 
 .record-detail p {
     margin: 1.0417vw 0 4.2708vw;
-    color: #ffeac6;
+    color: #2b2118;
     font-size: 0.7292vw;
     line-height: 1.25;
     letter-spacing: -0.03em;
@@ -756,18 +756,18 @@
     grid-template-columns: 55.75% 1fr;
     align-items: center;
     min-height: 3.6458vw;
-    color: #ffeac6;
+    color: #2b2118;
     font-size: 0.7292vw;
     line-height: 1;
     letter-spacing: -0.03em;
 }
 
 .record-detail div:first-child {
-    border-top: 0.0521vw solid rgba(255, 234, 198, 0.55);
+    border-top: 0.0521vw solid rgba(43, 33, 24, 0.42);
 }
 
 .record-detail div:last-child {
-    border-bottom: 0.0521vw solid rgba(255, 234, 198, 0.55);
+    border-bottom: 0.0521vw solid rgba(43, 33, 24, 0.42);
 }
 
 .record-detail dt,
