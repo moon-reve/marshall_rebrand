@@ -143,17 +143,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
   background: transparent;
 }
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 48% 40% at 62% 52%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.05) 44%, rgba(0, 0, 0, 0.34) 100%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.12) 34%, rgba(0, 0, 0, 0.12) 66%, rgba(0, 0, 0, 0.32) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.24) 100%);
-}
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -164,13 +153,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: relative;
   height: 100%;
   overflow: hidden;
-  background: var(--hero-dark);
+  background: var(--dark);
   transform: translate3d(0, var(--hero-panel-y, 0%), 0);
   will-change: transform;
 }
 .hero-panel::before {
   content: "";
   position: absolute;
+  z-index: 0;
   top: 0;
   width: 100vw;
   height: 100%;
@@ -179,10 +169,27 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background-position: center;
   background-repeat: no-repeat;
 }
+.hero-panel::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  width: 100vw;
+  height: 100%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 48% 40% at 62% 52%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.05) 44%, rgba(0, 0, 0, 0.34) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.12) 34%, rgba(0, 0, 0, 0.12) 66%, rgba(0, 0, 0, 0.32) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.24) 100%);
+}
 .hero-panel--01::before { left: 0; }
 .hero-panel--02::before { left: -25vw; }
 .hero-panel--03::before { left: -50vw; }
 .hero-panel--04::before { left: -75vw; }
+.hero-panel--01::after { left: 0; }
+.hero-panel--02::after { left: -25vw; }
+.hero-panel--03::after { left: -50vw; }
+.hero-panel--04::after { left: -75vw; }
 .hero-vlines {
   position: absolute;
   inset: 0;
@@ -238,6 +245,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    QUIZ SECTION
 ═══════════════════════════════════════════════════════ */
 .quiz-section {
+  --step-card-scale: 0.8;
   position: relative;
   width: 100%;
   height: 100vh;
@@ -262,7 +270,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .quiz-left {
   width: 24vw;
   flex-shrink: 0;
-  padding-top: 10.4167vw;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .quiz-compare-title {
@@ -270,7 +281,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-variation-settings: "opsz" 18;
   font-size: 3.3333vw;
   font-weight: 400;
-  color: #fff;
+  color: var(--cream-light);
   line-height: 1.2;
   letter-spacing: -0.0667vw;
   margin-bottom: 1.4583vw;
@@ -279,7 +290,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .quiz-compare-desc {
   font-size: 0.9375vw;
   font-weight: 400;
-  color: #fff;
+  color: rgba(255, 234, 198, 0.75);
   line-height: 1.5;
   letter-spacing: -0.01875vw;
 }
@@ -297,8 +308,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .quiz-right {
   flex: 1;
   min-width: 0;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  height: 100%;
   padding-left: 4.6875vw;
 }
 
@@ -401,17 +415,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ── 옵션: 카드 4개 ── */
 .step-options {
   display: flex;
-  gap: 1.0417vw;
+  gap: calc(1.0417vw * var(--step-card-scale));
 }
 
 /* ── 카드 — 259×365px 기준 ── */
 .step-card {
   position: relative;
-  width: 13.4896vw;
-  height: 19.0104vw;
+  width: calc(13.4896vw * var(--step-card-scale));
+  height: calc(19.0104vw * var(--step-card-scale));
   flex-shrink: 0;
   background: rgba(255, 234, 198, 0.05);
-  border-radius: 0.5208vw;
+  border-radius: calc(0.5208vw * var(--step-card-scale));
   border: 0.5px solid transparent;
   cursor: pointer;
   overflow: hidden;
@@ -463,14 +477,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ── 카드: 번호 — Bodoni Moda Regular 56px, tracking -1.232px ── */
 .step-card-num {
   position: absolute;
-  top: 0.885vw;
-  left: 1.4583vw;
+  top: calc(0.885vw * var(--step-card-scale));
+  left: calc(1.4583vw * var(--step-card-scale));
   font-family: 'Bodoni Moda', 'Bodoni MT', Didot, 'Times New Roman', serif;
   font-variation-settings: "opsz" 18;
-  font-size: 2.9167vw;
+  font-size: calc(2.9167vw * var(--step-card-scale));
   font-weight: 400;
   line-height: 1.5;
-  letter-spacing: -0.0642vw;
+  letter-spacing: calc(-0.0642vw * var(--step-card-scale));
   color: inherit;
   z-index: 1;
 }
@@ -478,12 +492,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ── 카드: 라벨 — Pretendard Medium 24px, tracking -0.528px ── */
 .step-card-label {
   position: absolute;
-  bottom: 1.5104vw;
-  left: 1.4583vw;
-  font-size: 1.25vw;
+  bottom: calc(1.5104vw * var(--step-card-scale));
+  left: calc(1.4583vw * var(--step-card-scale));
+  font-size: calc(1.25vw * var(--step-card-scale));
   font-weight: 500;
   line-height: 1.5;
-  letter-spacing: -0.0275vw;
+  letter-spacing: calc(-0.0275vw * var(--step-card-scale));
   color: inherit;
   white-space: nowrap;
   z-index: 1;
