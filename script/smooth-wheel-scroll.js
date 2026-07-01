@@ -6,9 +6,12 @@
 
     const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const coarsePointerQuery = window.matchMedia("(hover: none), (pointer: coarse)");
+    const topSnapStage = document.querySelector("[data-scroll-snap-top]");
     let targetY = window.scrollY;
     let renderedY = window.scrollY;
     let animationFrame = null;
+    let topSnapArmed = true;
+    let topSnapLocked = false;
 
     function clamp(value, min, max) {
         return Math.min(Math.max(value, min), max);
@@ -53,11 +56,51 @@
         if (Math.abs(distance) < 0.5) {
             renderedY = targetY;
             animationFrame = null;
+            if (topSnapLocked) {
+                topSnapLocked = false;
+            }
         } else {
             animationFrame = requestAnimationFrame(renderSmoothScroll);
         }
 
         window.scrollTo(0, renderedY);
+    }
+
+    function holdTopSnap(snapTop) {
+        topSnapLocked = true;
+        targetY = snapTop;
+    }
+
+    function shouldSnapToTop(deltaY) {
+        if (!topSnapStage) return false;
+
+        const snapTop = topSnapStage.offsetTop;
+        if (deltaY < 0 && window.scrollY <= snapTop + 2) {
+            topSnapArmed = true;
+            topSnapLocked = false;
+        }
+
+        if (topSnapLocked) {
+            holdTopSnap(snapTop);
+            if (!animationFrame) {
+                animationFrame = requestAnimationFrame(renderSmoothScroll);
+            }
+            return true;
+        }
+
+        if (deltaY <= 0) return false;
+        if (!topSnapArmed) return false;
+        if (window.scrollY >= snapTop - 2) return false;
+        if (targetY + deltaY < snapTop) return false;
+
+        topSnapArmed = false;
+        targetY = snapTop;
+        renderedY = window.scrollY;
+        holdTopSnap(snapTop);
+        if (!animationFrame) {
+            animationFrame = requestAnimationFrame(renderSmoothScroll);
+        }
+        return true;
     }
 
     window.addEventListener("wheel", (event) => {
@@ -79,7 +122,10 @@
         }
 
         event.preventDefault();
-        targetY = clamp(targetY + getWheelDelta(event), 0, getMaxScrollY());
+        const wheelDelta = getWheelDelta(event);
+        if (!shouldSnapToTop(wheelDelta)) {
+            targetY = clamp(targetY + wheelDelta, 0, getMaxScrollY());
+        }
 
         if (!animationFrame) {
             animationFrame = requestAnimationFrame(renderSmoothScroll);

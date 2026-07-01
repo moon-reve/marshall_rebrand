@@ -1,8 +1,42 @@
 const supportHero = document.querySelector(".support-hero");
+const supportTopbar = document.querySelector(".support-page .shop-topbar");
+const supportTopbarMenu = document.querySelector(".support-page .shop-topbar__menu");
+const supportTopbarNav = document.querySelector(".support-page .shop-topbar__nav");
 const supportHeroLightDuration = 1050;
 let supportHeroLightsOn = false;
 let supportHeroLightsAnimating = false;
 let supportHeroLightFrame = null;
+
+if (supportTopbar && supportTopbarMenu && supportTopbarNav) {
+    const setSupportMenuOpen = (isOpen) => {
+        supportTopbar.classList.toggle("is-menu-open", isOpen);
+        supportTopbarMenu.setAttribute("aria-expanded", String(isOpen));
+        supportTopbarMenu.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    };
+
+    supportTopbarMenu.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setSupportMenuOpen(!supportTopbar.classList.contains("is-menu-open"));
+    });
+
+    supportTopbarNav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) setSupportMenuOpen(false);
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!supportTopbar.classList.contains("is-menu-open")) return;
+        if (supportTopbar.contains(event.target)) return;
+        setSupportMenuOpen(false);
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setSupportMenuOpen(false);
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) setSupportMenuOpen(false);
+    });
+}
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);

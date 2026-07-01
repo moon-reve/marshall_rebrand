@@ -12,7 +12,7 @@
 
 .about-hero {
     position: relative;
-    height: 200vh;
+    height: 190vh;
     background: #d9c5a9;
 }
 
@@ -119,6 +119,7 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    background: #d9c5a9;
     opacity: var(--about-hero-dissolve-opacity, 0);
     pointer-events: none;
     transition: opacity 1.2s ease-out;
@@ -128,6 +129,7 @@
     position: relative;
     height: 100vh;
     overflow: hidden;
+    background: #d9c5a9;
     transform: translate3d(0, var(--about-dissolve-panel-y, 0%), 0);
     will-change: transform;
 }
@@ -288,9 +290,11 @@
     margin: 0;
 }
 
-.design-feature__story-copy .about-eyebrow {
+.design-feature__copy.design-feature__story-text .design-feature__story-copy p.about-eyebrow {
     color: var(--about-gold);
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: clamp(11px, 0.68vw, 13px);
+    letter-spacing: 0;
 }
 
 .design-feature__story-copy h2,
@@ -488,12 +492,6 @@
     font-size: clamp(42px, 3.9vw, 75px);
     font-weight: 400;
     line-height: 1;
-}
-
-.about-history__text .about-history__year.is-current-label {
-    font-family: inherit;
-    font-variation-settings: normal;
-    font-weight: 700;
 }
 
 .about-history__year-slot {
@@ -747,7 +745,7 @@
     }
 
     .about-hero {
-        height: 200vh;
+        height: 190vh;
     }
 
     .about-hero__copy {
