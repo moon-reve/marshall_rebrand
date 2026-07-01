@@ -684,6 +684,13 @@
     pointer-events: none;
 }
 
+@media (min-width: 641px) {
+    .record-feature__cover-arrow--prev,
+    .record-feature__cover-arrow--next {
+        color: #000000;
+    }
+}
+
 .record-feature__cover {
     margin: 0;
     width: 36.875vw;
