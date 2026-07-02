@@ -342,6 +342,7 @@ let aboutHistoryEnterTimer = null;
 let aboutHistoryPointerStartX = 0;
 let aboutHistoryPointerStartY = 0;
 let aboutHistoryPointerId = null;
+const aboutHistoryIndexBuffer = 0.035;
 
 function isAboutHistoryManualMode() {
     return window.matchMedia("(max-width: 64em)").matches;
@@ -462,7 +463,15 @@ function updateAboutHistoryInteraction() {
     const pinHeight = aboutHistorySticky?.offsetHeight || window.innerHeight;
     const scrollDistance = Math.max(aboutHistory.offsetHeight - pinHeight, 1);
     const progress = aboutClamp(-rect.top / scrollDistance, 0, 1);
-    const nextIndex = Math.min(aboutHistorySlides.length - 1, Math.floor(progress * aboutHistorySlides.length));
+    const segmentProgress = 1 / aboutHistorySlides.length;
+    let nextIndex = aboutHistoryIndex;
+    if (progress >= 1) {
+        nextIndex = aboutHistorySlides.length - 1;
+    } else if (progress >= (aboutHistoryIndex + 1) * segmentProgress + aboutHistoryIndexBuffer) {
+        nextIndex = Math.min(aboutHistoryIndex + 1, aboutHistorySlides.length - 1);
+    } else if (progress < aboutHistoryIndex * segmentProgress - aboutHistoryIndexBuffer) {
+        nextIndex = Math.max(aboutHistoryIndex - 1, 0);
+    }
     const isPinned = rect.top <= 0 && rect.bottom >= pinHeight;
     const isEnded = rect.bottom < pinHeight;
 

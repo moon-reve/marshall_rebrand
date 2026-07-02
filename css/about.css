@@ -349,7 +349,6 @@
 .about-history__image img {
     display: block;
     width: 100%;
-    height: auto;
 }
 
 .about-eyebrow {
@@ -408,7 +407,7 @@
     top: 50%;
     left: 50%;
     display: grid;
-    grid-template-columns: 25vw 4.6875vw max-content 4.6875vw max-content;
+    grid-template-columns: 25vw 4.6875vw max-content 4.6875vw 34vw;
     grid-template-areas: "image . nav . text";
     align-items: center;
     box-sizing: border-box;
@@ -472,13 +471,13 @@
 
 .about-history__nav {
     grid-area: nav;
-    align-self: stretch;
+    align-self: center;
     justify-self: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0;
-    height: 100%;
+    height: 18.75vw;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -511,7 +510,7 @@
     align-self: center;
     justify-self: start;
     width: 25vw;
-    height: 18.1562vw;
+    height: 18.75vw;
     margin: 0;
     overflow: hidden;
 }
@@ -520,7 +519,7 @@
     grid-area: text;
     align-self: center;
     justify-self: start;
-    width: fit-content;
+    width: 34vw;
     max-width: 100%;
     margin: 0;
 }
