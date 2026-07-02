@@ -940,7 +940,7 @@ a {
     font-family: Arial, sans-serif;
     font-size: 2.0833vw;
     font-weight: 500;
-    line-height: 1.5;
+    line-height: 1;
     letter-spacing: -0.03em;
 }
 
@@ -949,12 +949,12 @@ a {
     top: 14.2vh;
     left: 25vw;
     z-index: 2;
-    width: 60vw;
+    width: 71vw;
     margin: 0;
     color: #1b1410;
     font-size: 1.0417vw;
     font-weight: 400;
-    line-height: 1;
+    line-height: 1.5;
     letter-spacing: -0.022em;
     word-break: keep-all;
 }
@@ -3176,7 +3176,7 @@ a {
         width: calc(100vw - 172px);
         color: #4b4038;
         font-size: clamp(12px, 3.05vw, 13px);
-        line-height: 1.58;
+        line-height: 1.5;
         letter-spacing: 0;
     }
 
@@ -3216,41 +3216,15 @@ a {
         pointer-events: none;
     }
 
-    .design-feature__title-box {
-        top: 50%;
-        right: 32px;
-        left: auto;
-        width: min(270px, calc(100vw - 172px));
-        transform: translateY(-50%);
-        text-align: right;
-    }
-
-    .design-feature__headline {
-        text-align: right;
-        font-size: clamp(22px, 5.55vw, 24px);
-        line-height: 1.02;
-        letter-spacing: -0.02em;
-        white-space: nowrap;
-    }
-
-    .design-feature__headline p:not(:first-child) {
-        width: 100%;
-        margin-top: 18px;
-        margin-left: auto;
-        font-size: clamp(11px, 3vw, 12px);
-        line-height: 1.58;
-        letter-spacing: 0;
-        text-align: right;
-        word-break: keep-all;
-    }
-
-    .design-feature__headline p:first-child,
     .design-feature__copy p:first-child {
         font-size: clamp(24px, 6.1vw, 28px);
         line-height: 1.08;
     }
 
-    .design-feature__headline p:last-child,
+    .design-feature__headline p:not(:first-child) {
+        margin-top: 5.56vh;
+    }
+
     .design-feature__copy p:last-child,
     .milestone__copy p,
     .sound-detail__copy-en,
@@ -3262,11 +3236,6 @@ a {
         letter-spacing: 0;
     }
 
-    .design-feature__headline p:not(:first-child) {
-        font-size: clamp(11px, 3vw, 12px);
-        line-height: 1.58;
-        text-align: right;
-    }
 }
 
 @media (max-width: 430px) {
