@@ -1293,7 +1293,7 @@ body {
     }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 767px) {
     :root {
         --shop-topbar-height: 56px;
     }
@@ -2120,7 +2120,7 @@ body {
     }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 767px) {
     :root {
         --shop-topbar-height: calc(58px + env(safe-area-inset-top, 0px));
     }
