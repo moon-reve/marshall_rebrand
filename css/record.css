@@ -797,6 +797,405 @@
     font-weight: 400;
 }
 
+@media (max-width: 1024px) and (min-width: 768px) {
+    .record-page {
+        overflow-x: clip;
+    }
+
+    .record-page .shop-topbar {
+        --shop-topbar-height: clamp(54px, 6.25vw, 64px);
+        --shop-content-margin: clamp(34px, 5.2vw, 54px);
+    }
+
+    .record-page .shop-topbar__main {
+        height: var(--shop-topbar-height);
+        padding: 0 var(--shop-content-margin);
+    }
+
+    .record-page .shop-topbar__brand {
+        min-width: 118px;
+        font-size: clamp(34px, 4.2vw, 42px);
+    }
+
+    .record-page .shop-topbar__nav {
+        width: auto;
+        min-width: 0;
+        font-size: clamp(12px, 1.35vw, 14px);
+    }
+
+    .record-page .shop-topbar__nav ul {
+        gap: clamp(16px, 2.2vw, 24px);
+    }
+
+    .record-page .shop-topbar__actions {
+        gap: 18px;
+        margin-left: clamp(18px, 2.8vw, 28px);
+    }
+
+    .record-page .shop-topbar__action {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+    }
+
+    .record-page .shop-topbar__action img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .artist-grid {
+        --grid-half: 0.5px;
+    }
+
+    .record-hero {
+        height: 150svh;
+        min-height: 1180px;
+        background: #d9c5a9;
+    }
+
+    .record-hero__sticky {
+        height: 100svh;
+        min-height: 820px;
+    }
+
+    .record-hero__performer {
+        object-position: 58% center;
+    }
+
+    .record-hero__column-scene {
+        background-size: 100% 100%, auto 100%;
+        background-position: left top, 58% center;
+    }
+
+    .record-hero__column-grid--market .record-hero__column-scene::before,
+    .record-hero__column-grid--studio .record-hero__column-scene::before {
+        background-size: 100% 100%, auto 100%;
+        background-position: left top, center;
+    }
+
+    .record-hero__column-grid--market .record-hero__column-scene::before {
+        background-position: left top, 18% center;
+    }
+
+    .record-hero__copy,
+    .record-hero__slide-copy {
+        top: auto;
+        left: clamp(42px, 6vw, 64px);
+        right: clamp(42px, 6vw, 64px);
+        bottom: clamp(104px, 12svh, 132px);
+        width: auto;
+    }
+
+    .record-hero__copy h1,
+    .record-hero__slide-copy h2 {
+        font-size: clamp(72px, 10vw, 96px);
+        line-height: 0.96;
+        letter-spacing: -0.02em;
+    }
+
+    .record-hero__copy p,
+    .record-hero__slide-copy p {
+        max-width: min(620px, 78vw);
+        margin-top: clamp(34px, 5.2svh, 54px);
+        font-size: clamp(14px, 1.65vw, 16px);
+        line-height: 1.62;
+        letter-spacing: -0.01em;
+        word-break: keep-all;
+    }
+
+    .record-hero__copy p br,
+    .record-hero__slide-copy p br {
+        display: none;
+    }
+
+    .record-hero__slide::before {
+        left: 0;
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 44svh;
+    }
+
+    .record-hero__slide-image,
+    .record-hero__slide--studio .record-hero__slide-image {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .record-hero__slide--market .record-hero__slide-image {
+        object-position: 18% center;
+    }
+
+    .record-hero__arrow,
+    .artist-catalog__arrow,
+    .record-feature__cover-arrow {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+    }
+
+    .record-hero__arrow--prev {
+        left: clamp(20px, 3.4vw, 36px);
+    }
+
+    .record-hero__arrow--next {
+        right: clamp(20px, 3.4vw, 36px);
+    }
+
+    .artist-catalog {
+        --artist-tablet-side-gutter: clamp(86px, 11vw, 128px);
+        --artist-tablet-card-gap: clamp(22px, 3vw, 32px);
+        --artist-tablet-card-width: calc((100vw - (var(--artist-tablet-side-gutter) * 2) - (var(--artist-tablet-card-gap) * 3)) / 4);
+        position: relative;
+        top: auto;
+        z-index: 3;
+        margin-top: -50svh;
+        height: auto;
+        min-height: 780px;
+        padding: clamp(92px, 11svh, 118px) 0 clamp(96px, 12svh, 128px);
+        overflow: hidden;
+    }
+
+    .artist-catalog__intro {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: min(88vw, 680px);
+        margin: 0 auto;
+    }
+
+    .artist-catalog__intro h2,
+    .record-feature__heading h2 {
+        font-size: clamp(52px, 7vw, 68px);
+        line-height: 0.98;
+        letter-spacing: -0.02em;
+    }
+
+    .artist-catalog__intro p,
+    .record-feature__heading p {
+        max-width: 620px;
+        margin-top: 18px;
+        font-size: clamp(14px, 1.65vw, 16px);
+        line-height: 1.55;
+        word-break: keep-all;
+    }
+
+    .artist-catalog__filters {
+        gap: 12px;
+        margin-top: 34px;
+    }
+
+    .artist-catalog__filters a {
+        min-height: 44px;
+        height: 44px;
+        padding: 0 22px;
+        border-width: 1px;
+        border-radius: 999px;
+        font-size: 13px;
+    }
+
+    .artist-catalog__viewport {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: calc(100vw - (var(--artist-tablet-side-gutter) * 2));
+        margin: clamp(56px, 7svh, 72px) auto 0;
+        transform: none;
+    }
+
+    .artist-catalog__list {
+        --artist-card-gap: var(--artist-tablet-card-gap);
+        --artist-card-width: var(--artist-tablet-card-width);
+    }
+
+    .artist-card img,
+    .artist-card::after {
+        height: calc(var(--artist-card-width) * 1.144);
+    }
+
+    .artist-card h3 {
+        top: calc(var(--artist-card-width) * 0.572);
+        width: calc(var(--artist-card-width) - 24px);
+        font-size: clamp(14px, 1.7vw, 17px);
+        white-space: normal;
+    }
+
+    .artist-catalog__arrow {
+        top: clamp(438px, 47svh, 500px);
+        bottom: auto;
+        transform: translateY(-50%);
+    }
+
+    .artist-catalog__arrow--prev {
+        left: calc((var(--artist-tablet-side-gutter) - 44px) / 2);
+    }
+
+    .artist-catalog__arrow--next {
+        right: calc((var(--artist-tablet-side-gutter) - 44px) / 2);
+    }
+
+    @media (orientation: portrait) {
+        .artist-catalog__arrow {
+            top: calc(clamp(336px, 33.6svh, 376px) + (var(--artist-tablet-card-width) * 0.572));
+        }
+    }
+
+    .record-feature {
+        height: auto;
+        min-height: 760px;
+        padding: clamp(96px, 11svh, 124px) clamp(42px, 6vw, 64px) clamp(104px, 12svh, 132px);
+        overflow: hidden;
+    }
+
+    .record-feature__heading {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: min(88vw, 680px);
+        padding-right: 64px;
+    }
+
+    .record-feature__arrow {
+        top: clamp(110px, 12svh, 138px);
+        right: clamp(42px, 6vw, 64px);
+        width: 44px;
+        height: 44px;
+    }
+
+    .record-feature__arrow::before {
+        width: 30px;
+        right: 7px;
+    }
+
+    .record-feature__arrow::after {
+        right: 7px;
+        width: 10px;
+        height: 10px;
+    }
+
+    .record-feature__content {
+        position: relative;
+        left: auto;
+        top: auto;
+        grid-template-columns: minmax(0, 48%) minmax(0, 1fr);
+        gap: clamp(38px, 5vw, 56px);
+        width: 100%;
+        margin-top: clamp(68px, 8svh, 92px);
+    }
+
+    .record-feature__cover {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1.472 / 1;
+    }
+
+    .record-feature__cover-track {
+        --record-cover-width: calc((100vw - (clamp(42px, 6vw, 64px) * 2) - clamp(38px, 5vw, 56px)) * 0.48);
+        margin-inline: 0;
+    }
+
+    .record-feature__cover img {
+        height: auto;
+        aspect-ratio: 1.472 / 1;
+    }
+
+    .record-feature__cover-arrow {
+        top: calc(var(--record-cover-width) / 2.944);
+    }
+
+    .record-feature__cover-arrow--prev {
+        left: -22px;
+    }
+
+    .record-feature__cover-arrow--next {
+        left: auto;
+        right: calc(52% + clamp(38px, 5vw, 56px) - 22px);
+    }
+
+    .record-detail {
+        width: 100%;
+        padding-top: clamp(18px, 2.6vw, 28px);
+    }
+
+    .record-detail h3 {
+        font-size: clamp(34px, 4.6vw, 46px);
+    }
+
+    .record-detail p {
+        margin: 18px 0 34px;
+        font-size: clamp(13px, 1.55vw, 15px);
+        line-height: 1.58;
+        word-break: keep-all;
+    }
+
+    .record-detail dl {
+        width: 100%;
+    }
+
+    .record-detail div {
+        grid-template-columns: 38% 1fr;
+        min-height: 56px;
+        font-size: clamp(12px, 1.45vw, 14px);
+        line-height: 1.25;
+    }
+
+    .record-detail dd {
+        min-width: 0;
+        word-break: keep-all;
+    }
+
+    .record-page .footer-inner {
+        width: 88vw;
+        gap: 38px;
+        padding: 48px 0 42px;
+    }
+
+    .record-page .footer-brand {
+        width: 32%;
+    }
+
+    .record-page .footer-nav {
+        width: 68%;
+        padding: 0;
+        gap: 18px;
+    }
+
+    .record-page .footer-logo {
+        margin-bottom: 20px;
+        font-size: clamp(48px, 7vw, 64px);
+    }
+
+    .record-page .footer-tagline,
+    .record-page .footer-col ul li {
+        font-size: clamp(11px, 1.25vw, 13px);
+        line-height: 1.55;
+    }
+
+    .record-page .site-footer .footer-col-title {
+        margin-bottom: 18px;
+        font-size: clamp(10px, 1.15vw, 12px);
+    }
+
+    .record-page .footer-col ul {
+        gap: 8px;
+    }
+
+    .record-page .footer-bottom {
+        padding: 20px 6vw 26px;
+    }
+
+    .record-page .footer-copy,
+    .record-page .footer-legal-text,
+    .record-page .footer-divider {
+        font-size: 11px;
+    }
+}
+
 @media (max-width: 640px) {
     .record-page {
         width: 100%;
