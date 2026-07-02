@@ -893,12 +893,11 @@ a {
    ========================================================================== */
 
 .beginning-stage {
-    height: 150vh;
-    background: #fff;
+    height: 100vh;
 }
 
 .beginning {
-    height: 150vh;
+    height: 100vh;
     overflow: visible;
     background: #fff;
 }
@@ -970,8 +969,8 @@ a {
 
 .beginning__scroll-art {
     position: absolute;
-    top: 105vh;
-    left: 50vw;
+    top: 55.5vh;
+    left: 24.9vw;
     z-index: 1;
     width: 50.2vw;
     height: auto;
@@ -979,7 +978,6 @@ a {
     object-fit: contain;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(-50%);
     transition: opacity 0.2s ease;
 }
 
@@ -3185,7 +3183,7 @@ a {
     }
 
     .beginning__scroll-art {
-        top: 105vh;
+        top: 55.5vh;
         left: 50vw;
         width: calc(100vw - 36px);
         transform: translateX(-50%);
