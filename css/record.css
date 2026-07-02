@@ -751,6 +751,8 @@
 .record-detail h3 {
     margin: 0;
     color: #2b2118;
+    font-family: "Bodoni Moda", Georgia, "Times New Roman", serif;
+    font-variation-settings: "opsz" 18;
     font-size: 2.0833vw;
     font-weight: 700;
     line-height: 1;
