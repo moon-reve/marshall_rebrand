@@ -10,6 +10,10 @@
     background: var(--about-cream);
 }
 
+.shop-topbar__menu {
+    display: none;
+}
+
 .about-hero {
     position: relative;
     height: 190vh;
@@ -856,14 +860,611 @@
 }
 
 @media (max-width: 40em) {
+    :root {
+        --shop-topbar-height: 56px;
+    }
+
+    .shop-topbar {
+        --shop-content-margin: clamp(16px, 4.65vw, 22px);
+        width: 100%;
+    }
+
+    .shop-topbar__main {
+        position: relative;
+        height: var(--shop-topbar-height);
+        padding: 0 var(--shop-content-margin);
+    }
+
+    .shop-topbar__menu {
+        position: relative;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 44px;
+        height: 44px;
+        margin-left: -10px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #ffeac6;
+        cursor: pointer;
+    }
+
+    .shop-topbar__menu span {
+        position: absolute;
+        left: 10px;
+        width: 24px;
+        height: 1px;
+        background: currentColor;
+        transform-origin: center;
+        transition:
+            top 0.28s cubic-bezier(0.7, 0.024, 0.199, 0.976),
+            transform 0.28s cubic-bezier(0.7, 0.024, 0.199, 0.976),
+            opacity 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .shop-topbar__menu span:nth-child(1) {
+        top: 14px;
+    }
+
+    .shop-topbar__menu span:nth-child(2) {
+        top: 22px;
+    }
+
+    .shop-topbar__menu span:nth-child(3) {
+        top: 30px;
+    }
+
+    .shop-topbar__menu:hover,
+    .shop-topbar__menu:focus-visible {
+        color: #ffeac6;
+    }
+
+    .shop-topbar__menu:focus-visible {
+        outline: 1px solid #c8922a;
+        outline-offset: 2px;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__menu {
+        color: #c8922a;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__menu:hover,
+    .shop-topbar.is-menu-open .shop-topbar__menu:focus-visible {
+        color: #c8922a;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__menu span:nth-child(1) {
+        top: 22px;
+        transform: rotate(38deg);
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__menu span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0.2);
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__menu span:nth-child(3) {
+        top: 22px;
+        transform: rotate(-38deg);
+    }
+
+    .shop-topbar__brand {
+        position: absolute;
+        left: 50%;
+        display: inline-flex;
+        min-width: 0;
+        margin-left: 0;
+        font-size: clamp(30px, 9vw, 40px);
+        color: #d7c4a8;
+        transform: translateX(-50%);
+    }
+
+    .shop-topbar__nav {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: var(--shop-content-margin);
+        z-index: 2;
+        width: min(66vw, 260px);
+        min-width: 0;
+        padding: 18px 18px 20px;
+        border: 1px solid rgba(255, 234, 198, 0.18);
+        background:
+            linear-gradient(180deg, rgba(43, 33, 24, 0.94), rgba(27, 20, 16, 0.9)),
+            rgba(27, 18, 13, 0.86);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(12px);
+        font-size: clamp(13px, 3.4vw, 15px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translate3d(0, -12px, 0) scaleY(0.96);
+        transform-origin: top left;
+        transition:
+            opacity 0.26s ease,
+            visibility 0s linear 0.26s,
+            transform 0.34s cubic-bezier(0.7, 0.024, 0.199, 0.976);
+    }
+
+    .shop-topbar__nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 2px;
+        overflow-x: visible;
+        scrollbar-width: none;
+    }
+
+    .shop-topbar__nav ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shop-topbar__nav a {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 2px 0 18px;
+        color: rgba(255, 234, 198, 0.82);
+        letter-spacing: 0.02em;
+        transform: translate3d(-8px, 0, 0);
+        opacity: 0;
+        transition:
+            color 0.2s ease,
+            opacity 0.24s ease,
+            transform 0.32s cubic-bezier(0.7, 0.024, 0.199, 0.976);
+    }
+
+    .shop-topbar__nav a::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 50%;
+        width: 1px;
+        height: 16px;
+        background: currentColor;
+        opacity: 0;
+        transform: translateY(-50%) scaleY(0.25);
+        transition:
+            opacity 0.2s ease,
+            transform 0.28s cubic-bezier(0.7, 0.024, 0.199, 0.976);
+    }
+
+    .shop-topbar__nav a:hover,
+    .shop-topbar__nav a:focus-visible,
+    .shop-topbar__nav a.is-active {
+        color: #c8922a;
+    }
+
+    .shop-topbar__nav a:hover::before,
+    .shop-topbar__nav a:focus-visible::before,
+    .shop-topbar__nav a.is-active::before {
+        opacity: 1;
+        transform: translateY(-50%) scaleY(1);
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translate3d(0, 0, 0) scaleY(1);
+        transition-delay: 0s;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav a {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav li:nth-child(1) a {
+        transition-delay: 0.05s;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav li:nth-child(2) a {
+        transition-delay: 0.09s;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav li:nth-child(3) a {
+        transition-delay: 0.13s;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav li:nth-child(4) a {
+        transition-delay: 0.17s;
+    }
+
+    .shop-topbar.is-menu-open .shop-topbar__nav li:nth-child(5) a {
+        transition-delay: 0.21s;
+    }
+
+    .shop-topbar__actions {
+        gap: 2px;
+        margin-left: 10px;
+    }
+
+    .shop-topbar__action {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .shop-topbar__action img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .about-page {
+        overflow-x: clip;
+    }
+
+    .about-hero {
+        height: 230svh;
+        min-height: 1800px;
+    }
+
+    .about-hero__sticky,
+    .about-hero__media-grid,
+    .about-hero__dissolve-grid,
+    .about-hero__dissolve-panel,
+    .about-hero__text-flow-inner {
+        width: 100%;
+        height: 100svh;
+        min-height: 640px;
+    }
+
+    .about-hero__panel-img,
+    .about-hero__dissolve-img {
+        width: 100vw;
+        max-width: none;
+        height: 100svh;
+        min-height: 640px;
+    }
+
+    .about-hero__panel-img,
+    .about-hero__dissolve-img {
+        object-position: center top;
+    }
+
+    .about-hero__dissolve-grid {
+        grid-template-columns: repeat(4, 25vw);
+        width: 100vw;
+    }
+
+    .about-hero__dissolve-panel {
+        width: calc(25vw + 1px);
+        margin-right: -1px;
+    }
+
+    .about-hero__copy {
+        padding: calc(var(--shop-topbar-height) + 48px) 22px 64px;
+    }
+
+    .about-hero__copy-box {
+        gap: clamp(24px, 5.6svh, 44px);
+    }
+
+    .about-hero__copy h1 {
+        max-width: 10ch;
+        font-size: clamp(48px, 15vw, 64px);
+        line-height: 0.95;
+        letter-spacing: 0;
+    }
+
+    .about-hero__copy p {
+        width: min(100%, 330px);
+        font-size: clamp(13px, 3.3vw, 15px);
+        line-height: 1.65;
+    }
+
+    .about-hero__copy-track {
+        --design-feature-story-offset: 72svh;
+        top: 112svh;
+        left: 0;
+        width: 100%;
+        padding: 0 22px;
+    }
+
+    .design-feature__about-title,
+    .about-philosophy h2 {
+        font-size: clamp(58px, 18vw, 78px);
+    }
+
+    .design-feature__copy.design-feature__copy--one p {
+        margin: 0;
+        color: #ffeac6;
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.7;
+    }
+
+    .design-feature__founder-media {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: min(78vw, 340px);
+        margin: 12svh 0 0 auto;
+    }
+
+    .design-feature__copy.design-feature__story-text {
+        gap: 10svh;
+        margin-top: 36svh;
+        text-align: left;
+    }
+
+    .design-feature__story-media,
+    .design-feature__story-copy {
+        align-self: stretch;
+        width: 100%;
+    }
+
+    .design-feature__story-media {
+        width: min(78vw, 340px);
+    }
+
+    .design-feature__story-copy {
+        margin-left: auto;
+    }
+
+    .design-feature__story-copy h2,
+    .design-feature__story-copy p:not(.about-eyebrow) {
+        margin-left: 0;
+        text-align: left;
+    }
+
+    .design-feature__story-copy h2 {
+        margin-bottom: 24px;
+        font-size: clamp(24px, 6.4vw, 31px);
+        line-height: 1.35;
+    }
+
+    .about-eyebrow,
+    .design-feature__copy.design-feature__story-text .design-feature__story-copy p.about-eyebrow {
+        margin-bottom: 12px;
+        font-size: 12px;
+    }
+
+    .design-feature__story-copy p:not(.about-eyebrow) {
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.72;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+        line-break: strict;
+    }
+
     .about-hero__copy,
     .about-history,
     .about-philosophy {
-        padding-right: 24px;
-        padding-left: 24px;
+        padding-right: 22px;
+        padding-left: 22px;
+    }
+
+    .about-history {
+        padding-top: 88px;
+        padding-bottom: 84px;
+    }
+
+    .about-history__sticky {
+        padding: 0;
+    }
+
+    .about-history__intro {
+        gap: 18px;
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    .about-history__heading {
+        font-size: clamp(46px, 13vw, 58px);
+        line-height: 0.98;
+    }
+
+    .about-history__summary {
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.75;
+        text-align: left;
+    }
+
+    .about-history__content {
+        padding: 0;
+    }
+
+    .about-history__nav {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        min-height: 44px;
+        margin: 36px 0 22px;
+    }
+
+    .about-history__nav li {
+        width: auto;
+        height: 4px;
+        min-height: 4px;
+        flex: 1 1 0;
+    }
+
+    .about-history__image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1.22;
+        border-radius: 0;
+        cursor: grab;
+        touch-action: pan-y;
+        user-select: none;
+    }
+
+    .about-history__image.is-dragging {
+        cursor: grabbing;
+    }
+
+    .about-history__image img {
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .about-history.is-switching .about-history__image img {
+        transform: translateX(var(--about-history-image-exit-x, -36px));
+    }
+
+    .about-history.is-entering .about-history__image img {
+        animation: aboutHistoryImageSlideSide 420ms ease both;
+    }
+
+    @keyframes aboutHistoryImageSlideSide {
+        from {
+            opacity: 0;
+            transform: translateX(var(--about-history-image-enter-x, 36px));
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .about-history__nav li {
+        cursor: pointer;
+    }
+
+    .about-history__text {
+        margin-top: 28px;
+    }
+
+    .about-history__text .about-history__year {
+        margin-bottom: 22px;
+        font-size: clamp(48px, 16vw, 68px);
+    }
+
+    .about-history__text h2 {
+        margin-bottom: 14px;
+        font-size: clamp(22px, 5.8vw, 28px);
+    }
+
+    .about-history__text p {
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.7;
+    }
+
+    .about-philosophy-wrap {
+        height: auto;
+    }
+
+    .about-philosophy {
+        position: relative;
+        min-height: 0;
+        padding-top: 88px;
+        padding-bottom: 92px;
+    }
+
+    .about-philosophy h2 {
+        margin-bottom: 52px;
+        line-height: 0.95;
     }
 
     .about-philosophy__list {
         grid-template-columns: 1fr;
+        gap: 0;
+        width: 100%;
+    }
+
+    .about-stat {
+        padding: 0 0 34px;
+    }
+
+    .about-stat + .about-stat {
+        padding-top: 34px;
+        border-top: 1px solid rgba(200, 146, 42, 0.32);
+    }
+
+    .about-stat:not(:last-child)::after {
+        content: none;
+    }
+
+    .about-stat strong {
+        margin-bottom: 10px;
+        font-size: clamp(58px, 18vw, 78px);
+        line-height: 1.05;
+    }
+
+    .about-stat h3 {
+        margin-bottom: 22px;
+        font-size: clamp(25px, 7vw, 32px);
+    }
+
+    .about-stat p {
+        max-width: 100%;
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.65;
+    }
+
+    .about-page .site-footer {
+        overflow-x: clip;
+    }
+
+    .about-page .footer-inner {
+        width: 100%;
+        flex-direction: column;
+        gap: 42px;
+        padding: 52px 22px 38px;
+    }
+
+    .about-page .footer-brand,
+    .about-page .footer-nav {
+        width: 100%;
+    }
+
+    .about-page .footer-logo {
+        margin-bottom: 22px;
+        font-size: clamp(56px, 17vw, 76px);
+    }
+
+    .about-page .footer-tagline {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .about-page .footer-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px 22px;
+        padding: 0;
+    }
+
+    .about-page .site-footer .footer-col-title {
+        margin-bottom: 14px;
+        font-size: 12px;
+    }
+
+    .about-page .footer-col-title a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    .about-page .footer-col ul {
+        gap: 9px;
+    }
+
+    .about-page .footer-col ul li,
+    .about-page .footer-copy,
+    .about-page .footer-legal-text,
+    .about-page .footer-divider {
+        font-size: 12px;
+    }
+
+    .about-page .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 18px 22px 28px;
+    }
+
+    .about-page .footer-legal {
+        flex-wrap: wrap;
+        gap: 8px;
     }
 }
