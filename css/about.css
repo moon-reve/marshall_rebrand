@@ -314,6 +314,7 @@
     width: 100%;
     max-width: 760px;
     height: auto;
+    filter: brightness(0.7);
 }
 
 .design-feature__copy.design-feature__story-text {
@@ -341,6 +342,7 @@
     max-width: 760px;
     height: auto;
     margin: 0;
+    filter: brightness(0.7);
 }
 
 .design-feature__copy.design-feature__story-text .design-feature__story-copy p.about-eyebrow {
