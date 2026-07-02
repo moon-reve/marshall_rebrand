@@ -12,6 +12,7 @@ const aboutHistoryStage = document.querySelector("[data-about-history]");
 const aboutTopbar = document.querySelector(".shop-topbar");
 const aboutTopbarMenu = document.querySelector(".shop-topbar__menu");
 const aboutTopbarNav = document.querySelector(".shop-topbar__nav");
+const aboutDesignStoryText = document.querySelector("[data-about-design-story-text]");
 
 const aboutPanelTimings = [
     [0, 0.56],
@@ -137,10 +138,9 @@ function renderAboutHeroPanels(progress) {
         aboutHeroTextFlowInner.style.transform = `translate3d(0, ${textOffset}px, 0)`;
     }
 
-    const historyRect = aboutHistoryStage?.getBoundingClientRect();
-    const exitProgress = historyRect
-        ? aboutClamp((viewportHeight - historyRect.top) / viewportHeight, 0, 1)
-        : aboutClamp((heroScroll - viewportHeight * 0.55) / viewportHeight, 0, 1);
+    const storyTextBottom = aboutDesignStoryText?.getBoundingClientRect().bottom ?? viewportHeight;
+    const exitProgress = aboutClamp((viewportHeight * 0.55 - storyTextBottom) / viewportHeight, 0, 1);
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-media-opacity", exitProgress > 0 ? "0" : "1");
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));
@@ -166,6 +166,7 @@ function updateAboutHeroTransition() {
         aboutAnimationFrame = null;
         aboutHeroPanels.forEach((panel) => panel.style.removeProperty("--about-panel-y"));
         aboutHeroCopy?.style.removeProperty("--about-content-y");
+        aboutHeroMediaGrid?.style.removeProperty("--about-hero-media-opacity");
         aboutHeroMediaGrid?.style.removeProperty("--about-hero-dark-opacity");
         aboutHeroDissolveGrid?.style.removeProperty("--about-hero-dissolve-opacity");
         aboutHeroDissolvePanels.forEach((panel) => panel.style.removeProperty("--about-dissolve-panel-y"));

@@ -16,7 +16,7 @@
 
 .about-hero {
     position: relative;
-    height: 190vh;
+    height: 200vh;
     background: #d9c5a9;
 }
 
@@ -49,6 +49,7 @@
     height: 100%;
     overflow: hidden;
     background: #d9c5a9;
+    opacity: var(--about-hero-media-opacity, 1);
 }
 
 .about-hero__panel {
@@ -123,7 +124,7 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #d9c5a9;
+    background: transparent;
     opacity: var(--about-hero-dissolve-opacity, 0);
     pointer-events: none;
     transition: opacity 1.2s ease-out;
@@ -372,6 +373,7 @@
 
 .about-history {
     position: relative;
+    margin-top: -15vh;
     height: 420vh;
     background: #d9c5a9;
     color: #2b2118;
@@ -384,17 +386,18 @@
     left: 0;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto;
     grid-template-areas:
         "intro"
         "content";
     column-gap: 0;
-    row-gap: 1.875vw;
+    row-gap: 0;
+    align-content: space-between;
     align-items: start;
     box-sizing: border-box;
     width: 100%;
     height: 100vh;
-    padding: 7.2vw 4.9vw 5.2vw;
+    padding: 4.6875vw;
     overflow: hidden;
     background: #d9c5a9;
 }
@@ -436,7 +439,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.875vw;
     width: min(100%, 72vw);
     text-align: center;
 }
@@ -445,20 +447,24 @@
     margin: 0;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
     font-variation-settings: "opsz" 18;
-    font-size: clamp(38px, 4vw, 77px);
+    font-size: 5.82vw;
     font-weight: 400;
-    line-height: 1;
-    letter-spacing: 0;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
 }
 
 .about-history__summary {
     width: 100%;
-    margin: 0;
+    margin: 5.56vh 0 0;
     color: #2b2118;
-    font-size: clamp(14px, 0.94vw, 18px);
-    font-weight: 400;
-    line-height: 1.95;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 0.833vw;
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
     text-align: center;
+    white-space: normal;
 }
 
 .about-history__nav {
