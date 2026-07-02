@@ -231,6 +231,7 @@
     margin: 5.56vh 0 0;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: 0.833vw;
+    font-weight: 300;
     line-height: 1.4;
     letter-spacing: -0.01em;
 }
@@ -333,10 +334,11 @@
 }
 
 .record-hero__slide-copy p {
-    margin: 2.45vw 0 0;
+    margin: 5.56vh 0 0;
     color: #ffeac6;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
     font-size: 0.833vw;
+    font-weight: 300;
     line-height: 1.4;
     letter-spacing: -0.038vw;
 }
@@ -1112,7 +1114,7 @@
     .record-hero__copy p,
     .record-hero__slide-copy p {
         max-width: 92vw;
-        margin-top: clamp(22px, 5.6svh, 40px);
+        margin-top: 5.56vh;
         font-size: clamp(13px, 3.25vw, 15px);
         line-height: 1.62;
         letter-spacing: -0.01em;
