@@ -3360,24 +3360,28 @@ a {
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {
+    body.index-page .shop-topbar {
+        --shop-topbar-height: clamp(52px, 6.25vw, 64px);
+    }
+
     body.index-page .shop-topbar__main {
-        padding-right: 32px;
-        padding-left: 32px;
+        height: var(--shop-topbar-height);
+        padding: 0 5.2vw;
     }
 
     body.index-page .shop-topbar__brand {
-        font-size: clamp(32px, 4.2vw, 42px);
+        min-width: 120px;
+        font-size: clamp(34px, 4.2vw, 42px);
     }
 
     body.index-page .shop-topbar__nav {
         width: auto;
         min-width: 0;
-        margin-left: 32px;
-        font-size: clamp(12px, 1.45vw, 15px);
+        font-size: clamp(12px, 1.3vw, 14px);
     }
 
     body.index-page .shop-topbar__nav ul {
-        gap: clamp(18px, 3vw, 32px);
+        gap: clamp(20px, 2.4vw, 28px);
     }
 
     body.index-page .shop-topbar__actions {
@@ -3386,10 +3390,15 @@ a {
     }
 
     body.index-page .shop-topbar__action {
-        width: 24px;
-        height: 24px;
-        min-width: 24px;
-        min-height: 24px;
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+
+    body.index-page .shop-topbar__action img {
+        width: 18px;
+        height: 18px;
     }
 
     .fixed-nav {
