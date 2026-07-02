@@ -1,3 +1,7 @@
+/* ==========================================================================
+   00. Base / Fonts
+   ========================================================================== */
+
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&display=swap");
 
 @font-face {
@@ -56,6 +60,10 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+/* ==========================================================================
+   01. Global Topbar
+   ========================================================================== */
 
 .shop-topbar {
     --shop-content-margin: 4.6875vw;
@@ -168,6 +176,10 @@ a {
     height: 100vh;
     overflow: hidden;
 }
+
+/* ==========================================================================
+   02. Fixed Navigation / Grid / Gauge
+   ========================================================================== */
 
 .fixed-ui {
     position: fixed;
@@ -504,6 +516,10 @@ a {
     transform-origin: 50% 50%;
 }
 
+/* ==========================================================================
+   03. Hero
+   ========================================================================== */
+
 .hero-stage {
     height: 200vh;
 }
@@ -565,6 +581,7 @@ a {
 .hero__panel-img {
     position: absolute;
     top: 0;
+    z-index: 0;
     width: 100vw;
     height: 100vh;
     object-fit: cover;
@@ -802,6 +819,10 @@ a {
 
 /* ── 스피커 패널 섹션 ─────────────────────────────────── */
 /* 피그마: 4패널 y=1078, 각 w=480(25vw), h: 455/552/737/1080px */
+/* ==========================================================================
+   04. Speakers
+   ========================================================================== */
+
 .speakers-stage {
     position: relative;
     width: 100vw;
@@ -867,12 +888,17 @@ a {
     }
 }
 
+/* ==========================================================================
+   05. Beginning
+   ========================================================================== */
+
 .beginning-stage {
-    height: 100vh;
+    height: 150vh;
+    background: #fff;
 }
 
 .beginning {
-    height: 100vh;
+    height: 150vh;
     overflow: visible;
     background: #fff;
 }
@@ -914,7 +940,7 @@ a {
     font-family: Arial, sans-serif;
     font-size: 2.0833vw;
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.5;
     letter-spacing: -0.03em;
 }
 
@@ -923,12 +949,12 @@ a {
     top: 14.2vh;
     left: 25vw;
     z-index: 2;
-    width: 71vw;
+    width: 60vw;
     margin: 0;
     color: #1b1410;
     font-size: 1.0417vw;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1;
     letter-spacing: -0.022em;
     word-break: keep-all;
 }
@@ -944,8 +970,8 @@ a {
 
 .beginning__scroll-art {
     position: absolute;
-    top: 55.5vh;
-    left: 24.9vw;
+    top: 105vh;
+    left: 50vw;
     z-index: 1;
     width: 50.2vw;
     height: auto;
@@ -953,12 +979,17 @@ a {
     object-fit: contain;
     opacity: 0;
     pointer-events: none;
+    transform: translateX(-50%);
     transition: opacity 0.2s ease;
 }
 
 .beginning__scroll-art.is-ready {
     opacity: 1;
 }
+
+/* ==========================================================================
+   06. Design
+   ========================================================================== */
 
 .design-stage {
     position: relative;
@@ -1206,6 +1237,10 @@ a {
     margin: 0 0 1.3vh;
 }
 
+/* ==========================================================================
+   07. Evolution
+   ========================================================================== */
+
 .evolution-stage {
     position: relative;
     width: 100%;
@@ -1450,6 +1485,10 @@ a {
 .milestone__image-placeholder--wide {
     height: 70vh;
 }
+
+/* ==========================================================================
+   08. Sound
+   ========================================================================== */
 
 .sound-stage {
     position: relative;
@@ -2151,6 +2190,10 @@ a {
     left: 75vw;
 }
 
+/* ==========================================================================
+   09. Legacy
+   ========================================================================== */
+
 .legacy-sequence {
     position: relative;
     width: 100vw;
@@ -2355,6 +2398,10 @@ a {
 .legacy-closing__steps span:nth-child(3) { left: 50vw; }
 .legacy-closing__steps span:nth-child(4) { left: 75vw; }
 
+/* ==========================================================================
+   10. Finale
+   ========================================================================== */
+
 .finale {
     position: absolute;
     z-index: 2;
@@ -2554,6 +2601,10 @@ a {
     object-fit: cover;
     object-position: center 42%;
 }
+
+/* ==========================================================================
+   11. Responsive
+   ========================================================================== */
 
 @media (max-width: 64em) {
     .shop-topbar__nav {
@@ -3055,7 +3106,13 @@ a {
     }
 
     .beginning-stage {
-        height: 168vh;
+        height: 150vh;
+        background: #fff;
+    }
+
+    .beginning {
+        height: 150vh;
+        background: #fff;
     }
 
     .beginning__header {
@@ -3099,13 +3156,14 @@ a {
     }
 
     .beginning__scroll-art {
-        top: 124vh;
-        left: 18px;
+        top: 105vh;
+        left: 50vw;
         width: calc(100vw - 36px);
+        transform: translateX(-50%);
     }
 
     .design-stage {
-        margin-top: -12vh;
+        margin-top: 0;
     }
 
     .design-feature__sound-sticky {
@@ -3133,21 +3191,21 @@ a {
         top: 50%;
         right: 32px;
         left: auto;
-        width: calc(100vw - 64px);
+        width: min(270px, calc(100vw - 172px));
         transform: translateY(-50%);
         text-align: right;
     }
 
     .design-feature__headline {
         text-align: right;
-        font-size: clamp(24px, 6.1vw, 28px);
+        font-size: clamp(22px, 5.55vw, 24px);
         line-height: 1.02;
         letter-spacing: -0.02em;
         white-space: nowrap;
     }
 
     .design-feature__headline p:not(:first-child) {
-        width: min(260px, calc(100vw - 64px));
+        width: 100%;
         margin-top: 18px;
         margin-left: auto;
         font-size: clamp(11px, 3vw, 12px);
@@ -3179,5 +3237,128 @@ a {
         font-size: clamp(11px, 3vw, 12px);
         line-height: 1.58;
         text-align: right;
+    }
+}
+
+@media (max-width: 430px) {
+    /* mobile hero media adjustment */
+    .hero,
+    .hero__media-grid,
+    .hero__media-grid-overlay,
+    .hero__media-panel,
+    .hero__media-placeholder {
+        height: 100svh;
+    }
+
+    @supports (height: 100dvh) {
+        .hero,
+        .hero__media-grid,
+        .hero__media-grid-overlay,
+        .hero__media-panel,
+        .hero__media-placeholder {
+            height: 100dvh;
+        }
+    }
+
+    .hero__media-grid {
+        display: block;
+        width: 100vw;
+    }
+
+    .hero__media-panel {
+        display: block;
+        width: 100vw;
+        border-right: 0;
+    }
+
+    .hero__media-placeholder {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #121212;
+    }
+
+    .hero__media-placeholder::before {
+        content: '';
+        position: absolute;
+        left: calc(50% + var(--hero-mobile-bg-x, -8vw));
+        top: 28svh;
+        z-index: 1;
+        display: block;
+        width: 112vw;
+        height: 44svh;
+        background: url("../assets/images/bg-hero_10_1.png") center top / 100% auto no-repeat;
+        pointer-events: none;
+        transform: translateX(-50%);
+        transition: left 1.05s ease-out;
+    }
+
+    @supports (height: 100dvh) {
+        .hero__media-placeholder::before {
+            top: 28dvh;
+            height: 44dvh;
+        }
+    }
+
+    .hero__media-panel:nth-child(n + 2) {
+        display: none;
+    }
+
+    .shop-topbar.is-mobile-hero-hold {
+        top: 0;
+    }
+
+    .fixed-nav.is-mobile-hero-hold {
+        color: #fff;
+    }
+
+    .hero__content-overlay.is-active {
+        z-index: 6;
+    }
+
+    .hero__media-placeholder::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        display: block;
+        background: #000;
+        opacity: var(--hero-dark-opacity, 0.8);
+        pointer-events: none;
+        z-index: 3;
+        transition: opacity 1s ease-out;
+    }
+
+    .hero__panel-img,
+    .hero__media-panel--01 .hero__panel-img {
+        display: none;
+    }
+
+    @supports (height: 100dvh) {
+        .hero__panel-img,
+        .hero__media-panel--01 .hero__panel-img {
+            height: 100dvh;
+        }
+    }
+
+    .hero__gradient-overlay {
+        top: 68svh;
+        height: 32svh;
+    }
+
+    @supports (height: 100dvh) {
+        .hero__gradient-overlay {
+            top: 68dvh;
+            height: 32dvh;
+        }
+    }
+
+    .beginning__text {
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: break-word;
+    }
+
+    .beginning__text br {
+        display: none;
     }
 }
