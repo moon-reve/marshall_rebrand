@@ -10,6 +10,10 @@
     background: var(--about-cream);
 }
 
+.about-page .footer-tagline__tablet-break {
+    display: none;
+}
+
 .shop-topbar__menu {
     display: none;
 }
@@ -2092,6 +2096,15 @@
     .about-page .footer-col ul li {
         font-size: 12px;
         line-height: 1.65;
+    }
+
+    .about-page .footer-tagline {
+        word-break: keep-all;
+        line-break: strict;
+    }
+
+    .about-page .footer-tagline__tablet-break {
+        display: inline;
     }
 
     .about-page .site-footer .footer-col-title {
