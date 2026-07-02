@@ -241,6 +241,7 @@
 
 (() => {
     const hero = document.querySelector(".record-hero");
+    const artistCatalog = document.querySelector(".artist-catalog");
 
     if (!hero) {
         return;
@@ -425,6 +426,12 @@
         const rect = hero.getBoundingClientRect();
         const isHeroActive = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
         const wheelDelta = getWheelDelta(event);
+
+        if (wheelDelta > 0 && shouldSkipToArtist()) {
+            event.preventDefault();
+            skipToArtist();
+            return;
+        }
 
         const nextProgress = wheelDelta > 0 ? 1 : 0;
         const shouldHoldHero =
