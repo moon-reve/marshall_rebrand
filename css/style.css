@@ -3283,7 +3283,7 @@ a {
         display: block;
         width: 112vw;
         height: 44svh;
-        background: url("../assets/images/bg-hero_10_1.png") center top / 100% auto no-repeat;
+        background: url("../assets/images/bg-hero_10_1.avif") center top / 100% auto no-repeat;
         pointer-events: none;
         transform: translateX(-50%);
         transition: left 1.05s ease-out;
