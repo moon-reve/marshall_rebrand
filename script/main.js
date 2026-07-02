@@ -356,6 +356,7 @@ function triggerHeroLightsOn() {
     heroLightsAnimating = true;
     setTimeout(() => {
         heroMediaGrid?.style.setProperty("--hero-dark-opacity", "0");
+        heroMediaGrid?.style.setProperty("--hero-mobile-bg-x", "8vw");
         setTimeout(() => {
             heroLightsOn = true;
             heroLightsAnimating = false;
@@ -373,6 +374,7 @@ function updateHeroScroll() {
     if (heroRect.top >= -10 && heroLightsOn && !heroLightsAnimating) {
         heroLightsOn = false;
         heroMediaGrid?.style.setProperty("--hero-dark-opacity", "0.8");
+        heroMediaGrid?.style.setProperty("--hero-mobile-bg-x", "-8vw");
     }
 
     if (speakersEntryIsAutoAnimating) return;
@@ -385,12 +387,16 @@ function updateHeroScroll() {
         isMobileViewport() &&
         speakersRect.top <= 1 &&
         speakersRect.bottom > window.innerHeight * 0.5 &&
-        speakersRenderedProgress < 0.02;
+        speakersRenderedProgress < 0.18;
     const isHeroContentVisible = heroRect.bottom > 0 && speakersRect.top > 0;
+    const isMobileHeroOverlayVisible =
+        isMobileViewport() && (isHeroContentVisible || isMobileSpeakersHold);
 
     speakersGrid.classList.toggle("is-entry", isEntryPhase);
+    fixedNav?.classList.toggle("is-mobile-hero-hold", isMobileHeroOverlayVisible);
+    shopTopbar?.classList.toggle("is-mobile-hero-hold", isMobileHeroOverlayVisible);
     heroAbout?.classList.toggle("is-speakers-entering", isEntryPhase || isMobileSpeakersHold);
-    heroContent?.classList.toggle("is-active", isHeroContentVisible);
+    heroContent?.classList.toggle("is-active", isHeroContentVisible || isMobileSpeakersHold);
 
     if (isEntryPhase) {
         renderHeroContentExit(0);
@@ -418,7 +424,7 @@ function updateHeroScroll() {
         speakersImages.forEach((image) => {
             image.style.setProperty("--speakers-entry-y", "0vh");
         });
-        renderHeroContentExit(speakersRenderedProgress);
+        renderHeroContentExit(isMobileSpeakersHold ? 0 : speakersRenderedProgress);
         if (!isMobileSpeakersSequence) {
             renderHeroMediaExit(speakersRenderedProgress);
         }
@@ -889,7 +895,12 @@ function updateSpeakersTransition() {
         }
 
         const isFirstPanelMoving = renderSpeakersImages(speakersRenderedProgress);
-        renderHeroContentExit(speakersRenderedProgress);
+        const shouldHoldMobileHeroContent =
+            isMobileViewport() &&
+            stageRect.top <= 1 &&
+            stageRect.bottom > window.innerHeight * 0.5 &&
+            speakersRenderedProgress < 0.18;
+        renderHeroContentExit(shouldHoldMobileHeroContent ? 0 : speakersRenderedProgress);
         if (isMobileViewport()) {
             heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
         } else {
