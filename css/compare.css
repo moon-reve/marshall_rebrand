@@ -323,6 +323,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   height: 100%;
   padding-left: 4.6875vw;
 }
@@ -1330,6 +1331,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     height: auto;
     align-self: auto;
     justify-content: flex-start;
+    align-items: stretch;
     padding-left: 0;
   }
 
