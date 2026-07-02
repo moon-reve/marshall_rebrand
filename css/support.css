@@ -637,34 +637,34 @@
     position: relative;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    min-height: 520px;
+    min-height: 48.15vh;
 }
 
 .support-editorial__top::before {
     content: "";
     position: absolute;
-    top: 58%;
+    top: 56%;
     left: 50%;
     z-index: 1;
     width: 1px;
-    height: 99%;
+    height: 94%;
     background: rgba(247, 242, 234, 0.22);
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
 
 .support-faq--editorial {
-    padding: 78px 4.6875vw 74px 0;
+    padding: 7.22vh 4.6875vw 6.85vh 0;
     background: #17100d;
 }
 
 .support-service--editorial {
-    padding: 78px 0 74px 4.6875vw;
+    padding: 7.22vh 0 6.85vh 4.6875vw;
     background: transparent;
 }
 
 .support-section-kicker {
-    margin: 0 0 18px;
+    margin: 0 0 1.67vh;
     color: #b97918;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.625vw;
@@ -697,18 +697,18 @@
 }
 
 .faq-list--editorial {
-    margin-top: 36px;
+    margin-top: 3.33vh;
     border-top: 1px solid rgba(247, 242, 234, 0.16);
 }
 
 .faq-list--editorial .faq-list__item {
-    min-height: 58px;
+    min-height: 5.37vh;
     border-bottom: 1px solid rgba(247, 242, 234, 0.16);
 }
 
 .faq-list--editorial .faq-list__button {
-    grid-template-columns: 42px minmax(0, 1fr) 24px;
-    min-height: 58px;
+    grid-template-columns: 2.19vw minmax(0, 1fr) 1.25vw;
+    min-height: 5.37vh;
     padding-right: 1.25vw;
     padding-left: 1.25vw;
     color: #f7f2ea;
@@ -730,20 +730,20 @@
 
 .faq-list--editorial .faq-list__plus {
     color: #f7f2ea;
-    font-size: 14px;
+    font-size: 0.729vw;
 }
 
 .service-table {
-    margin-top: 32px;
+    margin-top: 2.96vh;
     background: transparent;
 }
 
 .service-row {
     display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 6.25vw minmax(0, 1fr);
     align-items: center;
-    min-height: 68px;
-    padding: 0 26px;
+    min-height: 6.3vh;
+    padding: 0 1.35vw;
     border-bottom: 1px solid rgba(247, 242, 234, 0.22);
 }
 
@@ -923,14 +923,14 @@
 }
 
 .support-help-cta h2 {
-    margin: 0 0 24px;
+    margin: 0 0 5.56vh;
     color: #17100d;
     font-family: "Bodoni Moda", "Bodoni MT", Didot, "Times New Roman", serif;
-    font-size: 150px;
+    font-size: 5.82vw;
     font-weight: 400;
     font-variation-settings: "opsz" 18;
-    line-height: 1.04;
-    letter-spacing: -0.0667vw;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
     white-space: nowrap;
     text-align: center;
 }
@@ -938,15 +938,16 @@
 .support-help-cta p {
     margin: 0;
     color: rgba(23, 16, 13, 0.82);
-    font-size: 18px;
+    font-size: 0.833vw;
     font-weight: 300;
-    line-height: 1.7;
-    letter-spacing: 0.02em;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
     text-align: center;
+    transform: translateY(-1vh);
 }
 
 .support-help-cta__copy p + p {
-    margin-top: 10px;
+    margin-top: 0.72vw;
 }
 
 .support-help-cta__copy {
