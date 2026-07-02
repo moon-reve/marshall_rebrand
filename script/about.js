@@ -9,6 +9,9 @@ const aboutHeroTextFlow = document.querySelector(".about-hero__text-flow");
 const aboutHeroTextFlowInner = document.querySelector(".about-hero__text-flow-inner");
 const aboutHeroCopyTrack = document.querySelector(".about-hero__copy-track");
 const aboutHistoryStage = document.querySelector("[data-about-history]");
+const aboutTopbar = document.querySelector(".shop-topbar");
+const aboutTopbarMenu = document.querySelector(".shop-topbar__menu");
+const aboutTopbarNav = document.querySelector(".shop-topbar__nav");
 
 const aboutPanelTimings = [
     [0, 0.56],
@@ -38,6 +41,37 @@ function aboutSequenceProgress(progress, start, end) {
 
 function aboutEaseSmooth(progress) {
     return progress * progress * (3 - 2 * progress);
+}
+
+if (aboutTopbar && aboutTopbarMenu && aboutTopbarNav) {
+    const setAboutMenuOpen = (isOpen) => {
+        aboutTopbar.classList.toggle("is-menu-open", isOpen);
+        aboutTopbarMenu.setAttribute("aria-expanded", String(isOpen));
+        aboutTopbarMenu.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    };
+
+    aboutTopbarMenu.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setAboutMenuOpen(!aboutTopbar.classList.contains("is-menu-open"));
+    });
+
+    aboutTopbarNav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) setAboutMenuOpen(false);
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!aboutTopbar.classList.contains("is-menu-open")) return;
+        if (aboutTopbar.contains(event.target)) return;
+        setAboutMenuOpen(false);
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setAboutMenuOpen(false);
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) setAboutMenuOpen(false);
+    });
 }
 
 function triggerAboutHeroLightsOn() {
@@ -239,6 +273,7 @@ window.setTimeout(autoRevealAboutHeroLights, 350);
 
 const aboutHistory = document.querySelector("[data-about-history]");
 const aboutHistorySticky = document.querySelector(".about-history__sticky");
+const aboutHistoryImageFrame = document.querySelector(".about-history__image");
 const aboutHistoryImage = document.querySelector("[data-about-history-image]");
 const aboutHistoryYear = document.querySelector("[data-about-history-year]");
 const aboutHistoryTitle = document.querySelector("[data-about-history-title]");
@@ -291,6 +326,13 @@ const aboutHistorySlides = [
 let aboutHistoryIndex = 0;
 let aboutHistorySwitchTimer = null;
 let aboutHistoryEnterTimer = null;
+let aboutHistoryPointerStartX = 0;
+let aboutHistoryPointerStartY = 0;
+let aboutHistoryPointerId = null;
+
+function isAboutHistoryManualMode() {
+    return window.matchMedia("(max-width: 64em)").matches;
+}
 
 function renderAboutHistoryYear(year, animate = true) {
     if (!aboutHistoryYear) return;
@@ -398,9 +440,8 @@ function renderAboutHistorySlide(index, animate = true) {
 function updateAboutHistoryInteraction() {
     if (!aboutHistory || !aboutHistorySlides.length) return;
 
-    if (window.matchMedia("(max-width: 64em)").matches) {
+    if (isAboutHistoryManualMode()) {
         aboutHistory.classList.remove("is-pinned", "is-ended");
-        renderAboutHistorySlide(0, false);
         return;
     }
 
@@ -417,12 +458,84 @@ function updateAboutHistoryInteraction() {
     renderAboutHistorySlide(nextIndex);
 }
 
+function shiftAboutHistorySlide(direction) {
+    if (!isAboutHistoryManualMode()) return;
+
+    const nextIndex = aboutClamp(aboutHistoryIndex + direction, 0, aboutHistorySlides.length - 1);
+    aboutHistory?.style.setProperty("--about-history-image-exit-x", `${direction > 0 ? -36 : 36}px`);
+    aboutHistory?.style.setProperty("--about-history-image-enter-x", `${direction > 0 ? 36 : -36}px`);
+    renderAboutHistorySlide(nextIndex);
+}
+
+function initializeAboutHistoryMobileControls() {
+    if (!aboutHistoryImageFrame || !aboutHistoryDots.length) return;
+
+    aboutHistoryImageFrame.addEventListener("pointerdown", (event) => {
+        if (!isAboutHistoryManualMode()) return;
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+
+        aboutHistoryPointerId = event.pointerId;
+        aboutHistoryPointerStartX = event.clientX;
+        aboutHistoryPointerStartY = event.clientY;
+        aboutHistoryImageFrame.setPointerCapture?.(event.pointerId);
+        aboutHistoryImageFrame.classList.add("is-dragging");
+    });
+
+    aboutHistoryImageFrame.addEventListener("pointerup", (event) => {
+        if (aboutHistoryPointerId !== event.pointerId) return;
+
+        const deltaX = event.clientX - aboutHistoryPointerStartX;
+        const deltaY = event.clientY - aboutHistoryPointerStartY;
+        aboutHistoryPointerId = null;
+        aboutHistoryImageFrame.releasePointerCapture?.(event.pointerId);
+        aboutHistoryImageFrame.classList.remove("is-dragging");
+
+        if (!isAboutHistoryManualMode()) return;
+        if (Math.abs(deltaX) < 44 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+
+        shiftAboutHistorySlide(deltaX < 0 ? 1 : -1);
+    });
+
+    aboutHistoryImageFrame.addEventListener("pointercancel", (event) => {
+        if (aboutHistoryPointerId !== event.pointerId) return;
+
+        aboutHistoryPointerId = null;
+        aboutHistoryImageFrame.classList.remove("is-dragging");
+    });
+
+    aboutHistoryDots.forEach((dot, index) => {
+        dot.setAttribute("role", "button");
+        dot.setAttribute("tabindex", "0");
+
+        dot.addEventListener("click", () => {
+            if (!isAboutHistoryManualMode()) return;
+
+            const direction = index >= aboutHistoryIndex ? 1 : -1;
+            aboutHistory?.style.setProperty("--about-history-image-exit-x", `${direction > 0 ? -36 : 36}px`);
+            aboutHistory?.style.setProperty("--about-history-image-enter-x", `${direction > 0 ? 36 : -36}px`);
+            renderAboutHistorySlide(index);
+        });
+
+        dot.addEventListener("keydown", (event) => {
+            if (!isAboutHistoryManualMode()) return;
+            if (event.key !== "Enter" && event.key !== " ") return;
+
+            event.preventDefault();
+            const direction = index >= aboutHistoryIndex ? 1 : -1;
+            aboutHistory?.style.setProperty("--about-history-image-exit-x", `${direction > 0 ? -36 : 36}px`);
+            aboutHistory?.style.setProperty("--about-history-image-enter-x", `${direction > 0 ? 36 : -36}px`);
+            renderAboutHistorySlide(index);
+        });
+    });
+}
+
 aboutHistorySlides.forEach((slide) => {
     const image = new Image();
     image.src = slide.image;
 });
 
 renderAboutHistorySlide(0, false);
+initializeAboutHistoryMobileControls();
 window.addEventListener("scroll", updateAboutHistoryInteraction, { passive: true });
 window.addEventListener("resize", updateAboutHistoryInteraction);
 updateAboutHistoryInteraction();
