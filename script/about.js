@@ -15,14 +15,16 @@ const aboutTopbarNav = document.querySelector(".shop-topbar__nav");
 const aboutDesignStoryText = document.querySelector("[data-about-design-story-text]");
 
 const aboutPanelTimings = [
-    [0, 0.56],
-    [0.08, 0.66],
-    [0.24, 0.82],
-    [0.4, 0.96],
+    [0, 0.42],
+    [0.22, 0.64],
+    [0.44, 0.86],
+    [0.66, 1],
 ];
 
 let aboutTargetProgress = 0;
 let aboutRenderedProgress = 0;
+let aboutTargetExitProgress = 0;
+let aboutRenderedExitProgress = 0;
 let aboutAnimationFrame = null;
 let aboutHeroLightsAnimating = false;
 let aboutHeroLightsOn = false;
@@ -104,6 +106,8 @@ function triggerAboutHeroLightsOff() {
     aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", "1");
     aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", "0");
     aboutHeroDissolvePanels.forEach((panel) => panel.style.setProperty("--about-dissolve-panel-y", "0%"));
+    aboutTargetExitProgress = 0;
+    aboutRenderedExitProgress = 0;
     aboutHeroCopy?.style.setProperty("--about-content-y", "0%");
     aboutHeroCopy?.style.setProperty("--about-hero-copy-opacity", "0");
     aboutHeroTextFlow?.style.setProperty("--about-hero-text-opacity", "0");
@@ -122,7 +126,7 @@ function renderAboutHeroPanels(progress) {
     const copyProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.02, viewportHeight * 0.38));
     const dissolveProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.12, viewportHeight * 0.42));
     const textOpacity = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 0.42));
-    const textProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 1.65));
+    const textProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 2.5));
 
     aboutHeroDissolveOn = dissolveProgress > 0.01 || textOpacity > 0.01;
     aboutHeroCopy?.style.setProperty("--about-content-y", `${-copyProgress * 100}%`);
@@ -139,8 +143,14 @@ function renderAboutHeroPanels(progress) {
     }
 
     const storyTextBottom = aboutDesignStoryText?.getBoundingClientRect().bottom ?? viewportHeight;
-    const exitProgress = aboutClamp((viewportHeight * 0.55 - storyTextBottom) / viewportHeight, 0, 1);
-    aboutHeroMediaGrid?.style.setProperty("--about-hero-media-opacity", exitProgress > 0 ? "0" : "1");
+    aboutTargetExitProgress = aboutClamp((viewportHeight * 0.55 - storyTextBottom) / (viewportHeight * 1.8), 0, 1);
+    aboutRenderedExitProgress += (aboutTargetExitProgress - aboutRenderedExitProgress) * 0.075;
+    if (Math.abs(aboutTargetExitProgress - aboutRenderedExitProgress) < 0.0005) {
+        aboutRenderedExitProgress = aboutTargetExitProgress;
+    }
+
+    const exitProgress = aboutRenderedExitProgress;
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-media-opacity", aboutTargetExitProgress > 0 ? "0" : "1");
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));
@@ -172,6 +182,8 @@ function updateAboutHeroTransition() {
         aboutHeroDissolvePanels.forEach((panel) => panel.style.removeProperty("--about-dissolve-panel-y"));
         aboutHeroTextFlow?.style.removeProperty("--about-hero-text-opacity");
         if (aboutHeroTextFlowInner) aboutHeroTextFlowInner.style.removeProperty("transform");
+        aboutTargetExitProgress = 0;
+        aboutRenderedExitProgress = 0;
         return;
     }
 
@@ -187,7 +199,7 @@ function updateAboutHeroTransition() {
 
         renderAboutHeroPanels(aboutRenderedProgress);
 
-        if (aboutRenderedProgress !== aboutTargetProgress) {
+        if (aboutRenderedProgress !== aboutTargetProgress || aboutRenderedExitProgress !== aboutTargetExitProgress) {
             aboutAnimationFrame = requestAnimationFrame(renderTransition);
         } else {
             aboutAnimationFrame = null;

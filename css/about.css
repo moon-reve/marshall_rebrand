@@ -16,7 +16,7 @@
 
 .about-hero {
     position: relative;
-    height: 200vh;
+    height: 240vh;
     background: #d9c5a9;
 }
 
@@ -243,7 +243,7 @@
 }
 
 .about-hero__copy-track {
-    --design-feature-story-offset: 90vh;
+    --design-feature-story-offset: 120vh;
     position: absolute;
     top: 118vh;
     left: 4.6875vw;
