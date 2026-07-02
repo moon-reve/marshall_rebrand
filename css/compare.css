@@ -992,7 +992,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: rgba(255, 234, 198, 0.2);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   :root {
     --shop-topbar-height: 56px;
   }
@@ -1635,7 +1635,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   :root {
     --shop-topbar-height: calc(58px + env(safe-area-inset-top, 0px));
   }
@@ -1786,5 +1786,435 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
   .shop-topbar__nav a::before {
     display: none;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .shop-topbar {
+    --shop-content-margin: 5.2vw;
+  }
+
+  .shop-topbar__main {
+    height: clamp(52px, 6.25vw, 64px);
+    padding: 0 var(--shop-content-margin);
+  }
+
+  .shop-topbar__brand {
+    min-width: 120px;
+    font-size: clamp(34px, 4.2vw, 42px);
+  }
+
+  .shop-topbar__nav {
+    width: auto;
+    min-width: 0;
+    font-size: clamp(12px, 1.3vw, 14px);
+  }
+
+  .shop-topbar__nav ul {
+    gap: clamp(20px, 2.4vw, 28px);
+  }
+
+  .shop-topbar__actions {
+    gap: 18px;
+    margin-left: 28px;
+  }
+
+  .shop-topbar__action {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .shop-topbar__action img {
+    width: 18px;
+    height: 18px;
+  }
+
+  html,
+  body,
+  .page {
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  .inner {
+    width: calc(100% - 64px);
+  }
+
+  .hero-stage {
+    height: 135svh;
+  }
+
+  .hero {
+    height: 100svh;
+    min-height: 760px;
+  }
+
+  .hero-grid {
+    grid-template-columns: repeat(4, 25vw);
+  }
+
+  .hero-panel::before,
+  .hero-panel::after {
+    width: 100vw;
+  }
+
+  .hero-content {
+    width: min(72vw, 680px);
+    height: 100%;
+    padding: 0 32px;
+    gap: 5.56vh;
+  }
+
+  .hero-title {
+    font-size: clamp(60px, 8.8vw, 92px);
+    line-height: 0.92;
+    white-space: normal;
+  }
+
+  .hero-desc {
+    max-width: min(76vw, 680px);
+    font-size: clamp(14px, 1.7vw, 17px);
+    line-height: 1.6;
+    letter-spacing: 0;
+    word-break: keep-all;
+  }
+
+  .quiz-section {
+    --step-card-scale: 1;
+    height: auto;
+    min-height: 100svh;
+    margin-top: -35svh;
+    overflow: clip;
+  }
+
+  .quiz-inner {
+    width: calc(100% - 64px);
+    min-height: 100svh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 96px 0 88px;
+  }
+
+  .quiz-left {
+    width: 100%;
+    align-self: auto;
+    justify-content: flex-start;
+  }
+
+  .quiz-compare-title {
+    margin-bottom: 5.56vh;
+    font-size: clamp(60px, 8.8vw, 92px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+
+  .quiz-compare-desc {
+    max-width: min(76vw, 680px);
+    font-size: clamp(14px, 1.7vw, 17px);
+    line-height: 1.6;
+    letter-spacing: 0;
+    word-break: keep-all;
+  }
+
+  .quiz-divider {
+    width: 100%;
+    height: 1px;
+    align-self: auto;
+    margin: 48px 0;
+  }
+
+  .quiz-right {
+    width: 100%;
+    height: auto;
+    align-self: auto;
+    justify-content: flex-start;
+    padding-left: 0;
+  }
+
+  .step-header {
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  .step-num {
+    font-size: clamp(14px, 1.7vw, 17px);
+    letter-spacing: 0;
+  }
+
+  .step-question {
+    font-size: clamp(24px, 3.2vw, 32px);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    white-space: normal;
+  }
+
+  .step-nav {
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .step-nav-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 28px;
+  }
+
+  .step-nav-text {
+    font-size: 12px;
+    letter-spacing: 0.24em;
+  }
+
+  .step-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .step-card {
+    width: 100%;
+    height: clamp(176px, 23vw, 220px);
+    border-radius: 8px;
+  }
+
+  .step-card-svg {
+    top: 53%;
+    left: 70% !important;
+    width: 78%;
+  }
+
+  .step-card-num {
+    top: 14px;
+    left: 16px;
+    font-size: clamp(34px, 5vw, 48px);
+    letter-spacing: 0;
+  }
+
+  .step-card-label {
+    bottom: 16px;
+    left: 16px;
+    max-width: calc(100% - 32px);
+    font-size: clamp(15px, 1.9vw, 18px);
+    line-height: 1.35;
+    letter-spacing: 0;
+    white-space: normal;
+  }
+
+  .product-result.is-visible {
+    display: block;
+    min-height: 0;
+  }
+
+  .product-grid {
+    width: calc(100% - 64px);
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    padding: 40px 0 56px;
+  }
+
+  .product-result.is-visible .product-grid[style*="display: flex"] {
+    display: grid !important;
+  }
+
+  .product-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 28px 24px 32px;
+    border-left: 1px solid #ede8e0;
+  }
+
+  .card-top {
+    height: 44px;
+  }
+
+  .badge-bestseller {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+
+  .btn-wishlist {
+    width: 44px;
+    height: 44px;
+  }
+
+  .btn-wishlist svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .card-image {
+    height: clamp(220px, 30vw, 300px);
+    overflow: visible;
+  }
+
+  .card-image img,
+  .product-card--acton .img-crop img,
+  .product-card--stanmore .img-crop img,
+  .product-card--heston-sub .img-crop img,
+  .product-card--heston120 .img-crop img,
+  .product-card--willen .card-image img,
+  .product-card--stockwell .card-image img,
+  .product-card--emberton .card-image img,
+  .product-card--kilburn .card-image img,
+  .product-card--minor .card-image img,
+  .product-card--mode .card-image img {
+    position: static;
+    width: min(76%, 280px);
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    transform: none;
+    object-fit: contain;
+  }
+
+  .product-card--acton .img-crop,
+  .product-card--stanmore .img-crop,
+  .product-card--heston-sub .img-crop,
+  .product-card--heston120 .img-crop {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: none;
+  }
+
+  .product-card--heston120 .img-crop img {
+    width: min(92%, 340px);
+  }
+
+  .product-card--willen .card-image img {
+    width: min(44%, 170px);
+  }
+
+  .product-card--stockwell .card-image img {
+    width: min(54%, 190px);
+  }
+
+  .product-card--emberton .card-image img,
+  .product-card--kilburn .card-image img {
+    width: min(72%, 250px);
+  }
+
+  .card-name-price {
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-bottom: 10px;
+  }
+
+  .product-name {
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.02em;
+  }
+
+  .product-price {
+    font-size: clamp(14px, 1.7vw, 17px);
+    letter-spacing: 0;
+  }
+
+  .product-desc {
+    margin-bottom: 28px;
+    font-size: clamp(14px, 1.7vw, 17px);
+    line-height: 1.55;
+    letter-spacing: 0;
+    word-break: keep-all;
+  }
+
+  .product-swatches {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .swatch {
+    width: 24px;
+    height: 24px;
+  }
+
+  .spec-row {
+    min-height: 46px;
+    gap: 14px;
+    padding: 8px 0;
+  }
+
+  .spec-label,
+  .spec-value {
+    font-size: clamp(12px, 1.45vw, 14px);
+    letter-spacing: 0;
+  }
+
+  .spec-label {
+    min-width: 92px;
+  }
+
+  .detail-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 44px;
+    margin-top: 16px;
+    font-size: clamp(13px, 1.55vw, 15px);
+    letter-spacing: 0;
+  }
+
+  .page .site-footer .footer-inner {
+    width: 100%;
+    gap: 44px;
+    padding: 60px 6.25vw 48px;
+  }
+
+  .page .site-footer .footer-brand {
+    width: 32%;
+  }
+
+  .page .site-footer .footer-nav {
+    width: 68%;
+    padding: 0;
+    gap: 22px;
+  }
+
+  .page .site-footer .footer-logo {
+    margin-bottom: 24px;
+    font-size: clamp(56px, 7vw, 72px);
+  }
+
+  .page .site-footer .footer-tagline,
+  .page .site-footer .footer-col ul li,
+  .page .site-footer .footer-col ul li a {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .page .site-footer .footer-tagline {
+    word-break: keep-all;
+    line-break: strict;
+  }
+
+  .page .site-footer .footer-col-title {
+    margin-bottom: 18px;
+    font-size: 11px;
+  }
+
+  .page .site-footer .footer-col ul {
+    gap: 10px;
+  }
+
+  .page .site-footer .footer-bottom {
+    padding: 18px 6.25vw 24px;
+  }
+
+  .page .site-footer .footer-copy,
+  .page .site-footer .footer-legal-text,
+  .page .site-footer .footer-divider {
+    font-size: 11px;
   }
 }
