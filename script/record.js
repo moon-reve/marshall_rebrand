@@ -241,6 +241,7 @@
 
 (() => {
     const hero = document.querySelector(".record-hero");
+    const artistCatalog = document.querySelector(".artist-catalog");
 
     if (!hero) {
         return;
@@ -373,9 +374,9 @@
 
     const renderFrame = () => {
         const distance = targetProgress - renderedProgress;
-        renderedProgress += distance * 0.025;
+        renderedProgress += distance * 0.065;
 
-        if (Math.abs(distance) < 0.00001) {
+        if (Math.abs(distance) < 0.0001) {
             renderedProgress = targetProgress;
         }
 
@@ -425,6 +426,12 @@
         const rect = hero.getBoundingClientRect();
         const isHeroActive = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
         const wheelDelta = getWheelDelta(event);
+
+        if (wheelDelta > 0 && shouldSkipToArtist()) {
+            event.preventDefault();
+            skipToArtist();
+            return;
+        }
 
         const nextProgress = wheelDelta > 0 ? 1 : 0;
         const shouldHoldHero =

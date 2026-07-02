@@ -1916,7 +1916,7 @@ a {
 
 .signature-sound__title {
     position: absolute;
-    top: 28.7vh;
+    top: 56vh;
     left: 50%;
     margin: 0;
     color: #ddc7a8;
@@ -1927,6 +1927,23 @@ a {
     line-height: 0.9;
     letter-spacing: -0.052em;
     white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.signature-sound__copy {
+    position: absolute;
+    top: calc(56vh + (7.8125vw * 0.9) + 5.56vh);
+    left: 50%;
+    width: min(72vw, 960px);
+    margin: 0;
+    color: rgba(221, 199, 168, 0.82);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+    font-size: clamp(14px, 0.94vw, 18px);
+    font-weight: 300;
+    line-height: 1.72;
+    letter-spacing: -0.01em;
+    text-align: center;
+    word-break: keep-all;
     transform: translateX(-50%);
 }
 
@@ -2760,6 +2777,17 @@ a {
         font-size: 11vw;
     }
 
+    .signature-sound__copy {
+        top: calc(56vh + (11vw * 0.9) + 5.56vh);
+        width: min(86vw, 620px);
+        font-size: 2.4vw;
+        line-height: 1.75;
+    }
+
+    .signature-sound__copy br {
+        display: none;
+    }
+
     .headphone-detail__copy-en {
         font-size: 3.5vw;
     }
@@ -2888,10 +2916,11 @@ a {
 
     .shop-topbar__nav ul {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: flex-end;
         justify-content: flex-start;
         gap: 22px;
         overflow: visible;
+        text-align: right;
     }
 
     .shop-topbar__nav a {

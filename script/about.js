@@ -9,16 +9,22 @@ const aboutHeroTextFlow = document.querySelector(".about-hero__text-flow");
 const aboutHeroTextFlowInner = document.querySelector(".about-hero__text-flow-inner");
 const aboutHeroCopyTrack = document.querySelector(".about-hero__copy-track");
 const aboutHistoryStage = document.querySelector("[data-about-history]");
+const aboutTopbar = document.querySelector(".shop-topbar");
+const aboutTopbarMenu = document.querySelector(".shop-topbar__menu");
+const aboutTopbarNav = document.querySelector(".shop-topbar__nav");
+const aboutDesignStoryText = document.querySelector("[data-about-design-story-text]");
 
 const aboutPanelTimings = [
-    [0, 0.56],
-    [0.08, 0.66],
-    [0.24, 0.82],
-    [0.4, 0.96],
+    [0, 0.42],
+    [0.22, 0.64],
+    [0.44, 0.86],
+    [0.66, 1],
 ];
 
 let aboutTargetProgress = 0;
 let aboutRenderedProgress = 0;
+let aboutTargetExitProgress = 0;
+let aboutRenderedExitProgress = 0;
 let aboutAnimationFrame = null;
 let aboutHeroLightsAnimating = false;
 let aboutHeroLightsOn = false;
@@ -38,6 +44,37 @@ function aboutSequenceProgress(progress, start, end) {
 
 function aboutEaseSmooth(progress) {
     return progress * progress * (3 - 2 * progress);
+}
+
+if (aboutTopbar && aboutTopbarMenu && aboutTopbarNav) {
+    const setAboutMenuOpen = (isOpen) => {
+        aboutTopbar.classList.toggle("is-menu-open", isOpen);
+        aboutTopbarMenu.setAttribute("aria-expanded", String(isOpen));
+        aboutTopbarMenu.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    };
+
+    aboutTopbarMenu.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setAboutMenuOpen(!aboutTopbar.classList.contains("is-menu-open"));
+    });
+
+    aboutTopbarNav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) setAboutMenuOpen(false);
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!aboutTopbar.classList.contains("is-menu-open")) return;
+        if (aboutTopbar.contains(event.target)) return;
+        setAboutMenuOpen(false);
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setAboutMenuOpen(false);
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) setAboutMenuOpen(false);
+    });
 }
 
 function triggerAboutHeroLightsOn() {
@@ -69,6 +106,8 @@ function triggerAboutHeroLightsOff() {
     aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", "1");
     aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", "0");
     aboutHeroDissolvePanels.forEach((panel) => panel.style.setProperty("--about-dissolve-panel-y", "0%"));
+    aboutTargetExitProgress = 0;
+    aboutRenderedExitProgress = 0;
     aboutHeroCopy?.style.setProperty("--about-content-y", "0%");
     aboutHeroCopy?.style.setProperty("--about-hero-copy-opacity", "0");
     aboutHeroTextFlow?.style.setProperty("--about-hero-text-opacity", "0");
@@ -87,7 +126,7 @@ function renderAboutHeroPanels(progress) {
     const copyProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.02, viewportHeight * 0.38));
     const dissolveProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.12, viewportHeight * 0.42));
     const textOpacity = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 0.42));
-    const textProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 1.65));
+    const textProgress = aboutEaseSmooth(aboutSequenceProgress(heroScroll, viewportHeight * 0.28, viewportHeight * 2.5));
 
     aboutHeroDissolveOn = dissolveProgress > 0.01 || textOpacity > 0.01;
     aboutHeroCopy?.style.setProperty("--about-content-y", `${-copyProgress * 100}%`);
@@ -103,10 +142,15 @@ function renderAboutHeroPanels(progress) {
         aboutHeroTextFlowInner.style.transform = `translate3d(0, ${textOffset}px, 0)`;
     }
 
-    const historyRect = aboutHistoryStage?.getBoundingClientRect();
-    const exitProgress = historyRect
-        ? aboutClamp((viewportHeight - historyRect.top) / viewportHeight, 0, 1)
-        : aboutClamp((heroScroll - viewportHeight * 0.55) / viewportHeight, 0, 1);
+    const storyTextBottom = aboutDesignStoryText?.getBoundingClientRect().bottom ?? viewportHeight;
+    aboutTargetExitProgress = aboutClamp((viewportHeight * 0.55 - storyTextBottom) / (viewportHeight * 1.8), 0, 1);
+    aboutRenderedExitProgress += (aboutTargetExitProgress - aboutRenderedExitProgress) * 0.075;
+    if (Math.abs(aboutTargetExitProgress - aboutRenderedExitProgress) < 0.0005) {
+        aboutRenderedExitProgress = aboutTargetExitProgress;
+    }
+
+    const exitProgress = aboutRenderedExitProgress;
+    aboutHeroMediaGrid?.style.setProperty("--about-hero-media-opacity", aboutTargetExitProgress > 0 ? "0" : "1");
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));
@@ -132,11 +176,14 @@ function updateAboutHeroTransition() {
         aboutAnimationFrame = null;
         aboutHeroPanels.forEach((panel) => panel.style.removeProperty("--about-panel-y"));
         aboutHeroCopy?.style.removeProperty("--about-content-y");
+        aboutHeroMediaGrid?.style.removeProperty("--about-hero-media-opacity");
         aboutHeroMediaGrid?.style.removeProperty("--about-hero-dark-opacity");
         aboutHeroDissolveGrid?.style.removeProperty("--about-hero-dissolve-opacity");
         aboutHeroDissolvePanels.forEach((panel) => panel.style.removeProperty("--about-dissolve-panel-y"));
         aboutHeroTextFlow?.style.removeProperty("--about-hero-text-opacity");
         if (aboutHeroTextFlowInner) aboutHeroTextFlowInner.style.removeProperty("transform");
+        aboutTargetExitProgress = 0;
+        aboutRenderedExitProgress = 0;
         return;
     }
 
@@ -152,7 +199,7 @@ function updateAboutHeroTransition() {
 
         renderAboutHeroPanels(aboutRenderedProgress);
 
-        if (aboutRenderedProgress !== aboutTargetProgress) {
+        if (aboutRenderedProgress !== aboutTargetProgress || aboutRenderedExitProgress !== aboutTargetExitProgress) {
             aboutAnimationFrame = requestAnimationFrame(renderTransition);
         } else {
             aboutAnimationFrame = null;
@@ -239,6 +286,7 @@ window.setTimeout(autoRevealAboutHeroLights, 350);
 
 const aboutHistory = document.querySelector("[data-about-history]");
 const aboutHistorySticky = document.querySelector(".about-history__sticky");
+const aboutHistoryImageFrame = document.querySelector(".about-history__image");
 const aboutHistoryImage = document.querySelector("[data-about-history-image]");
 const aboutHistoryYear = document.querySelector("[data-about-history-year]");
 const aboutHistoryTitle = document.querySelector("[data-about-history-title]");
@@ -291,6 +339,14 @@ const aboutHistorySlides = [
 let aboutHistoryIndex = 0;
 let aboutHistorySwitchTimer = null;
 let aboutHistoryEnterTimer = null;
+let aboutHistoryPointerStartX = 0;
+let aboutHistoryPointerStartY = 0;
+let aboutHistoryPointerId = null;
+const aboutHistoryIndexBuffer = 0.035;
+
+function isAboutHistoryManualMode() {
+    return window.matchMedia("(max-width: 64em)").matches;
+}
 
 function renderAboutHistoryYear(year, animate = true) {
     if (!aboutHistoryYear) return;
@@ -398,9 +454,8 @@ function renderAboutHistorySlide(index, animate = true) {
 function updateAboutHistoryInteraction() {
     if (!aboutHistory || !aboutHistorySlides.length) return;
 
-    if (window.matchMedia("(max-width: 64em)").matches) {
+    if (isAboutHistoryManualMode()) {
         aboutHistory.classList.remove("is-pinned", "is-ended");
-        renderAboutHistorySlide(0, false);
         return;
     }
 
@@ -408,7 +463,15 @@ function updateAboutHistoryInteraction() {
     const pinHeight = aboutHistorySticky?.offsetHeight || window.innerHeight;
     const scrollDistance = Math.max(aboutHistory.offsetHeight - pinHeight, 1);
     const progress = aboutClamp(-rect.top / scrollDistance, 0, 1);
-    const nextIndex = Math.min(aboutHistorySlides.length - 1, Math.floor(progress * aboutHistorySlides.length));
+    const segmentProgress = 1 / aboutHistorySlides.length;
+    let nextIndex = aboutHistoryIndex;
+    if (progress >= 1) {
+        nextIndex = aboutHistorySlides.length - 1;
+    } else if (progress >= (aboutHistoryIndex + 1) * segmentProgress + aboutHistoryIndexBuffer) {
+        nextIndex = Math.min(aboutHistoryIndex + 1, aboutHistorySlides.length - 1);
+    } else if (progress < aboutHistoryIndex * segmentProgress - aboutHistoryIndexBuffer) {
+        nextIndex = Math.max(aboutHistoryIndex - 1, 0);
+    }
     const isPinned = rect.top <= 0 && rect.bottom >= pinHeight;
     const isEnded = rect.bottom < pinHeight;
 
@@ -417,12 +480,84 @@ function updateAboutHistoryInteraction() {
     renderAboutHistorySlide(nextIndex);
 }
 
+function shiftAboutHistorySlide(direction) {
+    if (!isAboutHistoryManualMode()) return;
+
+    const nextIndex = aboutClamp(aboutHistoryIndex + direction, 0, aboutHistorySlides.length - 1);
+    aboutHistory?.style.setProperty("--about-history-image-exit-x", `${direction > 0 ? -36 : 36}px`);
+    aboutHistory?.style.setProperty("--about-history-image-enter-x", `${direction > 0 ? 36 : -36}px`);
+    renderAboutHistorySlide(nextIndex);
+}
+
+function initializeAboutHistoryMobileControls() {
+    if (!aboutHistoryImageFrame || !aboutHistoryDots.length) return;
+
+    aboutHistoryImageFrame.addEventListener("pointerdown", (event) => {
+        if (!isAboutHistoryManualMode()) return;
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+
+        aboutHistoryPointerId = event.pointerId;
+        aboutHistoryPointerStartX = event.clientX;
+        aboutHistoryPointerStartY = event.clientY;
+        aboutHistoryImageFrame.setPointerCapture?.(event.pointerId);
+        aboutHistoryImageFrame.classList.add("is-dragging");
+    });
+
+    aboutHistoryImageFrame.addEventListener("pointerup", (event) => {
+        if (aboutHistoryPointerId !== event.pointerId) return;
+
+        const deltaX = event.clientX - aboutHistoryPointerStartX;
+        const deltaY = event.clientY - aboutHistoryPointerStartY;
+        aboutHistoryPointerId = null;
+        aboutHistoryImageFrame.releasePointerCapture?.(event.pointerId);
+        aboutHistoryImageFrame.classList.remove("is-dragging");
+
+        if (!isAboutHistoryManualMode()) return;
+        if (Math.abs(deltaX) < 44 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+
+        shiftAboutHistorySlide(deltaX < 0 ? 1 : -1);
+    });
+
+    aboutHistoryImageFrame.addEventListener("pointercancel", (event) => {
+        if (aboutHistoryPointerId !== event.pointerId) return;
+
+        aboutHistoryPointerId = null;
+        aboutHistoryImageFrame.classList.remove("is-dragging");
+    });
+
+    aboutHistoryDots.forEach((dot, index) => {
+        dot.setAttribute("role", "button");
+        dot.setAttribute("tabindex", "0");
+
+        dot.addEventListener("click", () => {
+            if (!isAboutHistoryManualMode()) return;
+
+            const direction = index >= aboutHistoryIndex ? 1 : -1;
+            aboutHistory?.style.setProperty("--about-history-image-exit-x", `${direction > 0 ? -36 : 36}px`);
+            aboutHistory?.style.setProperty("--about-history-image-enter-x", `${direction > 0 ? 36 : -36}px`);
+            renderAboutHistorySlide(index);
+        });
+
+        dot.addEventListener("keydown", (event) => {
+            if (!isAboutHistoryManualMode()) return;
+            if (event.key !== "Enter" && event.key !== " ") return;
+
+            event.preventDefault();
+            const direction = index >= aboutHistoryIndex ? 1 : -1;
+            aboutHistory?.style.setProperty("--about-history-image-exit-x", `${direction > 0 ? -36 : 36}px`);
+            aboutHistory?.style.setProperty("--about-history-image-enter-x", `${direction > 0 ? 36 : -36}px`);
+            renderAboutHistorySlide(index);
+        });
+    });
+}
+
 aboutHistorySlides.forEach((slide) => {
     const image = new Image();
     image.src = slide.image;
 });
 
 renderAboutHistorySlide(0, false);
+initializeAboutHistoryMobileControls();
 window.addEventListener("scroll", updateAboutHistoryInteraction, { passive: true });
 window.addEventListener("resize", updateAboutHistoryInteraction);
 updateAboutHistoryInteraction();
