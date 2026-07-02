@@ -404,14 +404,17 @@
 
 .about-history__content {
     grid-area: content;
-    align-self: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: grid;
-    grid-template-columns: 31.25vw 4.6875vw max-content 4.6875vw 1fr;
+    grid-template-columns: 25vw 4.6875vw max-content 4.6875vw max-content;
     grid-template-areas: "image . nav . text";
     align-items: center;
     box-sizing: border-box;
-    width: 100%;
+    width: fit-content;
     padding: 1.5625vw 4.6875vw;
+    transform: translate(-50%, -50%);
 }
 
 .about-history__intro,
@@ -482,7 +485,7 @@
 }
 
 .about-history__nav li {
-    width: clamp(4px, 0.3125vw, 6px);
+    width: clamp(3.2px, 0.25vw, 4.8px);
     height: auto;
     flex: 1 1 0;
     border-radius: 0;
@@ -507,8 +510,8 @@
     grid-area: image;
     align-self: center;
     justify-self: start;
-    width: 31.25vw;
-    height: 22.6953vw;
+    width: 25vw;
+    height: 18.1562vw;
     margin: 0;
     overflow: hidden;
 }
@@ -516,7 +519,9 @@
 .about-history__text {
     grid-area: text;
     align-self: center;
-    width: 100%;
+    justify-self: start;
+    width: fit-content;
+    max-width: 100%;
     margin: 0;
 }
 
@@ -659,6 +664,7 @@
     margin-right: auto;
     margin-left: auto;
     display: grid;
+    justify-content: center;
     grid-template-columns:
         clamp(260px, 17.7vw, 340px)
         clamp(280px, 18.2vw, 350px)
@@ -803,7 +809,7 @@
     }
 
     .about-history__image {
-        width: min(100%, 620px);
+        width: min(80%, 496px);
     }
 
     .about-history {
@@ -822,6 +828,8 @@
 
     .about-history__content {
         display: block;
+        width: auto;
+        transform: none;
     }
 
     .about-history__intro,
@@ -850,8 +858,8 @@
     }
 
     .about-history__nav li {
-        width: 6px;
-        height: 56px;
+        width: 4.8px;
+        height: 44.8px;
     }
 
     .about-history__text {
