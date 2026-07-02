@@ -1282,7 +1282,7 @@
     }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 767px) {
     .support-page {
         --shop-topbar-height: 56px;
         overflow-x: clip;
@@ -1925,7 +1925,7 @@
     }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 767px) {
     .support-page {
         --shop-topbar-height: calc(58px + env(safe-area-inset-top, 0px));
     }
@@ -2094,7 +2094,359 @@
     }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 1024px) and (min-width: 768px) {
+    .support-page {
+        overflow-x: clip;
+    }
+
+    .support-hero {
+        height: 100svh;
+        min-height: 760px;
+    }
+
+    .support-hero__content {
+        align-items: center;
+        padding-right: 32px;
+        padding-left: 32px;
+    }
+
+    .support-hero__copy {
+        max-width: min(76vw, 680px);
+    }
+
+    .support-hero__title {
+        margin-bottom: 5.56vh;
+        font-size: clamp(60px, 8.8vw, 92px);
+        line-height: 0.92;
+        white-space: normal;
+    }
+
+    .support-hero__description {
+        width: auto;
+        max-width: min(76vw, 680px);
+        margin-bottom: 32px;
+        font-size: clamp(14px, 1.7vw, 17px);
+        line-height: 1.6;
+        letter-spacing: 0;
+    }
+
+    .support-hero__search {
+        width: min(58vw, 520px);
+        min-width: 0;
+        height: 52px;
+        gap: 12px;
+        padding: 0 12px 0 18px;
+    }
+
+    .support-hero__search-input {
+        font-size: clamp(14px, 1.7vw, 16px);
+    }
+
+    .support-hero__search-button {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .support-hero__search-button img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .support-actions {
+        grid-template-rows: auto 1fr;
+        min-height: 100svh;
+        height: auto;
+        padding: 88px 32px 96px;
+        overflow: clip;
+    }
+
+    .support-actions__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        width: min(100%, 760px);
+    }
+
+    .support-card {
+        width: 100%;
+        height: clamp(168px, 21vw, 210px);
+        min-height: 168px;
+        padding: 22px 20px;
+        border-radius: 8px;
+    }
+
+    .support-card::before {
+        top: 18px;
+        left: 20px;
+        font-size: clamp(28px, 4vw, 42px);
+    }
+
+    .support-card__icon {
+        right: -8px;
+        bottom: 40px;
+        width: clamp(82px, 11vw, 112px);
+        height: clamp(82px, 11vw, 112px);
+    }
+
+    .support-card__label {
+        font-size: clamp(15px, 1.9vw, 18px);
+        line-height: 1.35;
+        text-align: left;
+        white-space: normal;
+    }
+
+    .support-editorial__top {
+        grid-template-columns: 1fr;
+        min-height: 0;
+    }
+
+    .support-editorial__top::before {
+        display: none;
+    }
+
+    .support-faq--editorial,
+    .support-service--editorial {
+        padding: 72px 32px;
+    }
+
+    .support-section-kicker {
+        margin-bottom: 16px;
+        font-size: 12px;
+    }
+
+    .support-editorial__title {
+        font-size: clamp(42px, 6vw, 60px);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+    }
+
+    .faq-list--editorial {
+        margin-top: 34px;
+    }
+
+    .faq-list--editorial .faq-list__button {
+        grid-template-columns: 46px minmax(0, 1fr) 32px;
+        min-height: 64px;
+        padding-right: 12px;
+        padding-left: 12px;
+        font-size: clamp(14px, 1.7vw, 17px);
+        line-height: 1.45;
+    }
+
+    .faq-list__number {
+        font-size: 11px;
+    }
+
+    .faq-list--editorial .faq-list__plus {
+        font-size: 16px;
+    }
+
+    .service-table {
+        margin-top: 34px;
+    }
+
+    .service-row {
+        grid-template-columns: 120px minmax(0, 1fr);
+        min-height: 72px;
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .service-row .service-block__title {
+        font-size: clamp(13px, 1.55vw, 15px);
+    }
+
+    .service-row .service-block__primary {
+        font-size: clamp(14px, 1.7vw, 17px);
+        line-height: 1.45;
+    }
+
+    .support-guide--editorial {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100svh;
+        padding: 88px 32px 96px;
+    }
+
+    .support-guide__heading {
+        justify-items: start;
+    }
+
+    .support-guide__copy {
+        max-width: min(76vw, 680px);
+        margin-top: 5.56vh;
+        font-size: clamp(14px, 1.7vw, 17px);
+        line-height: 1.6;
+    }
+
+    .guide-flow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        height: auto;
+        gap: 18px;
+    }
+
+    .guide-flow__item {
+        grid-template-rows: 68px minmax(0, 1fr) 44px;
+        min-height: 260px;
+        gap: 16px;
+        padding: 24px;
+    }
+
+    .guide-flow__icon-wrap {
+        width: 60px;
+        height: 60px;
+    }
+
+    .guide-flow__icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .guide-flow__item strong {
+        font-size: clamp(20px, 2.6vw, 26px);
+    }
+
+    .guide-flow__item small {
+        font-size: clamp(13px, 1.55vw, 15px);
+        line-height: 1.55;
+        white-space: normal;
+    }
+
+    .guide-flow__arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .support-help-cta {
+        height: auto;
+        min-height: 100svh;
+        gap: 34px;
+        padding: 96px 32px;
+    }
+
+    .support-help-cta h2 {
+        margin-bottom: 5.56vh;
+        font-size: clamp(60px, 8.8vw, 92px);
+        line-height: 0.92;
+        white-space: normal;
+    }
+
+    .support-help-cta p {
+        max-width: min(76vw, 680px);
+        margin-right: auto;
+        margin-left: auto;
+        font-size: clamp(14px, 1.7vw, 17px);
+        line-height: 1.6;
+        word-break: keep-all;
+        transform: none;
+    }
+
+    .support-help-cta__copy,
+    .support-help-cta__contact {
+        width: min(76vw, 680px);
+    }
+
+    .support-help-cta__button {
+        min-height: 44px;
+        padding-right: 28px;
+        padding-left: 28px;
+    }
+
+    .support-page .shop-topbar {
+        --shop-content-margin: 5.2vw;
+    }
+
+    .support-page .shop-topbar__main {
+        height: clamp(52px, 6.25vw, 64px);
+        padding: 0 var(--shop-content-margin);
+    }
+
+    .support-page .shop-topbar__brand {
+        min-width: 120px;
+        font-size: clamp(34px, 4.2vw, 42px);
+    }
+
+    .support-page .shop-topbar__nav {
+        width: auto;
+        min-width: 0;
+        font-size: clamp(12px, 1.3vw, 14px);
+    }
+
+    .support-page .shop-topbar__nav ul {
+        gap: clamp(20px, 2.4vw, 28px);
+    }
+
+    .support-page .shop-topbar__actions {
+        gap: 18px;
+        margin-left: 28px;
+    }
+
+    .support-page .shop-topbar__action {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+
+    .support-page .shop-topbar__action img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .support-page .footer-inner {
+        width: 100%;
+        gap: 44px;
+        padding: 60px 6.25vw 48px;
+    }
+
+    .support-page .footer-brand {
+        width: 32%;
+    }
+
+    .support-page .footer-nav {
+        width: 68%;
+        padding: 0;
+        gap: 22px;
+    }
+
+    .support-page .footer-logo {
+        margin-bottom: 24px;
+        font-size: clamp(56px, 7vw, 72px);
+    }
+
+    .support-page .footer-tagline,
+    .support-page .footer-col ul li {
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+    .support-page .footer-tagline {
+        word-break: keep-all;
+        line-break: strict;
+    }
+
+    .support-page .site-footer .footer-col-title {
+        margin-bottom: 18px;
+        font-size: 11px;
+    }
+
+    .support-page .footer-col ul {
+        gap: 10px;
+    }
+
+    .support-page .footer-bottom {
+        padding: 18px 6.25vw 24px;
+    }
+
+    .support-page .footer-copy,
+    .support-page .footer-legal-text,
+    .support-page .footer-divider {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 767px) {
     .support-faq--editorial,
     .support-service--editorial,
     .support-guide--editorial {
