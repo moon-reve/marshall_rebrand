@@ -28,12 +28,18 @@ const designSound = document.querySelector(".design-feature--sound");
 const designSoundSticky = document.querySelector(".design-feature__sound-sticky");
 const designTextFlowInner = document.querySelector(".design-feature__text-flow-inner");
 const designTitleBox = document.querySelector(".design-feature__title-box");
+const designHeadline = document.querySelector(".design-feature__headline");
+const designHeadlineTitle = document.querySelector(".design-feature__headline p:first-child");
+const designHeadlineBody = document.querySelector(".design-feature__headline p:not(:first-child)");
 const designSticky = document.querySelector(".design-feature__design-sticky");
 const designPanelItems = document.querySelectorAll(".design-feature__design-panel");
 const designCopyTrack = document.querySelector("[data-design-copy-track]");
 const designCopyOne = document.querySelector("[data-design-copy-one]");
 const designCopyTwo = document.querySelector("[data-design-copy-scroll]");
+const mobileNavMuteQuery = window.matchMedia("(max-width: 430px)");
 const evolutionStage = document.querySelector("[data-evolution-stage]");
+const evolutionIntroTitle = document.querySelector(".evolution-intro__title");
+const evolutionIntroSubtitle = document.querySelector(".evolution-intro__subtitle");
 const soundStage = document.querySelector("[data-sound-stage]");
 const soundSticky = document.querySelector(".sound-sticky");
 const soundTrack = document.querySelector("[data-sound-track]");
@@ -152,13 +158,6 @@ const speakersPanelTimings = [
     [0.4, 0.96],
 ];
 
-const mobileSpeakersPanelTimings = [
-    [0.02, 0.96],
-    [1, 1.01],
-    [1, 1.01],
-    [1, 1.01],
-];
-
 const lineArtTransition = "stroke-dashoffset 0.22s cubic-bezier(0.22, 1, 0.36, 1)";
 
 function getLineArtPathProgress(drawLength, startLength, length, totalLength) {
@@ -189,9 +188,7 @@ function isMobileViewport() {
 }
 
 function getSpeakersPanelTiming(index) {
-    const timings = isMobileViewport() ? mobileSpeakersPanelTimings : speakersPanelTimings;
-
-    return timings[index] || [0, 1];
+    return speakersPanelTimings[index] || [0, 1];
 }
 
 function renderSpeakersEntry(progress) {
@@ -199,8 +196,6 @@ function renderSpeakersEntry(progress) {
 
     if (isMobileViewport()) {
         speakersGrid?.style.setProperty("--speakers-dissolve-opacity", `${easedProgress}`);
-        heroMediaGrid?.style.setProperty("--hero-entry-blur", `${easedProgress * 5}px`);
-        heroMediaGrid?.style.setProperty("--hero-entry-brightness", `${1 - easedProgress * 0.42}`);
     }
 
     speakersImages.forEach((image) => {
@@ -304,11 +299,11 @@ function renderSpeakersTransitionBackground(progress) {
 
     speakersTransitionBg.style.setProperty(
         "--speakers-transition-bg-opacity",
-        `${isMobileViewport() ? easedBackgroundProgress : backgroundProgress}`
+        `${backgroundProgress}`
     );
     speakersTransitionBg.style.setProperty(
         "--speakers-transition-bg-y",
-        `${isMobileViewport() ? (1 - easedBackgroundProgress) * -14 : 0}vh`
+        "0vh"
     );
 }
 
@@ -356,7 +351,6 @@ function triggerHeroLightsOn() {
     heroLightsAnimating = true;
     setTimeout(() => {
         heroMediaGrid?.style.setProperty("--hero-dark-opacity", "0");
-        heroMediaGrid?.style.setProperty("--hero-mobile-bg-x", "8vw");
         setTimeout(() => {
             heroLightsOn = true;
             heroLightsAnimating = false;
@@ -374,7 +368,6 @@ function updateHeroScroll() {
     if (heroRect.top >= -10 && heroLightsOn && !heroLightsAnimating) {
         heroLightsOn = false;
         heroMediaGrid?.style.setProperty("--hero-dark-opacity", "0.8");
-        heroMediaGrid?.style.setProperty("--hero-mobile-bg-x", "-8vw");
     }
 
     if (speakersEntryIsAutoAnimating) return;
@@ -404,30 +397,15 @@ function updateHeroScroll() {
         renderSpeakersTransitionBackground(0);
         renderSpeakersEntry(heroProgress);
     } else {
-        const isMobileSpeakersSequence =
-            isMobileViewport() &&
-            speakersRect.top <= 1 &&
-            speakersRect.bottom > 0;
-
-        if (isMobileViewport()) {
-            heroMediaGrid?.style.removeProperty("--hero-entry-blur");
-            heroMediaGrid?.style.removeProperty("--hero-entry-brightness");
-
-            if (isMobileSpeakersSequence) {
-                speakersGrid?.style.setProperty("--speakers-dissolve-opacity", "1");
-                heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
-            } else {
-                speakersGrid?.style.removeProperty("--speakers-dissolve-opacity");
-            }
-        }
+        heroMediaGrid?.style.removeProperty("--hero-entry-blur");
+        heroMediaGrid?.style.removeProperty("--hero-entry-brightness");
+        speakersGrid?.style.removeProperty("--speakers-dissolve-opacity");
 
         speakersImages.forEach((image) => {
             image.style.setProperty("--speakers-entry-y", "0vh");
         });
         renderHeroContentExit(isMobileSpeakersHold ? 0 : speakersRenderedProgress);
-        if (!isMobileSpeakersSequence) {
-            renderHeroMediaExit(speakersRenderedProgress);
-        }
+        renderHeroMediaExit(speakersRenderedProgress);
         renderSpeakersTransitionBackground(speakersRect.bottom > 0 ? speakersRenderedProgress : 0);
     }
 }
@@ -831,12 +809,8 @@ function updateSpeakersTransition() {
     if (!speakersStage || !speakersImages.length) return;
 
     const stageRect = speakersStage.getBoundingClientRect();
-    const scrollDistance = isMobileViewport()
-        ? Math.max(speakersStage.offsetHeight - window.innerHeight, window.innerHeight)
-        : Math.max(speakersStage.offsetHeight, 1);
-    speakersTargetProgress = isMobileViewport()
-        ? clamp(-stageRect.top / scrollDistance, 0, 1)
-        : clamp((window.innerHeight - stageRect.top) / scrollDistance, 0, 1);
+    const scrollDistance = Math.max(speakersStage.offsetHeight, 1);
+    speakersTargetProgress = clamp((window.innerHeight - stageRect.top) / scrollDistance, 0, 1);
 
     if (fixedNav && heroStage) {
         const heroBottom = heroStage.getBoundingClientRect().bottom;
@@ -901,11 +875,7 @@ function updateSpeakersTransition() {
             stageRect.bottom > window.innerHeight * 0.5 &&
             speakersRenderedProgress < 0.18;
         renderHeroContentExit(shouldHoldMobileHeroContent ? 0 : speakersRenderedProgress);
-        if (isMobileViewport()) {
-            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
-        } else {
-            renderHeroMediaExit(speakersRenderedProgress);
-        }
+        renderHeroMediaExit(speakersRenderedProgress);
         renderSpeakersTransitionBackground(speakersRenderedProgress);
 
         if (
@@ -938,7 +908,7 @@ function animateSpeakersToEnd() {
     const startBeginningProgress = beginningTextRenderedProgress;
     const startScrollY = window.scrollY;
     const startTime = performance.now();
-    const duration = isMobileViewport() ? 3200 : 1400;
+    const duration = 1400;
     let targetScrollY = speakersStage.offsetTop + speakersStage.offsetHeight - window.innerHeight;
     let targetBeginningProgress = 0;
 
@@ -958,11 +928,7 @@ function animateSpeakersToEnd() {
         speakersTargetProgress = speakersRenderedProgress;
         renderSpeakersImages(speakersRenderedProgress, false);
         renderHeroContentExit(speakersRenderedProgress);
-        if (isMobileViewport()) {
-            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
-        } else {
-            renderHeroMediaExit(speakersRenderedProgress);
-        }
+        renderHeroMediaExit(speakersRenderedProgress);
         renderSpeakersTransitionBackground(speakersRenderedProgress);
         window.scrollTo(0, mix(startScrollY, targetScrollY, easedProgress));
 
@@ -982,11 +948,7 @@ function animateSpeakersToEnd() {
         speakersPreviousTargetProgress = 1;
         renderSpeakersImages(1, false);
         renderHeroContentExit(1);
-        if (isMobileViewport()) {
-            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
-        } else {
-            renderHeroMediaExit(1);
-        }
+        renderHeroMediaExit(1);
         renderSpeakersTransitionBackground(1);
 
         if (beginningTextChars.length) {
@@ -1035,7 +997,7 @@ function animateSpeakersEntryToEnd() {
     if (speakersEntryAutoAnimationFrame) cancelAnimationFrame(speakersEntryAutoAnimationFrame);
 
     const startTime = performance.now();
-    const duration = isMobileViewport() ? 1650 : 950;
+    const duration = 950;
     const targetScrollY = heroStage.offsetTop + heroStage.offsetHeight - window.innerHeight;
 
     function renderSpeakersEntryAutoAnimation(now) {
@@ -1055,11 +1017,7 @@ function animateSpeakersEntryToEnd() {
 
         renderSpeakersEntry(1);
         renderHeroContentExit(0);
-        if (isMobileViewport()) {
-            heroMediaGrid?.style.setProperty("--hero-media-y", "-100vh");
-        } else {
-            renderHeroMediaExit(0);
-        }
+        renderHeroMediaExit(0);
         renderSpeakersTransitionBackground(0);
         window.scrollTo(0, targetScrollY);
         speakersRenderedProgress = 0;
@@ -1567,6 +1525,51 @@ function updateDesignCopyScroll() {
     designTextFlowInner.style.transform = `translate3d(0, ${trackMove}px, 0)`;
 }
 
+function isRectOverlapping(rectA, rectB) {
+    return !(
+        rectA.right < rectB.left ||
+        rectA.left > rectB.right ||
+        rectA.bottom < rectB.top ||
+        rectA.top > rectB.bottom
+    );
+}
+
+function updateMobileFixedNavMute() {
+    if (!fixedNav) return;
+
+    if (!mobileNavMuteQuery.matches) {
+        fixedNav.classList.remove("is-mobile-muted");
+        return;
+    }
+
+    const navRect = fixedNav.getBoundingClientRect();
+    const buffer = 32;
+    let designMute = false;
+
+    if (designTitleBox && designCopyTwo) {
+        const startRect = designTitleBox.getBoundingClientRect();
+        const endRect = designCopyTwo.getBoundingClientRect();
+        const muteZoneTop = Math.min(startRect.top, endRect.top);
+        const muteZoneBottom = Math.max(startRect.bottom, endRect.bottom);
+
+        designMute =
+            muteZoneTop <= navRect.bottom + buffer &&
+            muteZoneBottom >= navRect.top - buffer;
+    }
+
+    const overlapTargets = [
+        beginningScrollArt,
+        evolutionIntroTitle,
+        evolutionIntroSubtitle,
+    ].filter(Boolean);
+    const sectionMute = overlapTargets.some((target) => {
+        const targetRect = target.getBoundingClientRect();
+        return isRectOverlapping(navRect, targetRect);
+    });
+
+    fixedNav.classList.toggle("is-mobile-muted", designMute || sectionMute);
+}
+
 function updateSoundHorizontalScroll() {
     if (!soundStage || !soundSticky || !soundTrack) return;
 
@@ -1904,6 +1907,7 @@ function updateScrollEffects() {
     updateDesignCopyScroll();
     updateDesignSectionTransition();
     updateFixedNav();
+    updateMobileFixedNavMute();
     updateFixedGauge();
     updateSoundHorizontalScroll();
     updateHeadphoneSequence();
