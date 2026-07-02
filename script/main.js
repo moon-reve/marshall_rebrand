@@ -139,10 +139,10 @@ fixedNavLinks.forEach((link) => {
 });
 
 const legacyPanelTimings = [
-    [0, 0.5],
-    [0.05, 0.55],
-    [0.1, 0.6],
-    [0.15, 0.65],
+    [0, 0.25],
+    [0.13, 0.38],
+    [0.26, 0.51],
+    [0.39, 0.64],
 ];
 
 const speakersPanelTimings = [
