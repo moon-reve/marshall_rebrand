@@ -318,7 +318,7 @@
     width: 100%;
     max-width: 760px;
     height: auto;
-    border: 0.5px solid #745845;
+    border: 0.5px solid #ffeac6;
     filter: brightness(0.7);
 }
 
@@ -334,7 +334,7 @@
 .design-feature__story-media {
     align-self: flex-start;
     width: 42vw;
-    border: 0.5px solid #745845;
+    border: 0.5px solid #ffeac6;
 }
 
 .design-feature__story-copy {
