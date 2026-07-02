@@ -808,7 +808,7 @@
     function shouldSkipFromHero() {
         if (!heroStage || !quizSection || !isBeforeQuiz()) return false;
         const rect = heroStage.getBoundingClientRect();
-        return rect.top <= 1 && rect.bottom > 1;
+        return rect.top <= 1 && rect.bottom <= window.innerHeight + 2;
     }
     function getWheelDelta(event) {
         if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
@@ -828,7 +828,7 @@
     function update() {
         if (!heroStage || !hero) return;
         const rect = heroStage.getBoundingClientRect();
-        const dist = Math.max(heroStage.offsetHeight, 1);
+        const dist = Math.max(heroStage.offsetHeight - hero.offsetHeight, window.innerHeight * 0.45, 1);
         targetProgress = clamp(-rect.top / dist, 0, 1);
         if (rafId) return;
         function tick() {

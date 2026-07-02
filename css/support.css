@@ -44,11 +44,39 @@
 .support-hero__content {
     position: absolute;
     inset: 0;
-    z-index: 2;
+    z-index: 3;
     display: flex;
     align-items: center;
     padding: 0 4.6875vw;
     background: linear-gradient(180deg, rgba(7, 5, 3, 0.04) 0%, rgba(7, 5, 3, var(--support-hero-mid-opacity, 0.32)) 40%, rgba(7, 5, 3, var(--support-hero-bottom-opacity, 0.5)) 100%);
+}
+
+.support-hero__grid-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.support-hero__grid-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0.3px;
+    background: #745845;
+    opacity: 0.65;
+}
+
+.support-hero__grid-line--01 {
+    left: 25vw;
+}
+
+.support-hero__grid-line--02 {
+    left: 50vw;
+}
+
+.support-hero__grid-line--03 {
+    left: 75vw;
 }
 
 .support-hero__copy {

@@ -4,6 +4,7 @@ const aboutHeroMediaGrid = document.querySelector(".about-hero__media-grid");
 const aboutHeroDissolveGrid = document.querySelector(".about-hero__dissolve-grid");
 const aboutHeroDissolvePanels = document.querySelectorAll(".about-hero__dissolve-panel");
 const aboutHeroPanels = document.querySelectorAll(".about-hero__panel");
+const aboutHeroGridLines = document.querySelector(".about-hero__grid-lines");
 const aboutHeroCopy = document.querySelector(".about-hero__copy");
 const aboutHeroTextFlow = document.querySelector(".about-hero__text-flow");
 const aboutHeroTextFlowInner = document.querySelector(".about-hero__text-flow-inner");
@@ -106,6 +107,7 @@ function triggerAboutHeroLightsOff() {
     aboutHeroMediaGrid?.style.setProperty("--about-hero-base-image-opacity", "1");
     aboutHeroDissolveGrid?.style.setProperty("--about-hero-dissolve-opacity", "0");
     aboutHeroDissolvePanels.forEach((panel) => panel.style.setProperty("--about-dissolve-panel-y", "0%"));
+    aboutHeroGridLines?.style.setProperty("--about-hero-grid-lines-opacity", "1");
     aboutTargetExitProgress = 0;
     aboutRenderedExitProgress = 0;
     aboutHeroCopy?.style.setProperty("--about-content-y", "0%");
@@ -151,6 +153,7 @@ function renderAboutHeroPanels(progress) {
 
     const exitProgress = aboutRenderedExitProgress;
     aboutHeroMediaGrid?.style.setProperty("--about-hero-media-opacity", aboutTargetExitProgress > 0 ? "0" : "1");
+    aboutHeroGridLines?.style.setProperty("--about-hero-grid-lines-opacity", `${1 - exitProgress}`);
     aboutHeroDissolvePanels.forEach((panel, index) => {
         const [start, end] = aboutPanelTimings[index] || [0, 1];
         const panelProgress = aboutEaseSmooth(aboutSequenceProgress(exitProgress, start, end));
@@ -180,6 +183,7 @@ function updateAboutHeroTransition() {
         aboutHeroMediaGrid?.style.removeProperty("--about-hero-dark-opacity");
         aboutHeroDissolveGrid?.style.removeProperty("--about-hero-dissolve-opacity");
         aboutHeroDissolvePanels.forEach((panel) => panel.style.removeProperty("--about-dissolve-panel-y"));
+        aboutHeroGridLines?.style.removeProperty("--about-hero-grid-lines-opacity");
         aboutHeroTextFlow?.style.removeProperty("--about-hero-text-opacity");
         if (aboutHeroTextFlowInner) aboutHeroTextFlowInner.style.removeProperty("transform");
         aboutTargetExitProgress = 0;

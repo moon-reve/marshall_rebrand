@@ -136,7 +136,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    HERO
 ═══════════════════════════════════════════════════════ */
 .hero-stage {
-  height: 100vh;
+  height: 150vh;
   background: var(--dark);
 }
 .hero {
@@ -198,7 +198,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-panel--03::after { left: -50vw; }
 .hero-panel--04::after { left: -75vw; }
 .hero-vlines {
-  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
 }
 .hero-vline {
   position: absolute;
@@ -255,6 +259,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: relative;
   width: 100%;
   height: 100vh;
+  margin-top: -50vh;
   background: var(--dark);
   overflow: hidden;
 }
@@ -358,7 +363,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .step-num {
   font-size: 1.25vw;
   font-weight: 700;
-  color: #fff;
+  color: var(--cream-light);
   line-height: 1.5;
   letter-spacing: -0.0275vw;
 }
@@ -388,7 +393,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   padding: 0;
   cursor: pointer;
   font-size: 1.25vw;
-  color: #fff;
+  color: var(--cream-light);
   line-height: 1;
   opacity: 0.7;
   transition: opacity 0.2s;
@@ -413,7 +418,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .step-nav-text {
   font-size: 0.8333vw;
   font-weight: 500;
-  color: #fff;
+  color: var(--cream-light);
   letter-spacing: 0.25vw;
   line-height: 1.5;
 }
@@ -1281,6 +1286,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     --step-card-scale: 1;
     height: auto;
     min-height: 100svh;
+    margin-top: 0;
     overflow: visible;
   }
 
