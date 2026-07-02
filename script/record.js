@@ -373,9 +373,9 @@
 
     const renderFrame = () => {
         const distance = targetProgress - renderedProgress;
-        renderedProgress += distance * 0.025;
+        renderedProgress += distance * 0.065;
 
-        if (Math.abs(distance) < 0.00001) {
+        if (Math.abs(distance) < 0.0001) {
             renderedProgress = targetProgress;
         }
 
